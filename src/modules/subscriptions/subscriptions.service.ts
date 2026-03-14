@@ -5,7 +5,11 @@ import {
 } from '@nestjs/common';
 import { AuditLogsService } from '../audit-logs/audit-logs.service.js';
 import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
-import type { SubscriptionsRepository, SubscriptionWithPlan, PlanRecord } from './subscriptions.repository.js';
+import {
+  SubscriptionsRepository,
+  type SubscriptionWithPlan,
+  type PlanRecord,
+} from './subscriptions.repository.js';
 import type { AssignSubscriptionDto } from './dto/assign-subscription.dto.js';
 
 @Injectable()

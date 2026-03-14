@@ -6,7 +6,10 @@ import {
 } from '@nestjs/common';
 import { AuditLogsService } from '../audit-logs/audit-logs.service.js';
 import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
-import type { FeatureFlagsRepository, FeatureFlagRecord } from './feature-flags.repository.js';
+import {
+  FeatureFlagsRepository,
+  type FeatureFlagRecord,
+} from './feature-flags.repository.js';
 import type { CreateFeatureFlagDto } from './dto/create-feature-flag.dto.js';
 import type { UpdateFeatureFlagDto } from './dto/update-feature-flag.dto.js';
 
