@@ -1,0 +1,76 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1773265808717,
+      "tag": "0000_curved_prowler",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773266401826,
+      "tag": "0001_lush_garia",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773270212294,
+      "tag": "0002_wet_lilandra",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773271491201,
+      "tag": "0003_spotty_swordsman",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1773272352088,
+      "tag": "0004_flimsy_terror",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1773274672513,
+      "tag": "0005_wooden_wrecking_crew",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1773348826986,
+      "tag": "0006_goofy_argent",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1773350162810,
+      "tag": "0007_same_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1773418588904,
+      "tag": "0008_purple_killer_shrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1773445918497,
+      "tag": "0009_familiar_dakota_north",
+      "breakpoints": true
+    }
+  ]
+}
