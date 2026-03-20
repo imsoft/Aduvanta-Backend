@@ -46,6 +46,7 @@ import { WarehouseModule } from './modules/warehouse/warehouse.module.js';
 import { CupoLettersModule } from './modules/cupo-letters/cupo-letters.module.js';
 import { NotificationsModule } from './modules/notifications/notifications.module.js';
 import { AnalyticsModule } from './modules/analytics/analytics.module.js';
+import { UnitConverterModule } from './modules/unit-converter/unit-converter.module.js';
 import { AiModule } from './modules/ai/ai.module.js';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
 import { UsageModule } from './modules/usage/usage.module.js';
@@ -117,6 +118,7 @@ import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module
     CupoLettersModule,
     NotificationsModule,
     AnalyticsModule,
+    UnitConverterModule,
     AiModule,
     SubscriptionsModule,
     UsageModule,
