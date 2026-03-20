@@ -47,6 +47,8 @@ import { CupoLettersModule } from './modules/cupo-letters/cupo-letters.module.js
 import { NotificationsModule } from './modules/notifications/notifications.module.js';
 import { AnalyticsModule } from './modules/analytics/analytics.module.js';
 import { UnitConverterModule } from './modules/unit-converter/unit-converter.module.js';
+import { Anexo22Module } from './modules/anexo22/anexo22.module.js';
+import { SaaiErrorsModule } from './modules/saai-errors/saai-errors.module.js';
 import { AiModule } from './modules/ai/ai.module.js';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
 import { UsageModule } from './modules/usage/usage.module.js';
@@ -119,6 +121,8 @@ import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module
     NotificationsModule,
     AnalyticsModule,
     UnitConverterModule,
+    Anexo22Module,
+    SaaiErrorsModule,
     AiModule,
     SubscriptionsModule,
     UsageModule,

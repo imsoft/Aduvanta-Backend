@@ -101,3 +101,22 @@ export * from './notification-preferences.schema.js';
 export * from './saved-reports.schema.js';
 export * from './report-executions.schema.js';
 export * from './kpi-snapshots.schema.js';
+
+// Anexo 22 reference catalogs (catálogos oficiales SAT)
+export * from './anexo22-customs-sections.schema.js';
+export * from './anexo22-transport-means.schema.js';
+export * from './anexo22-pedimento-keys.schema.js';
+export * from './anexo22-customs-regimes.schema.js';
+export * from './anexo22-units-of-measure.schema.js';
+export * from './anexo22-countries.schema.js';
+export * from './anexo22-currencies.schema.js';
+export * from './anexo22-taxes.schema.js';
+export * from './anexo22-identifiers.schema.js';
+export * from './anexo22-rrna.schema.js';
+export * from './anexo22-payment-methods.schema.js';
+export * from './anexo22-container-types.schema.js';
+export * from './anexo22-operation-types.schema.js';
+
+// SAAI error codes (catálogo de errores del Sistema Automatizado Aduanero Integral)
+export * from './saai-error-codes.schema.js';
+export * from './saai-registro-types.schema.js';
