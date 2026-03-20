@@ -34,6 +34,18 @@ import { IntegrationsModule } from './modules/integrations/integrations.module.j
 import { IntegrationDeliveriesModule } from './modules/integration-deliveries/integration-deliveries.module.js';
 import { ExportsModule } from './modules/exports/exports.module.js';
 import { ImportsModule } from './modules/imports/imports.module.js';
+import { TariffClassificationModule } from './modules/tariff-classification/tariff-classification.module.js';
+import { CustomsEntriesModule } from './modules/customs-entries/customs-entries.module.js';
+import { CustomsOperationsModule } from './modules/customs-operations/customs-operations.module.js';
+import { CustomsValuationModule } from './modules/customs-valuation/customs-valuation.module.js';
+import { EDocumentsModule } from './modules/e-documents/e-documents.module.js';
+import { BillingModule } from './modules/billing/billing.module.js';
+import { TreasuryModule } from './modules/treasury/treasury.module.js';
+import { DocumentManagementModule } from './modules/document-management/document-management.module.js';
+import { WarehouseModule } from './modules/warehouse/warehouse.module.js';
+import { CupoLettersModule } from './modules/cupo-letters/cupo-letters.module.js';
+import { NotificationsModule } from './modules/notifications/notifications.module.js';
+import { AnalyticsModule } from './modules/analytics/analytics.module.js';
 import { AiModule } from './modules/ai/ai.module.js';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
 import { UsageModule } from './modules/usage/usage.module.js';
@@ -93,6 +105,18 @@ import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module
     IntegrationDeliveriesModule,
     ExportsModule,
     ImportsModule,
+    TariffClassificationModule,
+    CustomsEntriesModule,
+    CustomsOperationsModule,
+    CustomsValuationModule,
+    EDocumentsModule,
+    BillingModule,
+    TreasuryModule,
+    DocumentManagementModule,
+    WarehouseModule,
+    CupoLettersModule,
+    NotificationsModule,
+    AnalyticsModule,
     AiModule,
     SubscriptionsModule,
     UsageModule,
