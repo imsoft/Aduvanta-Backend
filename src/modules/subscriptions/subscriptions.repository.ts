@@ -59,7 +59,9 @@ export class SubscriptionsRepository {
     return result[0];
   }
 
-  async insertSubscription(entry: NewSubscription): Promise<SubscriptionRecord> {
+  async insertSubscription(
+    entry: NewSubscription,
+  ): Promise<SubscriptionRecord> {
     const [record] = await this.db
       .insert(organizationSubscriptions)
       .values(entry)

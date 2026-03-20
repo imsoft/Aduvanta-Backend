@@ -21,7 +21,9 @@ export const clients = pgTable('clients', {
   notes: text('notes'),
   // References Better Auth user — no FK to avoid drizzle-kit migration conflicts.
   createdById: text('created_by_id').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

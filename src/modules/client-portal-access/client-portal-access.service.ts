@@ -24,7 +24,10 @@ export class ClientPortalAccessService {
   ): Promise<ClientPortalAccessRecord[]> {
     // Validate client belongs to org.
     await this.clientsService.getById(clientId, organizationId);
-    return this.portalAccessRepository.findByClientAndOrg(clientId, organizationId);
+    return this.portalAccessRepository.findByClientAndOrg(
+      clientId,
+      organizationId,
+    );
   }
 
   async grant(

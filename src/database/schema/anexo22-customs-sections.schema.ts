@@ -1,4 +1,10 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+} from 'drizzle-orm/pg-core';
 
 // Apéndice 1: Aduanas y secciones aduaneras
 export const anexo22CustomsSections = pgTable('anexo22_customs_sections', {

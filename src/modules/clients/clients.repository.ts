@@ -33,7 +33,9 @@ export class ClientsRepository {
   }
 
   async findByOrganization(filter: ListClientsFilter): Promise<ClientRecord[]> {
-    const conditions: SQL[] = [eq(clients.organizationId, filter.organizationId)];
+    const conditions: SQL[] = [
+      eq(clients.organizationId, filter.organizationId),
+    ];
 
     if (filter.status) {
       conditions.push(eq(clients.status, filter.status));
@@ -67,7 +69,9 @@ export class ClientsRepository {
     const result = await this.db
       .update(clients)
       .set(data)
-      .where(and(eq(clients.id, id), eq(clients.organizationId, organizationId)))
+      .where(
+        and(eq(clients.id, id), eq(clients.organizationId, organizationId)),
+      )
       .returning();
     return result[0];
   }

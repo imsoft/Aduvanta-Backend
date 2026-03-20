@@ -14,7 +14,9 @@ export const clientContacts = pgTable('client_contacts', {
   phone: text('phone'),
   position: text('position'),
   isPrimary: boolean('is_primary').notNull().default(false),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

@@ -1,6 +1,12 @@
 import { IsBoolean, IsIn, IsOptional } from 'class-validator';
 
-const OPERATION_STATUSES = ['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETED', 'CANCELLED'] as const;
+const OPERATION_STATUSES = [
+  'OPEN',
+  'IN_PROGRESS',
+  'ON_HOLD',
+  'COMPLETED',
+  'CANCELLED',
+] as const;
 
 export class CreateStatusTransitionRuleDto {
   @IsIn(OPERATION_STATUSES)

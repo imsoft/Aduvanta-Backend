@@ -1,4 +1,10 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+} from 'drizzle-orm/pg-core';
 
 // Apéndice 8: Identificadores (nivel pedimento y partida)
 export const anexo22Identifiers = pgTable('anexo22_identifiers', {

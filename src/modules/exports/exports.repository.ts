@@ -21,10 +21,7 @@ export class ExportsRepository {
   constructor(@Inject(DATABASE) private readonly db: Database) {}
 
   async insert(entry: NewExportJob): Promise<ExportJobRecord> {
-    const [record] = await this.db
-      .insert(exportJobs)
-      .values(entry)
-      .returning();
+    const [record] = await this.db.insert(exportJobs).values(entry).returning();
     return record;
   }
 
@@ -37,8 +34,12 @@ export class ExportsRepository {
     return result[0];
   }
 
-  async findByOrganization(filter: ListExportJobsFilter): Promise<ExportJobRecord[]> {
-    const conditions: SQL[] = [eq(exportJobs.organizationId, filter.organizationId)];
+  async findByOrganization(
+    filter: ListExportJobsFilter,
+  ): Promise<ExportJobRecord[]> {
+    const conditions: SQL[] = [
+      eq(exportJobs.organizationId, filter.organizationId),
+    ];
 
     if (filter.status) {
       conditions.push(eq(exportJobs.status, filter.status));
@@ -63,7 +64,12 @@ export class ExportsRepository {
     const result = await this.db
       .update(exportJobs)
       .set(data)
-      .where(and(eq(exportJobs.id, id), eq(exportJobs.organizationId, organizationId)))
+      .where(
+        and(
+          eq(exportJobs.id, id),
+          eq(exportJobs.organizationId, organizationId),
+        ),
+      )
       .returning();
     return result[0];
   }

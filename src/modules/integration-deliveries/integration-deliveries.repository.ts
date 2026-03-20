@@ -36,7 +36,9 @@ export class IntegrationDeliveriesRepository {
     return result[0];
   }
 
-  async findByIntegration(filter: ListDeliveriesFilter): Promise<DeliveryRecord[]> {
+  async findByIntegration(
+    filter: ListDeliveriesFilter,
+  ): Promise<DeliveryRecord[]> {
     const conditions: SQL[] = [
       eq(integrationDeliveries.integrationId, filter.integrationId),
       eq(integrationDeliveries.organizationId, filter.organizationId),

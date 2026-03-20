@@ -45,7 +45,12 @@ export class ComplianceDocumentRequirementsController {
     @Body() dto: CreateDocumentRequirementDto,
     @Session() session: ActiveSession,
   ) {
-    return this.requirementsService.create(ruleSetId, organizationId, dto, session.user.id);
+    return this.requirementsService.create(
+      ruleSetId,
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Patch('compliance/document-requirements/:requirementId')

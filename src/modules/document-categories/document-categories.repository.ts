@@ -27,7 +27,9 @@ export class DocumentCategoriesRepository {
     return result[0];
   }
 
-  async findByOrganization(organizationId: string): Promise<DocumentCategoryRecord[]> {
+  async findByOrganization(
+    organizationId: string,
+  ): Promise<DocumentCategoryRecord[]> {
     return this.db
       .select()
       .from(documentCategories)

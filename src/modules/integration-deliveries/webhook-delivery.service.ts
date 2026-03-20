@@ -50,14 +50,20 @@ export class WebhookDeliveryService {
   /**
    * Retry a single delivery by re-sending the original payload.
    */
-  async retry(deliveryId: string, organizationId: string, actorId: string): Promise<DeliveryRecord> {
+  async retry(
+    deliveryId: string,
+    organizationId: string,
+    actorId: string,
+  ): Promise<DeliveryRecord> {
     const delivery = await this.deliveriesRepository.findById(deliveryId);
 
     if (!delivery || delivery.organizationId !== organizationId) {
       throw new Error(`Delivery ${deliveryId} not found`);
     }
 
-    const integration = await this.integrationsRepository.findById(delivery.integrationId);
+    const integration = await this.integrationsRepository.findById(
+      delivery.integrationId,
+    );
 
     if (!integration || integration.organizationId !== organizationId) {
       throw new Error(`Integration for delivery ${deliveryId} not found`);
@@ -66,13 +72,17 @@ export class WebhookDeliveryService {
     const payload = JSON.parse(delivery.payloadJson) as WebhookEventPayload;
     const result = await this.sendHttpRequest(integration.targetUrl!, payload);
 
-    const updated = await this.deliveriesRepository.update(deliveryId, organizationId, {
-      status: result.success ? 'SUCCESS' : 'FAILED',
-      responseStatus: result.status ?? null,
-      responseBody: result.body ?? null,
-      attemptCount: delivery.attemptCount + 1,
-      lastAttemptAt: new Date(),
-    });
+    const updated = await this.deliveriesRepository.update(
+      deliveryId,
+      organizationId,
+      {
+        status: result.success ? 'SUCCESS' : 'FAILED',
+        responseStatus: result.status ?? null,
+        responseBody: result.body ?? null,
+        attemptCount: delivery.attemptCount + 1,
+        lastAttemptAt: new Date(),
+      },
+    );
 
     await this.auditLogsService.log({
       organizationId,
@@ -94,7 +104,11 @@ export class WebhookDeliveryService {
   }
 
   private async dispatchToIntegration(
-    integration: { id: string; organizationId: string; targetUrl: string | null },
+    integration: {
+      id: string;
+      organizationId: string;
+      targetUrl: string | null;
+    },
     payload: WebhookEventPayload,
   ): Promise<void> {
     if (!integration.targetUrl) {
@@ -116,13 +130,17 @@ export class WebhookDeliveryService {
 
     const result = await this.sendHttpRequest(integration.targetUrl, payload);
 
-    await this.deliveriesRepository.update(delivery.id, integration.organizationId, {
-      status: result.success ? 'SUCCESS' : 'FAILED',
-      responseStatus: result.status ?? null,
-      responseBody: result.body ?? null,
-      attemptCount: 1,
-      lastAttemptAt: new Date(),
-    });
+    await this.deliveriesRepository.update(
+      delivery.id,
+      integration.organizationId,
+      {
+        status: result.success ? 'SUCCESS' : 'FAILED',
+        responseStatus: result.status ?? null,
+        responseBody: result.body ?? null,
+        attemptCount: 1,
+        lastAttemptAt: new Date(),
+      },
+    );
 
     await this.auditLogsService.log({
       organizationId: integration.organizationId,

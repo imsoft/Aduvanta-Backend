@@ -64,7 +64,12 @@ export class ClientsController {
     @Body() dto: UpdateClientDto,
     @Session() session: ActiveSession,
   ) {
-    return this.clientsService.update(clientId, organizationId, dto, session.user.id);
+    return this.clientsService.update(
+      clientId,
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Delete(':clientId')
@@ -75,6 +80,10 @@ export class ClientsController {
     @Param('clientId') clientId: string,
     @Session() session: ActiveSession,
   ) {
-    await this.clientsService.deactivate(clientId, organizationId, session.user.id);
+    await this.clientsService.deactivate(
+      clientId,
+      organizationId,
+      session.user.id,
+    );
   }
 }

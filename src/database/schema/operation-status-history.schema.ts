@@ -15,5 +15,7 @@ export const operationStatusHistory = pgTable('operation_status_history', {
   // References Better Auth user — no FK to avoid drizzle-kit migration conflicts.
   changedById: text('changed_by_id').notNull(),
   comment: text('comment'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });

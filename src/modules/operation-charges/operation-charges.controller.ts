@@ -46,7 +46,12 @@ export class OperationChargesController {
     @Body() dto: CreateOperationChargeDto,
     @Session() session: ActiveSession,
   ) {
-    return this.chargesService.create(operationId, organizationId, dto, session.user.id);
+    return this.chargesService.create(
+      operationId,
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Patch(':chargeId')
@@ -57,7 +62,12 @@ export class OperationChargesController {
     @Body() dto: UpdateOperationChargeDto,
     @Session() session: ActiveSession,
   ) {
-    return this.chargesService.update(chargeId, organizationId, dto, session.user.id);
+    return this.chargesService.update(
+      chargeId,
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Delete(':chargeId')
@@ -68,6 +78,10 @@ export class OperationChargesController {
     @Param('chargeId') chargeId: string,
     @Session() session: ActiveSession,
   ) {
-    await this.chargesService.deactivate(chargeId, organizationId, session.user.id);
+    await this.chargesService.deactivate(
+      chargeId,
+      organizationId,
+      session.user.id,
+    );
   }
 }

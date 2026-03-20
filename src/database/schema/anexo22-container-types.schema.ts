@@ -1,4 +1,10 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+} from 'drizzle-orm/pg-core';
 
 // Apéndice 10: Tipos de contenedor
 export const anexo22ContainerTypes = pgTable('anexo22_container_types', {

@@ -8,7 +8,8 @@ export const subscriptionStatusEnum = pgEnum('subscription_status', [
   'EXPIRED',
 ]);
 
-export type SubscriptionStatus = (typeof subscriptionStatusEnum.enumValues)[number];
+export type SubscriptionStatus =
+  (typeof subscriptionStatusEnum.enumValues)[number];
 
 export const organizationSubscriptions = pgTable('organization_subscriptions', {
   id: text('id')
@@ -23,9 +24,13 @@ export const organizationSubscriptions = pgTable('organization_subscriptions', {
     .notNull()
     .references(() => plans.id),
   status: subscriptionStatusEnum('status').notNull().default('ACTIVE'),
-  startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+  startedAt: timestamp('started_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   endsAt: timestamp('ends_at', { withTimezone: true }),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

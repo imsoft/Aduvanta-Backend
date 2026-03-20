@@ -37,8 +37,12 @@ export class IntegrationsRepository {
     return result[0];
   }
 
-  async findByOrganization(filter: ListIntegrationsFilter): Promise<IntegrationRecord[]> {
-    const conditions: SQL[] = [eq(integrations.organizationId, filter.organizationId)];
+  async findByOrganization(
+    filter: ListIntegrationsFilter,
+  ): Promise<IntegrationRecord[]> {
+    const conditions: SQL[] = [
+      eq(integrations.organizationId, filter.organizationId),
+    ];
 
     if (filter.status) {
       conditions.push(eq(integrations.status, filter.status));
@@ -72,7 +76,10 @@ export class IntegrationsRepository {
       );
 
     return active.filter((i) =>
-      i.eventTypes.split(',').map((e) => e.trim()).includes(eventType),
+      i.eventTypes
+        .split(',')
+        .map((e) => e.trim())
+        .includes(eventType),
     );
   }
 
@@ -84,7 +91,12 @@ export class IntegrationsRepository {
     const result = await this.db
       .update(integrations)
       .set(data)
-      .where(and(eq(integrations.id, id), eq(integrations.organizationId, organizationId)))
+      .where(
+        and(
+          eq(integrations.id, id),
+          eq(integrations.organizationId, organizationId),
+        ),
+      )
       .returning();
     return result[0];
   }

@@ -37,7 +37,9 @@ export class ComplianceDocumentRequirementsService {
   ): Promise<DocumentRequirementRecord> {
     await this.ruleSetsService.getById(ruleSetId, organizationId);
 
-    const category = await this.categoriesRepository.findById(dto.documentCategoryId);
+    const category = await this.categoriesRepository.findById(
+      dto.documentCategoryId,
+    );
     if (!category || category.organizationId !== organizationId) {
       throw new NotFoundException(
         `Document category ${dto.documentCategoryId} not found in this organization`,
@@ -77,7 +79,10 @@ export class ComplianceDocumentRequirementsService {
     return requirement;
   }
 
-  async getById(id: string, organizationId: string): Promise<DocumentRequirementRecord> {
+  async getById(
+    id: string,
+    organizationId: string,
+  ): Promise<DocumentRequirementRecord> {
     const req = await this.requirementsRepository.findById(id);
 
     if (!req || req.organizationId !== organizationId) {
@@ -95,7 +100,11 @@ export class ComplianceDocumentRequirementsService {
   ): Promise<DocumentRequirementRecord> {
     await this.getById(id, organizationId);
 
-    const updated = await this.requirementsRepository.update(id, organizationId, dto);
+    const updated = await this.requirementsRepository.update(
+      id,
+      organizationId,
+      dto,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Document requirement ${id} not found`);
@@ -113,7 +122,11 @@ export class ComplianceDocumentRequirementsService {
     return updated;
   }
 
-  async delete(id: string, organizationId: string, actorId: string): Promise<void> {
+  async delete(
+    id: string,
+    organizationId: string,
+    actorId: string,
+  ): Promise<void> {
     const req = await this.getById(id, organizationId);
 
     await this.requirementsRepository.delete(id, organizationId);

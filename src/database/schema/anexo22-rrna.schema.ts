@@ -1,4 +1,10 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+} from 'drizzle-orm/pg-core';
 
 // Apéndice 9: Regulaciones y restricciones no arancelarias (RRNA)
 export const anexo22Rrna = pgTable('anexo22_rrna', {

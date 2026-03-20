@@ -3,7 +3,8 @@ import { and, eq } from 'drizzle-orm';
 import { DATABASE, type Database } from '../../database/database.module.js';
 import { documentRequirements } from '../../database/schema/index.js';
 
-export type DocumentRequirementRecord = typeof documentRequirements.$inferSelect;
+export type DocumentRequirementRecord =
+  typeof documentRequirements.$inferSelect;
 export type NewDocumentRequirement = typeof documentRequirements.$inferInsert;
 
 @Injectable()

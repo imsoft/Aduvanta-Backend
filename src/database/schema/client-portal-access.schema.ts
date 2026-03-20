@@ -17,9 +17,15 @@ export const clientPortalAccess = pgTable(
     // References Better Auth's user table — no FK constraint to avoid
     // drizzle-kit migration conflicts with Better Auth-managed tables.
     userId: text('user_id').notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
   (t) => [
-    unique('client_portal_access_unique').on(t.organizationId, t.clientId, t.userId),
+    unique('client_portal_access_unique').on(
+      t.organizationId,
+      t.clientId,
+      t.userId,
+    ),
   ],
 );

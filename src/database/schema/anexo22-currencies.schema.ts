@@ -1,4 +1,10 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+} from 'drizzle-orm/pg-core';
 
 // Apéndice 5: Monedas / divisas
 export const anexo22Currencies = pgTable('anexo22_currencies', {

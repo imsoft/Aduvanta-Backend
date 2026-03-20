@@ -37,7 +37,11 @@ export class FeatureFlagsController {
     @Body() dto: CreateFeatureFlagDto,
     @Session() session: ActiveSession,
   ) {
-    return this.featureFlagsService.create(organizationId, dto, session.user.id);
+    return this.featureFlagsService.create(
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Patch(':flagId')

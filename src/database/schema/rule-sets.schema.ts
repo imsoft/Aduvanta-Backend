@@ -15,7 +15,9 @@ export const ruleSets = pgTable(
     code: text('code').notNull(),
     operationType: operationTypeEnum('operation_type').notNull(),
     isActive: boolean('is_active').notNull().default(true),
-    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .notNull()
       .defaultNow()

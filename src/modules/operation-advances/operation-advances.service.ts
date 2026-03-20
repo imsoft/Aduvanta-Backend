@@ -67,7 +67,10 @@ export class OperationAdvancesService {
     return advance;
   }
 
-  async getById(id: string, organizationId: string): Promise<OperationAdvanceRecord> {
+  async getById(
+    id: string,
+    organizationId: string,
+  ): Promise<OperationAdvanceRecord> {
     const advance = await this.advancesRepository.findById(id);
 
     if (!advance || advance.organizationId !== organizationId) {
@@ -90,10 +93,15 @@ export class OperationAdvancesService {
     if (dto.currency !== undefined) data.currency = dto.currency;
     if (dto.reference !== undefined) data.reference = dto.reference;
     if (dto.notes !== undefined) data.notes = dto.notes;
-    if (dto.receivedAt !== undefined) data.receivedAt = new Date(dto.receivedAt);
+    if (dto.receivedAt !== undefined)
+      data.receivedAt = new Date(dto.receivedAt);
     if (dto.status !== undefined) data.status = dto.status;
 
-    const updated = await this.advancesRepository.update(id, organizationId, data);
+    const updated = await this.advancesRepository.update(
+      id,
+      organizationId,
+      data,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Advance ${id} not found`);
@@ -118,7 +126,9 @@ export class OperationAdvancesService {
   ): Promise<void> {
     const advance = await this.getById(id, organizationId);
 
-    await this.advancesRepository.update(id, organizationId, { status: 'INACTIVE' });
+    await this.advancesRepository.update(id, organizationId, {
+      status: 'INACTIVE',
+    });
 
     await this.auditLogsService.log({
       organizationId,

@@ -55,7 +55,10 @@ export class DocumentCategoriesService {
     return category;
   }
 
-  async getById(id: string, organizationId: string): Promise<DocumentCategoryRecord> {
+  async getById(
+    id: string,
+    organizationId: string,
+  ): Promise<DocumentCategoryRecord> {
     const category = await this.categoriesRepository.findById(id);
 
     if (!category || category.organizationId !== organizationId) {
@@ -73,7 +76,11 @@ export class DocumentCategoriesService {
   ): Promise<DocumentCategoryRecord> {
     await this.getById(id, organizationId);
 
-    const updated = await this.categoriesRepository.update(id, organizationId, dto);
+    const updated = await this.categoriesRepository.update(
+      id,
+      organizationId,
+      dto,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Document category ${id} not found`);
@@ -98,10 +105,11 @@ export class DocumentCategoriesService {
   ): Promise<void> {
     await this.getById(id, organizationId);
 
-    const hasDocuments = await this.categoriesRepository.hasDocumentsWithCategory(
-      id,
-      organizationId,
-    );
+    const hasDocuments =
+      await this.categoriesRepository.hasDocumentsWithCategory(
+        id,
+        organizationId,
+      );
 
     if (hasDocuments) {
       throw new BadRequestException(

@@ -57,7 +57,10 @@ export class OperationComplianceService {
     operationId: string,
     organizationId: string,
   ): Promise<OperationComplianceEvaluation> {
-    const operation = await this.operationsService.getById(operationId, organizationId);
+    const operation = await this.operationsService.getById(
+      operationId,
+      organizationId,
+    );
 
     const ruleSet = await this.ruleSetsRepository.findActiveByOperationType(
       operation.type,
@@ -90,7 +93,9 @@ export class OperationComplianceService {
       organizationId,
     );
     const requiredReqs = docRequirements.filter((r) => r.isRequired);
-    const requiredCategoryIds = new Set(requiredReqs.map((r) => r.documentCategoryId));
+    const requiredCategoryIds = new Set(
+      requiredReqs.map((r) => r.documentCategoryId),
+    );
 
     // Active documents on this operation.
     const activeDocuments = await this.documentsRepository.findByOperation({
@@ -108,7 +113,10 @@ export class OperationComplianceService {
     );
 
     // Fetch category details for all referenced IDs.
-    const allCategoryIds = new Set([...requiredCategoryIds, ...presentCategoryIds]);
+    const allCategoryIds = new Set([
+      ...requiredCategoryIds,
+      ...presentCategoryIds,
+    ]);
     const categoryMap = await this.buildCategoryMap(
       [...allCategoryIds],
       organizationId,
@@ -132,22 +140,25 @@ export class OperationComplianceService {
     const hasMissingDocs = missingRequiredDocumentCategories.length > 0;
 
     // Allowed transitions from current status.
-    const transitionRules = await this.statusRulesRepository.findByRuleSetAndFromStatus(
-      ruleSet.id,
-      operation.status,
-    );
+    const transitionRules =
+      await this.statusRulesRepository.findByRuleSetAndFromStatus(
+        ruleSet.id,
+        operation.status,
+      );
 
-    const allowedTransitions: AllowedTransition[] = transitionRules.map((rule) => {
-      const isBlocked = rule.requiresAllRequiredDocuments && hasMissingDocs;
-      return {
-        toStatus: rule.toStatus,
-        requiresAllRequiredDocuments: rule.requiresAllRequiredDocuments,
-        isBlocked,
-        blockReason: isBlocked
-          ? `Missing ${missingRequiredDocumentCategories.length} required document(s) before transitioning to ${rule.toStatus}`
-          : null,
-      };
-    });
+    const allowedTransitions: AllowedTransition[] = transitionRules.map(
+      (rule) => {
+        const isBlocked = rule.requiresAllRequiredDocuments && hasMissingDocs;
+        return {
+          toStatus: rule.toStatus,
+          requiresAllRequiredDocuments: rule.requiresAllRequiredDocuments,
+          isBlocked,
+          blockReason: isBlocked
+            ? `Missing ${missingRequiredDocumentCategories.length} required document(s) before transitioning to ${rule.toStatus}`
+            : null,
+        };
+      },
+    );
 
     const canCurrentWorkflowAdvance =
       allowedTransitions.length > 0 &&

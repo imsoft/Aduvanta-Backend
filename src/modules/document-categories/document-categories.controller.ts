@@ -66,6 +66,10 @@ export class DocumentCategoriesController {
     @Param('categoryId') categoryId: string,
     @Session() session: ActiveSession,
   ) {
-    await this.categoriesService.remove(categoryId, organizationId, session.user.id);
+    await this.categoriesService.remove(
+      categoryId,
+      organizationId,
+      session.user.id,
+    );
   }
 }

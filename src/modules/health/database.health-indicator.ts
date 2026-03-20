@@ -1,5 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { HealthIndicatorResult, HealthIndicator, HealthCheckError } from '@nestjs/terminus';
+import {
+  HealthIndicatorResult,
+  HealthIndicator,
+  HealthCheckError,
+} from '@nestjs/terminus';
 import { sql } from 'drizzle-orm';
 import { DATABASE, type Database } from '../../database/database.module.js';
 

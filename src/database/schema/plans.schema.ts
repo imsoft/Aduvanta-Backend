@@ -15,9 +15,13 @@ export const plans = pgTable('plans', {
   maxUsers: integer('max_users').notNull().default(5),
   maxClients: integer('max_clients').notNull().default(100),
   maxOperations: integer('max_operations').notNull().default(500),
-  maxStorageBytes: integer('max_storage_bytes').notNull().default(1_073_741_824), // 1 GB
+  maxStorageBytes: integer('max_storage_bytes')
+    .notNull()
+    .default(1_073_741_824), // 1 GB
   maxIntegrations: integer('max_integrations').notNull().default(3),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

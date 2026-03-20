@@ -41,7 +41,9 @@ export class MembershipsService {
     );
 
     if (existing) {
-      throw new ConflictException('User is already a member of this organization');
+      throw new ConflictException(
+        'User is already a member of this organization',
+      );
     }
 
     const membership = await this.membershipsRepository.insert({
@@ -59,7 +61,10 @@ export class MembershipsService {
       metadata: { email, role, userId: user.id },
     });
 
-    return { membership, user: { id: user.id, name: user.name, email: user.email } };
+    return {
+      membership,
+      user: { id: user.id, name: user.name, email: user.email },
+    };
   }
 
   async updateMemberRole(
@@ -107,10 +112,17 @@ export class MembershipsService {
       action: AUDIT_ACTION.MEMBER_ROLE_UPDATED,
       resource: 'membership',
       resourceId: updated.id,
-      metadata: { userId: targetUserId, previousRole: target.role, newRole: role },
+      metadata: {
+        userId: targetUserId,
+        previousRole: target.role,
+        newRole: role,
+      },
     });
 
-    return { membership: updated, user: { id: user.id, name: user.name, email: user.email } };
+    return {
+      membership: updated,
+      user: { id: user.id, name: user.name, email: user.email },
+    };
   }
 
   async removeMember(
@@ -119,7 +131,9 @@ export class MembershipsService {
     actorId: string,
   ): Promise<void> {
     if (targetUserId === actorId) {
-      throw new BadRequestException('You cannot remove yourself from the organization');
+      throw new BadRequestException(
+        'You cannot remove yourself from the organization',
+      );
     }
 
     const target = await this.membershipsRepository.findByUserAndOrg(
@@ -135,7 +149,10 @@ export class MembershipsService {
       throw new BadRequestException('The owner cannot be removed');
     }
 
-    await this.membershipsRepository.deleteByOrgAndUser(organizationId, targetUserId);
+    await this.membershipsRepository.deleteByOrgAndUser(
+      organizationId,
+      targetUserId,
+    );
 
     await this.auditLogsService.log({
       organizationId,

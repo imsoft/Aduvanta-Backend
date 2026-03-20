@@ -66,7 +66,10 @@ export class OperationChargesService {
     return charge;
   }
 
-  async getById(id: string, organizationId: string): Promise<OperationChargeRecord> {
+  async getById(
+    id: string,
+    organizationId: string,
+  ): Promise<OperationChargeRecord> {
     const charge = await this.chargesRepository.findById(id);
 
     if (!charge || charge.organizationId !== organizationId) {
@@ -91,7 +94,11 @@ export class OperationChargesService {
     if (dto.currency !== undefined) data.currency = dto.currency;
     if (dto.status !== undefined) data.status = dto.status;
 
-    const updated = await this.chargesRepository.update(id, organizationId, data);
+    const updated = await this.chargesRepository.update(
+      id,
+      organizationId,
+      data,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Charge ${id} not found`);
@@ -116,7 +123,9 @@ export class OperationChargesService {
   ): Promise<void> {
     const charge = await this.getById(id, organizationId);
 
-    await this.chargesRepository.update(id, organizationId, { status: 'INACTIVE' });
+    await this.chargesRepository.update(id, organizationId, {
+      status: 'INACTIVE',
+    });
 
     await this.auditLogsService.log({
       organizationId,

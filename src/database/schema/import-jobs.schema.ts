@@ -29,7 +29,9 @@ export const importJobs = pgTable('import_jobs', {
   requestedById: text('requested_by_id').notNull(),
   // JSON summary: { processed, created, failed, errors }
   resultSummaryJson: text('result_summary_json'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

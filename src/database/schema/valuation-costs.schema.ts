@@ -1,10 +1,4 @@
-import {
-  pgTable,
-  text,
-  numeric,
-  timestamp,
-  pgEnum,
-} from 'drizzle-orm/pg-core';
+import { pgTable, text, numeric, timestamp, pgEnum } from 'drizzle-orm/pg-core';
 import { valuationDeclarations } from './valuation-declarations.schema.js';
 
 export const costCategoryEnum = pgEnum('cost_category', [

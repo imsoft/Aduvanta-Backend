@@ -10,8 +10,10 @@ import {
 
 export type OperationRecord = typeof operations.$inferSelect;
 export type NewOperation = typeof operations.$inferInsert;
-export type OperationStatusHistoryRecord = typeof operationStatusHistory.$inferSelect;
-export type NewOperationStatusHistory = typeof operationStatusHistory.$inferInsert;
+export type OperationStatusHistoryRecord =
+  typeof operationStatusHistory.$inferSelect;
+export type NewOperationStatusHistory =
+  typeof operationStatusHistory.$inferInsert;
 
 export interface ListOperationsFilter {
   organizationId: string;
@@ -42,8 +44,12 @@ export class OperationsRepository {
     return result[0];
   }
 
-  async findByOrganization(filter: ListOperationsFilter): Promise<OperationRecord[]> {
-    const conditions: SQL[] = [eq(operations.organizationId, filter.organizationId)];
+  async findByOrganization(
+    filter: ListOperationsFilter,
+  ): Promise<OperationRecord[]> {
+    const conditions: SQL[] = [
+      eq(operations.organizationId, filter.organizationId),
+    ];
 
     if (filter.clientId) {
       conditions.push(eq(operations.clientId, filter.clientId));
@@ -87,7 +93,12 @@ export class OperationsRepository {
     const result = await this.db
       .update(operations)
       .set(data)
-      .where(and(eq(operations.id, id), eq(operations.organizationId, organizationId)))
+      .where(
+        and(
+          eq(operations.id, id),
+          eq(operations.organizationId, organizationId),
+        ),
+      )
       .returning();
     return result[0];
   }

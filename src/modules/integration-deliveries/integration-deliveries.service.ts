@@ -42,6 +42,10 @@ export class IntegrationDeliveriesService {
     organizationId: string,
     actorId: string,
   ): Promise<DeliveryRecord> {
-    return this.webhookDeliveryService.retry(deliveryId, organizationId, actorId);
+    return this.webhookDeliveryService.retry(
+      deliveryId,
+      organizationId,
+      actorId,
+    );
   }
 }

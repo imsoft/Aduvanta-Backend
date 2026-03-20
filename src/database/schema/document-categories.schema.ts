@@ -11,7 +11,9 @@ export const documentCategories = pgTable('document_categories', {
   name: text('name').notNull(),
   code: text('code').notNull(),
   description: text('description'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

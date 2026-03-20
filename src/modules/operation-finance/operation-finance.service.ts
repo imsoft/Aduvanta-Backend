@@ -5,7 +5,11 @@ import { OperationAdvancesRepository } from '../operation-advances/operation-adv
 import { AuditLogsService } from '../audit-logs/audit-logs.service.js';
 import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
 
-export type FinancialStatus = 'PENDING' | 'PARTIALLY_PAID' | 'PAID' | 'NO_CHARGES';
+export type FinancialStatus =
+  | 'PENDING'
+  | 'PARTIALLY_PAID'
+  | 'PAID'
+  | 'NO_CHARGES';
 
 export interface OperationFinanceSummary {
   totalCharges: string;
@@ -31,7 +35,10 @@ export class OperationFinanceService {
 
     const [charges, advances] = await Promise.all([
       this.chargesRepository.findActiveByOperation(operationId, organizationId),
-      this.advancesRepository.findActiveByOperation(operationId, organizationId),
+      this.advancesRepository.findActiveByOperation(
+        operationId,
+        organizationId,
+      ),
     ]);
 
     const totalCharges = charges.reduce(

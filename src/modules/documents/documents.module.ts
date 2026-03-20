@@ -8,7 +8,12 @@ import { DocumentsService } from './documents.service.js';
 import { DocumentsController } from './documents.controller.js';
 
 @Module({
-  imports: [AuthModule, DocumentCategoriesModule, OperationsModule, StorageModule],
+  imports: [
+    AuthModule,
+    DocumentCategoriesModule,
+    OperationsModule,
+    StorageModule,
+  ],
   providers: [DocumentsRepository, DocumentsService],
   controllers: [DocumentsController],
   exports: [DocumentsRepository, DocumentsService],

@@ -20,13 +20,19 @@ export const statusTransitionRules = pgTable(
     requiresAllRequiredDocuments: boolean('requires_all_required_documents')
       .notNull()
       .default(false),
-    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .notNull()
       .defaultNow()
       .$onUpdate(() => new Date()),
   },
   (t) => [
-    unique('status_rule_from_to_unique').on(t.ruleSetId, t.fromStatus, t.toStatus),
+    unique('status_rule_from_to_unique').on(
+      t.ruleSetId,
+      t.fromStatus,
+      t.toStatus,
+    ),
   ],
 );

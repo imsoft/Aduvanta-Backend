@@ -64,7 +64,12 @@ export class ComplianceRuleSetsController {
     @Body() dto: UpdateRuleSetDto,
     @Session() session: ActiveSession,
   ) {
-    return this.ruleSetsService.update(ruleSetId, organizationId, dto, session.user.id);
+    return this.ruleSetsService.update(
+      ruleSetId,
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Delete(':ruleSetId')
@@ -75,6 +80,10 @@ export class ComplianceRuleSetsController {
     @Param('ruleSetId') ruleSetId: string,
     @Session() session: ActiveSession,
   ) {
-    await this.ruleSetsService.delete(ruleSetId, organizationId, session.user.id);
+    await this.ruleSetsService.delete(
+      ruleSetId,
+      organizationId,
+      session.user.id,
+    );
   }
 }

@@ -19,10 +19,7 @@ export class ImportsRepository {
   constructor(@Inject(DATABASE) private readonly db: Database) {}
 
   async insert(entry: NewImportJob): Promise<ImportJobRecord> {
-    const [record] = await this.db
-      .insert(importJobs)
-      .values(entry)
-      .returning();
+    const [record] = await this.db.insert(importJobs).values(entry).returning();
     return record;
   }
 
@@ -35,8 +32,12 @@ export class ImportsRepository {
     return result[0];
   }
 
-  async findByOrganization(filter: ListImportJobsFilter): Promise<ImportJobRecord[]> {
-    const conditions: SQL[] = [eq(importJobs.organizationId, filter.organizationId)];
+  async findByOrganization(
+    filter: ListImportJobsFilter,
+  ): Promise<ImportJobRecord[]> {
+    const conditions: SQL[] = [
+      eq(importJobs.organizationId, filter.organizationId),
+    ];
 
     if (filter.status) {
       conditions.push(eq(importJobs.status, filter.status));
@@ -57,7 +58,12 @@ export class ImportsRepository {
     const result = await this.db
       .update(importJobs)
       .set(data)
-      .where(and(eq(importJobs.id, id), eq(importJobs.organizationId, organizationId)))
+      .where(
+        and(
+          eq(importJobs.id, id),
+          eq(importJobs.organizationId, organizationId),
+        ),
+      )
       .returning();
     return result[0];
   }

@@ -78,6 +78,10 @@ export class OperationAdvancesController {
     @Param('advanceId') advanceId: string,
     @Session() session: ActiveSession,
   ) {
-    await this.advancesService.deactivate(advanceId, organizationId, session.user.id);
+    await this.advancesService.deactivate(
+      advanceId,
+      organizationId,
+      session.user.id,
+    );
   }
 }

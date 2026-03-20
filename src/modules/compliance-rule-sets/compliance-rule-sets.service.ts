@@ -18,7 +18,10 @@ export class ComplianceRuleSetsService {
     private readonly auditLogsService: AuditLogsService,
   ) {}
 
-  async list(organizationId: string, dto: ListRuleSetsDto): Promise<RuleSetRecord[]> {
+  async list(
+    organizationId: string,
+    dto: ListRuleSetsDto,
+  ): Promise<RuleSetRecord[]> {
     return this.ruleSetRepository.findByOrganization({
       organizationId,
       operationType: dto.operationType,
@@ -95,7 +98,11 @@ export class ComplianceRuleSetsService {
       }
     }
 
-    const updated = await this.ruleSetRepository.update(id, organizationId, dto);
+    const updated = await this.ruleSetRepository.update(
+      id,
+      organizationId,
+      dto,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Rule set ${id} not found`);
@@ -113,7 +120,11 @@ export class ComplianceRuleSetsService {
     return updated;
   }
 
-  async delete(id: string, organizationId: string, actorId: string): Promise<void> {
+  async delete(
+    id: string,
+    organizationId: string,
+    actorId: string,
+  ): Promise<void> {
     const ruleSet = await this.getById(id, organizationId);
 
     await this.ruleSetRepository.delete(id, organizationId);

@@ -37,13 +37,22 @@ export class ComplianceRuleSetsRepository {
     const result = await this.db
       .select()
       .from(ruleSets)
-      .where(and(eq(ruleSets.code, code), eq(ruleSets.organizationId, organizationId)))
+      .where(
+        and(
+          eq(ruleSets.code, code),
+          eq(ruleSets.organizationId, organizationId),
+        ),
+      )
       .limit(1);
     return result[0];
   }
 
-  async findByOrganization(filter: ListRuleSetsFilter): Promise<RuleSetRecord[]> {
-    const conditions: SQL[] = [eq(ruleSets.organizationId, filter.organizationId)];
+  async findByOrganization(
+    filter: ListRuleSetsFilter,
+  ): Promise<RuleSetRecord[]> {
+    const conditions: SQL[] = [
+      eq(ruleSets.organizationId, filter.organizationId),
+    ];
 
     if (filter.operationType) {
       conditions.push(eq(ruleSets.operationType, filter.operationType));
@@ -86,7 +95,9 @@ export class ComplianceRuleSetsRepository {
     const result = await this.db
       .update(ruleSets)
       .set(data)
-      .where(and(eq(ruleSets.id, id), eq(ruleSets.organizationId, organizationId)))
+      .where(
+        and(eq(ruleSets.id, id), eq(ruleSets.organizationId, organizationId)),
+      )
       .returning();
     return result[0];
   }
@@ -94,6 +105,8 @@ export class ComplianceRuleSetsRepository {
   async delete(id: string, organizationId: string): Promise<void> {
     await this.db
       .delete(ruleSets)
-      .where(and(eq(ruleSets.id, id), eq(ruleSets.organizationId, organizationId)));
+      .where(
+        and(eq(ruleSets.id, id), eq(ruleSets.organizationId, organizationId)),
+      );
   }
 }

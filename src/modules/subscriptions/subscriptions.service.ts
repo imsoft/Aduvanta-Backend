@@ -26,9 +26,8 @@ export class SubscriptionsService {
   async getSubscription(
     organizationId: string,
   ): Promise<SubscriptionWithPlan | null> {
-    const result = await this.subscriptionsRepository.findSubscriptionByOrg(
-      organizationId,
-    );
+    const result =
+      await this.subscriptionsRepository.findSubscriptionByOrg(organizationId);
     return result ?? null;
   }
 
@@ -49,9 +48,8 @@ export class SubscriptionsService {
       );
     }
 
-    const existing = await this.subscriptionsRepository.findSubscriptionByOrg(
-      organizationId,
-    );
+    const existing =
+      await this.subscriptionsRepository.findSubscriptionByOrg(organizationId);
 
     let subscription: SubscriptionWithPlan;
 

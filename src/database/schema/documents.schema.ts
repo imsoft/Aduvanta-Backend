@@ -1,9 +1,19 @@
-import { boolean, integer, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from 'drizzle-orm/pg-core';
 import { organizations } from './organizations.schema';
 import { operations } from './operations.schema';
 import { documentCategories } from './document-categories.schema';
 
-export const documentStatusEnum = pgEnum('document_status', ['ACTIVE', 'INACTIVE']);
+export const documentStatusEnum = pgEnum('document_status', [
+  'ACTIVE',
+  'INACTIVE',
+]);
 
 export type DocumentStatus = (typeof documentStatusEnum.enumValues)[number];
 
@@ -30,7 +40,9 @@ export const documents = pgTable('documents', {
   status: documentStatusEnum('status').notNull().default('ACTIVE'),
   isClientVisible: boolean('is_client_visible').notNull().default(false),
   currentVersionNumber: integer('current_version_number').notNull().default(1),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

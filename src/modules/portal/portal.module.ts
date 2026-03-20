@@ -8,7 +8,12 @@ import { PortalService } from './portal.service.js';
 import { PortalController } from './portal.controller.js';
 
 @Module({
-  imports: [AuthModule, ClientPortalAccessModule, OperationsModule, StorageModule],
+  imports: [
+    AuthModule,
+    ClientPortalAccessModule,
+    OperationsModule,
+    StorageModule,
+  ],
   providers: [PortalRepository, PortalService],
   controllers: [PortalController],
 })

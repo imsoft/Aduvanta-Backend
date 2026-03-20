@@ -61,7 +61,9 @@ function buildOverview(operation: OperationRecord): string {
   return `Operation ${operation.reference} — "${operation.title}" is ${operation.status} with ${operation.priority} priority.${dueStr}${assigneeStr}${closedStr}`;
 }
 
-function buildDocumentStatus(compliance: OperationComplianceEvaluation): string {
+function buildDocumentStatus(
+  compliance: OperationComplianceEvaluation,
+): string {
   if (compliance.missingRequiredDocumentCategories.length === 0) {
     const count = compliance.presentDocumentCategories.length;
     return `All required documents are present (${count} categor${count === 1 ? 'y' : 'ies'} uploaded).`;
@@ -73,7 +75,9 @@ function buildDocumentStatus(compliance: OperationComplianceEvaluation): string 
   return `${compliance.missingRequiredDocumentCategories.length} required document categor${compliance.missingRequiredDocumentCategories.length === 1 ? 'y is' : 'ies are'} missing: ${missing}.`;
 }
 
-function buildComplianceStatus(compliance: OperationComplianceEvaluation): string {
+function buildComplianceStatus(
+  compliance: OperationComplianceEvaluation,
+): string {
   if (!compliance.ruleSetId) {
     return 'No compliance rule set is configured for this operation type.';
   }

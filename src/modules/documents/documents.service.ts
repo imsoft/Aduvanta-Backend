@@ -8,7 +8,10 @@ import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
 import { DocumentCategoriesRepository } from '../document-categories/document-categories.repository.js';
 import { OperationsService } from '../operations/operations.service.js';
 import { StorageService } from '../storage/storage.service.js';
-import type { DocumentRecord, DocumentVersionRecord } from './documents.repository.js';
+import type {
+  DocumentRecord,
+  DocumentVersionRecord,
+} from './documents.repository.js';
 import { DocumentsRepository } from './documents.repository.js';
 import type { CreateDocumentDto } from './dto/create-document.dto.js';
 import type { UpdateDocumentDto } from './dto/update-document.dto.js';
@@ -65,7 +68,12 @@ export class DocumentsService {
     }
 
     const documentId = crypto.randomUUID();
-    const storageKey = buildStorageKey(organizationId, documentId, 1, file.originalname);
+    const storageKey = buildStorageKey(
+      organizationId,
+      documentId,
+      1,
+      file.originalname,
+    );
 
     await this.storageService.upload(storageKey, file.buffer, file.mimetype);
 
@@ -133,7 +141,11 @@ export class DocumentsService {
       await this.validateCategory(dto.categoryId, organizationId);
     }
 
-    const updated = await this.documentsRepository.update(id, organizationId, dto);
+    const updated = await this.documentsRepository.update(
+      id,
+      organizationId,
+      dto,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Document ${id} not found`);
@@ -158,7 +170,9 @@ export class DocumentsService {
   ): Promise<void> {
     await this.getById(id, organizationId);
 
-    await this.documentsRepository.update(id, organizationId, { status: 'INACTIVE' });
+    await this.documentsRepository.update(id, organizationId, {
+      status: 'INACTIVE',
+    });
 
     await this.auditLogsService.log({
       organizationId,
@@ -179,7 +193,12 @@ export class DocumentsService {
     const document = await this.getById(id, organizationId);
 
     const nextVersion = document.currentVersionNumber + 1;
-    const storageKey = buildStorageKey(organizationId, id, nextVersion, file.originalname);
+    const storageKey = buildStorageKey(
+      organizationId,
+      id,
+      nextVersion,
+      file.originalname,
+    );
 
     await this.storageService.upload(storageKey, file.buffer, file.mimetype);
 

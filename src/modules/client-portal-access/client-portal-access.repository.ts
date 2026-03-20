@@ -10,7 +10,9 @@ export type NewClientPortalAccess = typeof clientPortalAccess.$inferInsert;
 export class ClientPortalAccessRepository {
   constructor(@Inject(DATABASE) private readonly db: Database) {}
 
-  async insert(entry: NewClientPortalAccess): Promise<ClientPortalAccessRecord> {
+  async insert(
+    entry: NewClientPortalAccess,
+  ): Promise<ClientPortalAccessRecord> {
     const [record] = await this.db
       .insert(clientPortalAccess)
       .values(entry)

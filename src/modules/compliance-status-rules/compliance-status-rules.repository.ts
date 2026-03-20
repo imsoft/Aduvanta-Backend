@@ -1,16 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import { DATABASE, type Database } from '../../database/database.module.js';
-import { statusTransitionRules, type OperationStatus } from '../../database/schema/index.js';
+import {
+  statusTransitionRules,
+  type OperationStatus,
+} from '../../database/schema/index.js';
 
-export type StatusTransitionRuleRecord = typeof statusTransitionRules.$inferSelect;
+export type StatusTransitionRuleRecord =
+  typeof statusTransitionRules.$inferSelect;
 export type NewStatusTransitionRule = typeof statusTransitionRules.$inferInsert;
 
 @Injectable()
 export class ComplianceStatusRulesRepository {
   constructor(@Inject(DATABASE) private readonly db: Database) {}
 
-  async insert(entry: NewStatusTransitionRule): Promise<StatusTransitionRuleRecord> {
+  async insert(
+    entry: NewStatusTransitionRule,
+  ): Promise<StatusTransitionRuleRecord> {
     const [record] = await this.db
       .insert(statusTransitionRules)
       .values(entry)

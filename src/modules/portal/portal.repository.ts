@@ -24,7 +24,9 @@ export interface PortalListOperationsFilter {
 export class PortalRepository {
   constructor(@Inject(DATABASE) private readonly db: Database) {}
 
-  async findOperations(filter: PortalListOperationsFilter): Promise<OperationRecord[]> {
+  async findOperations(
+    filter: PortalListOperationsFilter,
+  ): Promise<OperationRecord[]> {
     if (filter.clientIds.length === 0) {
       return [];
     }

@@ -32,7 +32,11 @@ export class IntegrationDeliveriesController {
     @Param('integrationId') integrationId: string,
     @Query() query: ListIntegrationDeliveriesDto,
   ) {
-    return this.deliveriesService.listForIntegration(integrationId, organizationId, query);
+    return this.deliveriesService.listForIntegration(
+      integrationId,
+      organizationId,
+      query,
+    );
   }
 
   @Post('integration-deliveries/:deliveryId/retry')
@@ -43,6 +47,10 @@ export class IntegrationDeliveriesController {
     @Param('deliveryId') deliveryId: string,
     @Session() session: ActiveSession,
   ) {
-    return this.deliveriesService.retry(deliveryId, organizationId, session.user.id);
+    return this.deliveriesService.retry(
+      deliveryId,
+      organizationId,
+      session.user.id,
+    );
   }
 }

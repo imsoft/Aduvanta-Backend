@@ -15,5 +15,7 @@ export const documentVersions = pgTable('document_versions', {
   sizeInBytes: integer('size_in_bytes').notNull(),
   // References Better Auth user — no FK to avoid drizzle-kit migration conflicts.
   uploadedById: text('uploaded_by_id').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });

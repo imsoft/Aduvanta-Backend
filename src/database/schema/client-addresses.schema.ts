@@ -18,7 +18,9 @@ export const clientAddresses = pgTable('client_addresses', {
   street2: text('street2'),
   reference: text('reference'),
   isPrimary: boolean('is_primary').notNull().default(false),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

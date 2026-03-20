@@ -33,7 +33,9 @@ export const exportJobs = pgTable('export_jobs', {
   requestedById: text('requested_by_id').notNull(),
   // Optional JSON filters applied at export time
   filtersJson: text('filters_json'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

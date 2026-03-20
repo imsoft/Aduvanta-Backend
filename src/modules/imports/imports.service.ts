@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AuditLogsService } from '../audit-logs/audit-logs.service.js';
 import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
 import { ClientsRepository } from '../clients/clients.repository.js';
@@ -72,11 +76,15 @@ export class ImportsService {
         actorId,
       );
 
-      const updated = await this.importsRepository.update(job.id, organizationId, {
-        status: 'COMPLETED',
-        resultSummaryJson: JSON.stringify(summary),
-        completedAt: new Date(),
-      });
+      const updated = await this.importsRepository.update(
+        job.id,
+        organizationId,
+        {
+          status: 'COMPLETED',
+          resultSummaryJson: JSON.stringify(summary),
+          completedAt: new Date(),
+        },
+      );
 
       await this.auditLogsService.log({
         organizationId,
@@ -89,16 +97,20 @@ export class ImportsService {
 
       return updated ?? job;
     } catch (err) {
-      const failed = await this.importsRepository.update(job.id, organizationId, {
-        status: 'FAILED',
-        resultSummaryJson: JSON.stringify({
-          processed: 0,
-          created: 0,
-          failed: 0,
-          errors: [err instanceof Error ? err.message : String(err)],
-        }),
-        completedAt: new Date(),
-      });
+      const failed = await this.importsRepository.update(
+        job.id,
+        organizationId,
+        {
+          status: 'FAILED',
+          resultSummaryJson: JSON.stringify({
+            processed: 0,
+            created: 0,
+            failed: 0,
+            errors: [err instanceof Error ? err.message : String(err)],
+          }),
+          completedAt: new Date(),
+        },
+      );
 
       await this.auditLogsService.log({
         organizationId,
@@ -106,7 +118,10 @@ export class ImportsService {
         action: AUDIT_ACTION.IMPORT_FAILED,
         resource: 'import_job',
         resourceId: job.id,
-        metadata: { type: dto.type, error: err instanceof Error ? err.message : String(err) },
+        metadata: {
+          type: dto.type,
+          error: err instanceof Error ? err.message : String(err),
+        },
       });
 
       return failed ?? job;
@@ -148,7 +163,9 @@ export class ImportsService {
       .filter((l) => l.length > 0);
 
     if (lines.length < 2) {
-      throw new BadRequestException('CSV must have a header row and at least one data row');
+      throw new BadRequestException(
+        'CSV must have a header row and at least one data row',
+      );
     }
 
     const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
@@ -162,7 +179,12 @@ export class ImportsService {
     const emailIndex = headers.indexOf('email');
     const phoneIndex = headers.indexOf('phone');
 
-    const summary: ImportResultSummary = { processed: 0, created: 0, failed: 0, errors: [] };
+    const summary: ImportResultSummary = {
+      processed: 0,
+      created: 0,
+      failed: 0,
+      errors: [],
+    };
 
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i].split(',').map((c) => c.trim());

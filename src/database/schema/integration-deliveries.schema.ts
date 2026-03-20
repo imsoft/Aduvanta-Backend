@@ -27,7 +27,9 @@ export const integrationDeliveries = pgTable('integration_deliveries', {
   responseBody: text('response_body'),
   attemptCount: integer('attempt_count').notNull().default(0),
   lastAttemptAt: timestamp('last_attempt_at', { withTimezone: true }),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

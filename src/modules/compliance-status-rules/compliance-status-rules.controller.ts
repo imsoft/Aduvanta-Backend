@@ -24,7 +24,9 @@ import { UpdateStatusTransitionRuleDto } from './dto/update-status-transition-ru
 @Controller()
 @UseGuards(AuthGuard, PermissionsGuard)
 export class ComplianceStatusRulesController {
-  constructor(private readonly statusRulesService: ComplianceStatusRulesService) {}
+  constructor(
+    private readonly statusRulesService: ComplianceStatusRulesService,
+  ) {}
 
   @Get('compliance/rule-sets/:ruleSetId/status-rules')
   @RequirePermission(PERMISSION.COMPLIANCE_READ)
@@ -43,7 +45,12 @@ export class ComplianceStatusRulesController {
     @Body() dto: CreateStatusTransitionRuleDto,
     @Session() session: ActiveSession,
   ) {
-    return this.statusRulesService.create(ruleSetId, organizationId, dto, session.user.id);
+    return this.statusRulesService.create(
+      ruleSetId,
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Patch('compliance/status-rules/:statusRuleId')

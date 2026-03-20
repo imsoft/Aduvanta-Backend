@@ -13,6 +13,9 @@ import { ComplianceDocumentRequirementsController } from './compliance-document-
     ComplianceDocumentRequirementsService,
   ],
   controllers: [ComplianceDocumentRequirementsController],
-  exports: [ComplianceDocumentRequirementsRepository, ComplianceDocumentRequirementsService],
+  exports: [
+    ComplianceDocumentRequirementsRepository,
+    ComplianceDocumentRequirementsService,
+  ],
 })
 export class ComplianceDocumentRequirementsModule {}

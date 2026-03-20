@@ -13,7 +13,9 @@ export const operationComments = pgTable('operation_comments', {
   authorId: text('author_id').notNull(),
   body: text('body').notNull(),
   isClientVisible: boolean('is_client_visible').notNull().default(false),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

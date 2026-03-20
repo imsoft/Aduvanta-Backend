@@ -19,13 +19,18 @@ export const documentRequirements = pgTable(
       .notNull()
       .references(() => documentCategories.id, { onDelete: 'cascade' }),
     isRequired: boolean('is_required').notNull().default(true),
-    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .notNull()
       .defaultNow()
       .$onUpdate(() => new Date()),
   },
   (t) => [
-    unique('doc_req_rule_set_category_unique').on(t.ruleSetId, t.documentCategoryId),
+    unique('doc_req_rule_set_category_unique').on(
+      t.ruleSetId,
+      t.documentCategoryId,
+    ),
   ],
 );

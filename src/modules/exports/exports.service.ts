@@ -55,13 +55,22 @@ export class ExportsService {
 
     // Process synchronously in V1.
     try {
-      const updated = await this.processExport(job.id, organizationId, dto.type, actorId);
+      const updated = await this.processExport(
+        job.id,
+        organizationId,
+        dto.type,
+        actorId,
+      );
       return updated;
     } catch (err) {
-      const failed = await this.exportsRepository.update(job.id, organizationId, {
-        status: 'FAILED',
-        completedAt: new Date(),
-      });
+      const failed = await this.exportsRepository.update(
+        job.id,
+        organizationId,
+        {
+          status: 'FAILED',
+          completedAt: new Date(),
+        },
+      );
 
       await this.auditLogsService.log({
         organizationId,
@@ -89,7 +98,10 @@ export class ExportsService {
     return record;
   }
 
-  async getDownloadUrl(id: string, organizationId: string): Promise<{ url: string }> {
+  async getDownloadUrl(
+    id: string,
+    organizationId: string,
+  ): Promise<{ url: string }> {
     const job = await this.getById(id, organizationId);
 
     if (!job.storageKey) {
@@ -164,26 +176,76 @@ export class ExportsService {
     return updated!;
   }
 
-  private buildClientsCsv(clients: { id: string; name: string; taxId: string | null; email: string | null; phone: string | null; status: string; createdAt: Date }[]): string {
+  private buildClientsCsv(
+    clients: {
+      id: string;
+      name: string;
+      taxId: string | null;
+      email: string | null;
+      phone: string | null;
+      status: string;
+      createdAt: Date;
+    }[],
+  ): string {
     const header = 'id,name,taxId,email,phone,status,createdAt';
     const rows = clients.map((c) =>
-      [c.id, this.escapeCsv(c.name), c.taxId ?? '', c.email ?? '', c.phone ?? '', c.status, c.createdAt.toISOString()].join(','),
+      [
+        c.id,
+        this.escapeCsv(c.name),
+        c.taxId ?? '',
+        c.email ?? '',
+        c.phone ?? '',
+        c.status,
+        c.createdAt.toISOString(),
+      ].join(','),
     );
     return [header, ...rows].join('\n');
   }
 
-  private buildOperationsCsv(operations: { id: string; reference: string; title: string; type: string; status: string; priority: string; createdAt: Date }[]): string {
+  private buildOperationsCsv(
+    operations: {
+      id: string;
+      reference: string;
+      title: string;
+      type: string;
+      status: string;
+      priority: string;
+      createdAt: Date;
+    }[],
+  ): string {
     const header = 'id,reference,title,type,status,priority,createdAt';
     const rows = operations.map((o) =>
-      [o.id, this.escapeCsv(o.reference), this.escapeCsv(o.title), o.type, o.status, o.priority, o.createdAt.toISOString()].join(','),
+      [
+        o.id,
+        this.escapeCsv(o.reference),
+        this.escapeCsv(o.title),
+        o.type,
+        o.status,
+        o.priority,
+        o.createdAt.toISOString(),
+      ].join(','),
     );
     return [header, ...rows].join('\n');
   }
 
-  private buildFinanceCsv(operations: { id: string; reference: string; title: string; status: string; createdAt: Date }[]): string {
+  private buildFinanceCsv(
+    operations: {
+      id: string;
+      reference: string;
+      title: string;
+      status: string;
+      createdAt: Date;
+    }[],
+  ): string {
     const header = 'operationId,reference,title,status,createdAt';
     const rows = operations.map((o) =>
-      [o.id, this.escapeCsv(o.reference), this.escapeCsv(o.title), o.status, o.createdAt.toISOString()].join(','),
+      [
+        o.id,
+        this.escapeCsv(o.reference),
+        this.escapeCsv(o.title),
+        o.status,
+        o.createdAt.toISOString(),
+      ].join(','),
     );
     return [header, ...rows].join('\n');
   }

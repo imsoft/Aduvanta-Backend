@@ -1,4 +1,10 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+} from 'drizzle-orm/pg-core';
 
 // Apéndice 7: Unidades de medida (comercial y tarifa)
 export const anexo22UnitsOfMeasure = pgTable('anexo22_units_of_measure', {

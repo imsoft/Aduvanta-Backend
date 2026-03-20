@@ -1,10 +1,4 @@
-import {
-  pgTable,
-  text,
-  timestamp,
-  integer,
-  pgEnum,
-} from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, integer, pgEnum } from 'drizzle-orm/pg-core';
 import { organizations } from './organizations.schema.js';
 
 export const checklistStatusEnum = pgEnum('checklist_status', [

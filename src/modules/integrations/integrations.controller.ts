@@ -44,7 +44,11 @@ export class IntegrationsController {
     @Body() dto: CreateIntegrationDto,
     @Session() session: ActiveSession,
   ) {
-    return this.integrationsService.create(organizationId, dto, session.user.id);
+    return this.integrationsService.create(
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Get(':integrationId')
@@ -64,7 +68,12 @@ export class IntegrationsController {
     @Body() dto: UpdateIntegrationDto,
     @Session() session: ActiveSession,
   ) {
-    return this.integrationsService.update(integrationId, organizationId, dto, session.user.id);
+    return this.integrationsService.update(
+      integrationId,
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Delete(':integrationId')
@@ -75,6 +84,10 @@ export class IntegrationsController {
     @Param('integrationId') integrationId: string,
     @Session() session: ActiveSession,
   ) {
-    await this.integrationsService.deactivate(integrationId, organizationId, session.user.id);
+    await this.integrationsService.deactivate(
+      integrationId,
+      organizationId,
+      session.user.id,
+    );
   }
 }

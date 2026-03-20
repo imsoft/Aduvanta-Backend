@@ -36,7 +36,9 @@ export class OperationChargesRepository {
     return result[0];
   }
 
-  async findByOperation(filter: ListChargesFilter): Promise<OperationChargeRecord[]> {
+  async findByOperation(
+    filter: ListChargesFilter,
+  ): Promise<OperationChargeRecord[]> {
     const conditions: SQL[] = [
       eq(operationCharges.operationId, filter.operationId),
       eq(operationCharges.organizationId, filter.organizationId),

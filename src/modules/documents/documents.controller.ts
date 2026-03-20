@@ -41,7 +41,11 @@ export class DocumentsController {
     @Param('operationId') operationId: string,
     @Query() query: ListOperationDocumentsDto,
   ) {
-    return this.documentsService.listForOperation(operationId, organizationId, query);
+    return this.documentsService.listForOperation(
+      operationId,
+      organizationId,
+      query,
+    );
   }
 
   @Post('operations/:operationId/documents')
@@ -54,7 +58,13 @@ export class DocumentsController {
     @UploadedFile() file: Express.Multer.File,
     @Session() session: ActiveSession,
   ) {
-    return this.documentsService.create(operationId, organizationId, dto, file, session.user.id);
+    return this.documentsService.create(
+      operationId,
+      organizationId,
+      dto,
+      file,
+      session.user.id,
+    );
   }
 
   // --- Single document ---
@@ -76,7 +86,12 @@ export class DocumentsController {
     @Body() dto: UpdateDocumentDto,
     @Session() session: ActiveSession,
   ) {
-    return this.documentsService.update(documentId, organizationId, dto, session.user.id);
+    return this.documentsService.update(
+      documentId,
+      organizationId,
+      dto,
+      session.user.id,
+    );
   }
 
   @Delete('documents/:documentId')
@@ -87,7 +102,11 @@ export class DocumentsController {
     @Param('documentId') documentId: string,
     @Session() session: ActiveSession,
   ) {
-    await this.documentsService.deactivate(documentId, organizationId, session.user.id);
+    await this.documentsService.deactivate(
+      documentId,
+      organizationId,
+      session.user.id,
+    );
   }
 
   // --- Versions ---

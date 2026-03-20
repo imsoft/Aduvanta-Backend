@@ -1,4 +1,10 @@
-import { IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateDocumentCategoryDto {
   @IsString()
@@ -10,7 +16,8 @@ export class CreateDocumentCategoryDto {
   @MinLength(1)
   @MaxLength(50)
   @Matches(/^[A-Z0-9_]+$/, {
-    message: 'code must contain only uppercase letters, digits, and underscores',
+    message:
+      'code must contain only uppercase letters, digits, and underscores',
   })
   code: string;
 

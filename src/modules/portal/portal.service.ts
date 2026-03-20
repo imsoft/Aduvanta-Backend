@@ -7,7 +7,10 @@ import { AuditLogsService } from '../audit-logs/audit-logs.service.js';
 import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
 import { ClientPortalAccessRepository } from '../client-portal-access/client-portal-access.repository.js';
 import { StorageService } from '../storage/storage.service.js';
-import type { OperationRecord, OperationStatusHistoryRecord } from '../operations/operations.repository.js';
+import type {
+  OperationRecord,
+  OperationStatusHistoryRecord,
+} from '../operations/operations.repository.js';
 import { OperationsRepository } from '../operations/operations.repository.js';
 import type { OperationCommentRecord } from '../operation-comments/operation-comments.repository.js';
 import type { DocumentRecord } from '../documents/documents.repository.js';
@@ -70,7 +73,10 @@ export class PortalService {
     organizationId: string,
   ): Promise<OperationStatusHistoryRecord[]> {
     await this.getOperation(operationId, userId, organizationId);
-    return this.operationsRepository.findStatusHistory(operationId, organizationId);
+    return this.operationsRepository.findStatusHistory(
+      operationId,
+      organizationId,
+    );
   }
 
   async listComments(
@@ -80,7 +86,10 @@ export class PortalService {
   ): Promise<OperationCommentRecord[]> {
     await this.getOperation(operationId, userId, organizationId);
 
-    return this.portalRepository.findClientVisibleComments(operationId, organizationId);
+    return this.portalRepository.findClientVisibleComments(
+      operationId,
+      organizationId,
+    );
   }
 
   async listDocuments(
@@ -90,7 +99,10 @@ export class PortalService {
   ): Promise<DocumentRecord[]> {
     await this.getOperation(operationId, userId, organizationId);
 
-    return this.portalRepository.findClientVisibleDocuments(operationId, organizationId);
+    return this.portalRepository.findClientVisibleDocuments(
+      operationId,
+      organizationId,
+    );
   }
 
   async getDocumentDownloadUrl(
@@ -98,7 +110,10 @@ export class PortalService {
     userId: string,
     organizationId: string,
   ): Promise<{ url: string; expiresInSeconds: number }> {
-    const document = await this.portalRepository.findDocumentById(documentId, organizationId);
+    const document = await this.portalRepository.findDocumentById(
+      documentId,
+      organizationId,
+    );
 
     if (!document) {
       throw new NotFoundException(`Document ${documentId} not found`);
@@ -129,7 +144,10 @@ export class PortalService {
       action: AUDIT_ACTION.PORTAL_DOCUMENT_DOWNLOADED,
       resource: 'document',
       resourceId: documentId,
-      metadata: { operationId: document.operationId, storageKey: document.storageKey },
+      metadata: {
+        operationId: document.operationId,
+        storageKey: document.storageKey,
+      },
     });
 
     return { url, expiresInSeconds: PORTAL_SIGNED_URL_EXPIRES_IN };

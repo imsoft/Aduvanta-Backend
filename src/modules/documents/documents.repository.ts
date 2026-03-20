@@ -40,7 +40,9 @@ export class DocumentsRepository {
     return result[0];
   }
 
-  async findByOperation(filter: ListDocumentsFilter): Promise<DocumentRecord[]> {
+  async findByOperation(
+    filter: ListDocumentsFilter,
+  ): Promise<DocumentRecord[]> {
     const conditions: SQL[] = [
       eq(documents.operationId, filter.operationId),
       eq(documents.organizationId, filter.organizationId),
@@ -74,7 +76,9 @@ export class DocumentsRepository {
     const result = await this.db
       .update(documents)
       .set(data)
-      .where(and(eq(documents.id, id), eq(documents.organizationId, organizationId)))
+      .where(
+        and(eq(documents.id, id), eq(documents.organizationId, organizationId)),
+      )
       .returning();
     return result[0];
   }
@@ -96,7 +100,9 @@ export class DocumentsRepository {
     return result.length > 0;
   }
 
-  async insertVersion(entry: NewDocumentVersion): Promise<DocumentVersionRecord> {
+  async insertVersion(
+    entry: NewDocumentVersion,
+  ): Promise<DocumentVersionRecord> {
     const [record] = await this.db
       .insert(documentVersions)
       .values(entry)

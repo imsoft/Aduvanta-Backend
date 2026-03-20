@@ -69,7 +69,8 @@ export class FeatureFlagsService {
 
     const updated = await this.featureFlagsRepository.update(id, {
       isEnabled: dto.isEnabled ?? flag.isEnabled,
-      description: dto.description !== undefined ? dto.description : flag.description,
+      description:
+        dto.description !== undefined ? dto.description : flag.description,
     });
 
     if (!updated) {

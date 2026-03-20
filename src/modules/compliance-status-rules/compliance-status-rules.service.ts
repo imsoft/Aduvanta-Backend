@@ -35,11 +35,12 @@ export class ComplianceStatusRulesService {
   ): Promise<StatusTransitionRuleRecord> {
     await this.ruleSetsService.getById(ruleSetId, organizationId);
 
-    const existing = await this.statusRulesRepository.findByRuleSetAndTransition(
-      ruleSetId,
-      dto.fromStatus,
-      dto.toStatus,
-    );
+    const existing =
+      await this.statusRulesRepository.findByRuleSetAndTransition(
+        ruleSetId,
+        dto.fromStatus,
+        dto.toStatus,
+      );
     if (existing) {
       throw new ConflictException(
         `A status rule for ${dto.fromStatus} → ${dto.toStatus} already exists in this rule set`,
@@ -71,7 +72,10 @@ export class ComplianceStatusRulesService {
     return rule;
   }
 
-  async getById(id: string, organizationId: string): Promise<StatusTransitionRuleRecord> {
+  async getById(
+    id: string,
+    organizationId: string,
+  ): Promise<StatusTransitionRuleRecord> {
     const rule = await this.statusRulesRepository.findById(id);
 
     if (!rule || rule.organizationId !== organizationId) {
@@ -89,7 +93,11 @@ export class ComplianceStatusRulesService {
   ): Promise<StatusTransitionRuleRecord> {
     await this.getById(id, organizationId);
 
-    const updated = await this.statusRulesRepository.update(id, organizationId, dto);
+    const updated = await this.statusRulesRepository.update(
+      id,
+      organizationId,
+      dto,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Status transition rule ${id} not found`);
@@ -107,7 +115,11 @@ export class ComplianceStatusRulesService {
     return updated;
   }
 
-  async delete(id: string, organizationId: string, actorId: string): Promise<void> {
+  async delete(
+    id: string,
+    organizationId: string,
+    actorId: string,
+  ): Promise<void> {
     const rule = await this.getById(id, organizationId);
 
     await this.statusRulesRepository.delete(id, organizationId);

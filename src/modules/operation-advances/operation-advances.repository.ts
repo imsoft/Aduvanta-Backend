@@ -36,7 +36,9 @@ export class OperationAdvancesRepository {
     return result[0];
   }
 
-  async findByOperation(filter: ListAdvancesFilter): Promise<OperationAdvanceRecord[]> {
+  async findByOperation(
+    filter: ListAdvancesFilter,
+  ): Promise<OperationAdvanceRecord[]> {
     const conditions: SQL[] = [
       eq(operationAdvances.operationId, filter.operationId),
       eq(operationAdvances.organizationId, filter.organizationId),

@@ -24,7 +24,9 @@ import { ListPortalAccessDto } from './dto/list-portal-access.dto.js';
 @Controller('client-portal-access')
 @UseGuards(AuthGuard, PermissionsGuard)
 export class ClientPortalAccessController {
-  constructor(private readonly portalAccessService: ClientPortalAccessService) {}
+  constructor(
+    private readonly portalAccessService: ClientPortalAccessService,
+  ) {}
 
   @Get()
   @RequirePermission(PERMISSION.PORTAL_ACCESS_MANAGE)
@@ -33,7 +35,10 @@ export class ClientPortalAccessController {
     @Query() query: ListPortalAccessDto,
   ) {
     if (query.clientId) {
-      return this.portalAccessService.listForClient(query.clientId, organizationId);
+      return this.portalAccessService.listForClient(
+        query.clientId,
+        organizationId,
+      );
     }
     return [];
   }
@@ -56,6 +61,10 @@ export class ClientPortalAccessController {
     @Param('accessId') accessId: string,
     @Session() session: ActiveSession,
   ) {
-    await this.portalAccessService.revoke(accessId, organizationId, session.user.id);
+    await this.portalAccessService.revoke(
+      accessId,
+      organizationId,
+      session.user.id,
+    );
   }
 }

@@ -27,7 +27,11 @@ export class PortalController {
     @Query() query: ListPortalOperationsDto,
     @Session() session: ActiveSession,
   ) {
-    return this.portalService.listOperations(session.user.id, organizationId, query);
+    return this.portalService.listOperations(
+      session.user.id,
+      organizationId,
+      query,
+    );
   }
 
   @Get('operations/:operationId')
@@ -37,7 +41,11 @@ export class PortalController {
     @Param('operationId') operationId: string,
     @Session() session: ActiveSession,
   ) {
-    return this.portalService.getOperation(operationId, session.user.id, organizationId);
+    return this.portalService.getOperation(
+      operationId,
+      session.user.id,
+      organizationId,
+    );
   }
 
   @Get('operations/:operationId/history')
@@ -47,7 +55,11 @@ export class PortalController {
     @Param('operationId') operationId: string,
     @Session() session: ActiveSession,
   ) {
-    return this.portalService.getStatusHistory(operationId, session.user.id, organizationId);
+    return this.portalService.getStatusHistory(
+      operationId,
+      session.user.id,
+      organizationId,
+    );
   }
 
   @Get('operations/:operationId/comments')
@@ -57,7 +69,11 @@ export class PortalController {
     @Param('operationId') operationId: string,
     @Session() session: ActiveSession,
   ) {
-    return this.portalService.listComments(operationId, session.user.id, organizationId);
+    return this.portalService.listComments(
+      operationId,
+      session.user.id,
+      organizationId,
+    );
   }
 
   @Get('operations/:operationId/documents')
@@ -67,7 +83,11 @@ export class PortalController {
     @Param('operationId') operationId: string,
     @Session() session: ActiveSession,
   ) {
-    return this.portalService.listDocuments(operationId, session.user.id, organizationId);
+    return this.portalService.listDocuments(
+      operationId,
+      session.user.id,
+      organizationId,
+    );
   }
 
   @Get('documents/:documentId/download-url')

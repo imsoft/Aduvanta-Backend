@@ -69,7 +69,11 @@ export class ClientsService {
   ): Promise<ClientRecord> {
     await this.getById(id, organizationId);
 
-    const updated = await this.clientsRepository.update(id, organizationId, dto);
+    const updated = await this.clientsRepository.update(
+      id,
+      organizationId,
+      dto,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Client ${id} not found`);
@@ -94,7 +98,9 @@ export class ClientsService {
   ): Promise<void> {
     await this.getById(id, organizationId);
 
-    await this.clientsRepository.update(id, organizationId, { status: 'INACTIVE' });
+    await this.clientsRepository.update(id, organizationId, {
+      status: 'INACTIVE',
+    });
 
     await this.auditLogsService.log({
       organizationId,

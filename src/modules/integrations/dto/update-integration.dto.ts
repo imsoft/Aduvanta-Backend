@@ -7,7 +7,10 @@ import {
   IsUrl,
   MaxLength,
 } from 'class-validator';
-import { VALID_EVENT_TYPES, type WebhookEventType } from './create-integration.dto.js';
+import {
+  VALID_EVENT_TYPES,
+  type WebhookEventType,
+} from './create-integration.dto.js';
 
 export class UpdateIntegrationDto {
   @IsOptional()

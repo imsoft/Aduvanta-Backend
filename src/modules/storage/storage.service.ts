@@ -52,7 +52,10 @@ export class StorageService {
     return { key, bucket: this.bucket! };
   }
 
-  async getPresignedUrl(key: string, expiresInSeconds: number): Promise<string> {
+  async getPresignedUrl(
+    key: string,
+    expiresInSeconds: number,
+  ): Promise<string> {
     this.assertConfigured();
 
     return getSignedUrl(

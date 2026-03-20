@@ -7,7 +7,10 @@ import { AuditLogsService } from '../audit-logs/audit-logs.service.js';
 import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
 import { ClientsService } from '../clients/clients.service.js';
 import { MembershipsRepository } from '../memberships/memberships.repository.js';
-import type { OperationRecord, OperationStatusHistoryRecord } from './operations.repository.js';
+import type {
+  OperationRecord,
+  OperationStatusHistoryRecord,
+} from './operations.repository.js';
 import { OperationsRepository } from './operations.repository.js';
 import type { CreateOperationDto } from './dto/create-operation.dto.js';
 import type { UpdateOperationDto } from './dto/update-operation.dto.js';
@@ -186,9 +189,7 @@ export class OperationsService {
       );
     }
 
-    const closedAt = CLOSED_STATUSES.includes(dto.status)
-      ? new Date()
-      : null;
+    const closedAt = CLOSED_STATUSES.includes(dto.status) ? new Date() : null;
 
     const updated = await this.operationsRepository.update(id, organizationId, {
       status: dto.status,

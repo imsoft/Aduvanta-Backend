@@ -1,10 +1,4 @@
-import {
-  pgTable,
-  text,
-  timestamp,
-  boolean,
-  pgEnum,
-} from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, pgEnum } from 'drizzle-orm/pg-core';
 import { organizations } from './organizations.schema.js';
 
 export const templateTypeEnum = pgEnum('template_type', [

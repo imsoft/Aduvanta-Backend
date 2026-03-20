@@ -24,7 +24,8 @@ export const operationTypeEnum = pgEnum('operation_type', [
 ]);
 
 export type OperationStatus = (typeof operationStatusEnum.enumValues)[number];
-export type OperationPriority = (typeof operationPriorityEnum.enumValues)[number];
+export type OperationPriority =
+  (typeof operationPriorityEnum.enumValues)[number];
 export type OperationType = (typeof operationTypeEnum.enumValues)[number];
 
 export const operations = pgTable('operations', {
@@ -49,7 +50,9 @@ export const operations = pgTable('operations', {
   openedAt: timestamp('opened_at', { withTimezone: true }),
   dueAt: timestamp('due_at', { withTimezone: true }),
   closedAt: timestamp('closed_at', { withTimezone: true }),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow()

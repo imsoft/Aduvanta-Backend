@@ -10,7 +10,9 @@ export type NewFeatureFlag = typeof featureFlags.$inferInsert;
 export class FeatureFlagsRepository {
   constructor(@Inject(DATABASE) private readonly db: Database) {}
 
-  async findByOrganization(organizationId: string): Promise<FeatureFlagRecord[]> {
+  async findByOrganization(
+    organizationId: string,
+  ): Promise<FeatureFlagRecord[]> {
     // Returns org-specific flags + global flags (organizationId IS NULL).
     return this.db
       .select()

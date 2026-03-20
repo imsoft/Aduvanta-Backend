@@ -1,5 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { HealthIndicatorResult, HealthIndicator, HealthCheckError } from '@nestjs/terminus';
+import {
+  HealthIndicatorResult,
+  HealthIndicator,
+  HealthCheckError,
+} from '@nestjs/terminus';
 import type Redis from 'ioredis';
 import { REDIS } from '../../redis/redis.module.js';
 

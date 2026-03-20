@@ -55,13 +55,20 @@ export class IntegrationsService {
       action: AUDIT_ACTION.INTEGRATION_CREATED,
       resource: 'integration',
       resourceId: record.id,
-      metadata: { provider: record.provider, name: record.name, eventTypes: dto.eventTypes },
+      metadata: {
+        provider: record.provider,
+        name: record.name,
+        eventTypes: dto.eventTypes,
+      },
     });
 
     return this.sanitize(record);
   }
 
-  async getById(id: string, organizationId: string): Promise<IntegrationRecord> {
+  async getById(
+    id: string,
+    organizationId: string,
+  ): Promise<IntegrationRecord> {
     const record = await this.integrationsRepository.findById(id);
 
     if (!record || record.organizationId !== organizationId) {
@@ -82,11 +89,17 @@ export class IntegrationsService {
     const data: Record<string, unknown> = {};
     if (dto.name !== undefined) data.name = dto.name;
     if (dto.targetUrl !== undefined) data.targetUrl = dto.targetUrl;
-    if (dto.secret !== undefined) data.secretEncrypted = encodeSecret(dto.secret);
-    if (dto.eventTypes !== undefined) data.eventTypes = dto.eventTypes.join(',');
+    if (dto.secret !== undefined)
+      data.secretEncrypted = encodeSecret(dto.secret);
+    if (dto.eventTypes !== undefined)
+      data.eventTypes = dto.eventTypes.join(',');
     if (dto.status !== undefined) data.status = dto.status;
 
-    const updated = await this.integrationsRepository.update(id, organizationId, data);
+    const updated = await this.integrationsRepository.update(
+      id,
+      organizationId,
+      data,
+    );
 
     if (!updated) {
       throw new NotFoundException(`Integration ${id} not found`);
@@ -104,10 +117,16 @@ export class IntegrationsService {
     return this.sanitize(updated);
   }
 
-  async deactivate(id: string, organizationId: string, actorId: string): Promise<void> {
+  async deactivate(
+    id: string,
+    organizationId: string,
+    actorId: string,
+  ): Promise<void> {
     await this.getById(id, organizationId);
 
-    await this.integrationsRepository.update(id, organizationId, { status: 'INACTIVE' });
+    await this.integrationsRepository.update(id, organizationId, {
+      status: 'INACTIVE',
+    });
 
     await this.auditLogsService.log({
       organizationId,
