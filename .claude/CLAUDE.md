@@ -21,19 +21,26 @@ The backend is responsible for:
 This is not a prototype backend.
 This backend must be built as a scalable modular platform.
 
-The current priority is the foundation layer:
+The foundation layer is complete:
 
-- config
-- database
-- auth
-- users
-- organizations
-- memberships
-- roles
-- permissions
-- audit logs
+- config, database, auth, users, organizations, memberships, roles, permissions, audit logs, health, storage
 
-Do not prioritize operations, documents, finance, compliance, integrations, or AI before the foundation is working correctly.
+The current priority is building operational modules following this order:
+
+1. Tariff Classification / TIGIE (`tariff-classification`)
+2. Customs Entries / Pedimentos (`customs-entries`)
+3. Customs Operations / Traffic (`customs-operations`)
+4. Customs Valuation (`customs-valuation`)
+5. COVE / E-Documents (`e-documents`)
+6. Billing (`billing`)
+7. Treasury (`treasury`)
+8. Document Management (`document-management`)
+9. Warehouse Control (`warehouse`)
+10. CUPO Letters (`cupo-letters`)
+11. Notifications (`notifications`)
+12. Client Portal (`portal`)
+13. Analytics & BI (`analytics`)
+14. AI Assistant (`ai-assistant`)
 
 ---
 
