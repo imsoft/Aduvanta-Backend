@@ -12,6 +12,7 @@ export const configSchema = z.object({
     .min(32, 'BETTER_AUTH_SECRET must be at least 32 characters'),
   BETTER_AUTH_URL: z.string().url('BETTER_AUTH_URL must be a valid URL'),
   CORS_ORIGIN: z.string().default('http://localhost:3001'),
+  COOKIE_DOMAIN: z.string().optional(),
   SENTRY_DSN: z.string().url().optional(),
   // S3-compatible object storage
   S3_BUCKET: z.string().optional(),
