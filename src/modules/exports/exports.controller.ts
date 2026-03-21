@@ -14,12 +14,16 @@ import { Session } from '../../common/decorators/session.decorator.js';
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { PERMISSION } from '../permissions/permission.codes.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { ExportsService } from './exports.service.js';
 import { CreateExportJobDto } from './dto/create-export-job.dto.js';
 import { ListExportJobsDto } from './dto/list-export-jobs.dto.js';
 
+@RateLimit('export')
 @Controller('exports')
-@UseGuards(AuthGuard, PermissionsGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, PermissionsGuard)
 export class ExportsController {
   constructor(private readonly exportsService: ExportsService) {}
 

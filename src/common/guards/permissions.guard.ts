@@ -36,14 +36,22 @@ export class PermissionsGuard implements CanActivate {
       throw new UnauthorizedException('No active session');
     }
 
-    // Extract organizationId from route params, then fallback to header.
+    // Extract organizationId from route param or header — never fall back to generic 'id'.
     const organizationId =
       (request.params as Record<string, string>)['organizationId'] ??
-      (request.params as Record<string, string>)['id'] ??
-      request.headers['x-organization-id'];
+      (typeof request.headers['x-organization-id'] === 'string'
+        ? request.headers['x-organization-id']
+        : undefined);
 
     if (!organizationId || typeof organizationId !== 'string') {
       throw new ForbiddenException('Organization context is required');
+    }
+
+    // Validate UUID format to prevent injection via header.
+    const UUID_RE =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!UUID_RE.test(organizationId)) {
+      throw new ForbiddenException('Invalid organization identifier');
     }
 
     await this.permissionsService.assertPermission(

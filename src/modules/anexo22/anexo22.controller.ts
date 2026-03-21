@@ -8,6 +8,9 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AuthGuard } from '../../common/guards/auth.guard.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { Anexo22Service } from './anexo22.service.js';
 import {
   catalogParamSchema,
@@ -17,8 +20,9 @@ import {
 import type { CatalogName } from './anexo22.repository.js';
 
 @ApiTags('Anexo 22')
+@RateLimit('search')
 @Controller('anexo22')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard)
 export class Anexo22Controller {
   constructor(private readonly service: Anexo22Service) {}
 

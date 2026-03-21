@@ -16,6 +16,11 @@ import { Session } from '../../common/decorators/session.decorator.js';
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { PERMISSION } from '../permissions/permission.codes.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { Idempotent } from '../../common/idempotency/idempotency.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { IdempotencyGuard } from '../../common/idempotency/idempotency.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { CustomsEntriesService } from './customs-entries.service.js';
 import { CreateCustomsEntryDto } from './dto/create-customs-entry.dto.js';
 import { UpdateCustomsEntryDto } from './dto/update-customs-entry.dto.js';
@@ -26,8 +31,9 @@ import { ChangeEntryStatusDto } from './dto/change-entry-status.dto.js';
 import { SearchEntriesDto } from './dto/search-entries.dto.js';
 import { ListEntriesDto } from './dto/list-entries.dto.js';
 
+@RateLimit('mutation')
 @Controller('customs')
-@UseGuards(AuthGuard, PermissionsGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, IdempotencyGuard, PermissionsGuard)
 export class CustomsEntriesController {
   constructor(private readonly customsService: CustomsEntriesService) {}
 
@@ -120,6 +126,7 @@ export class CustomsEntriesController {
   }
 
   @Post('entries')
+  @Idempotent(10000)
   @RequirePermission(PERMISSION.CUSTOMS_ENTRIES_CREATE)
   async createEntry(
     @Body() dto: CreateCustomsEntryDto,

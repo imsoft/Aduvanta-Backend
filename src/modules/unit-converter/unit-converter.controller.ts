@@ -1,11 +1,15 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../../common/guards/auth.guard.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { UnitConverterService } from './unit-converter.service.js';
 import { ConvertDto } from './dto/convert.dto.js';
 import { ConvertAllDto } from './dto/convert-all.dto.js';
 
+@RateLimit('search')
 @Controller('unit-converter')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard)
 export class UnitConverterController {
   constructor(private readonly service: UnitConverterService) {}
 

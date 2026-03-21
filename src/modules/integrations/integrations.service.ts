@@ -1,4 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { AppConfigService } from '../../config/config.service.js';
+import { encrypt } from '../../common/crypto/encryption.js';
 import { AuditLogsService } from '../audit-logs/audit-logs.service.js';
 import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
 import type { IntegrationRecord } from './integrations.repository.js';
@@ -7,18 +9,26 @@ import type { CreateIntegrationDto } from './dto/create-integration.dto.js';
 import type { UpdateIntegrationDto } from './dto/update-integration.dto.js';
 import type { ListIntegrationsDto } from './dto/list-integrations.dto.js';
 
-// Secrets are stored as-is in V1 (plaintext marker).
-// In a production hardening pass, replace with proper encryption.
-function encodeSecret(secret: string): string {
-  return secret;
-}
-
 @Injectable()
 export class IntegrationsService {
+  private readonly encryptionKey: string | undefined;
+
   constructor(
     private readonly integrationsRepository: IntegrationsRepository,
     private readonly auditLogsService: AuditLogsService,
-  ) {}
+    private readonly config: AppConfigService,
+  ) {
+    this.encryptionKey = this.config.get('ENCRYPTION_KEY');
+  }
+
+  private encodeSecret(secret: string): string {
+    if (!this.encryptionKey) {
+      throw new Error(
+        'ENCRYPTION_KEY is required to store integration secrets',
+      );
+    }
+    return encrypt(secret, this.encryptionKey);
+  }
 
   async list(
     organizationId: string,
@@ -44,7 +54,7 @@ export class IntegrationsService {
       name: dto.name,
       status: 'ACTIVE',
       targetUrl: dto.targetUrl,
-      secretEncrypted: dto.secret ? encodeSecret(dto.secret) : null,
+      secretEncrypted: dto.secret ? this.encodeSecret(dto.secret) : null,
       eventTypes: dto.eventTypes.join(','),
       createdById: actorId,
     });
@@ -90,7 +100,7 @@ export class IntegrationsService {
     if (dto.name !== undefined) data.name = dto.name;
     if (dto.targetUrl !== undefined) data.targetUrl = dto.targetUrl;
     if (dto.secret !== undefined)
-      data.secretEncrypted = encodeSecret(dto.secret);
+      data.secretEncrypted = this.encodeSecret(dto.secret);
     if (dto.eventTypes !== undefined)
       data.eventTypes = dto.eventTypes.join(',');
     if (dto.status !== undefined) data.status = dto.status;

@@ -16,6 +16,11 @@ import { Session } from '../../common/decorators/session.decorator.js';
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { PERMISSION } from '../permissions/permission.codes.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { Idempotent } from '../../common/idempotency/idempotency.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { IdempotencyGuard } from '../../common/idempotency/idempotency.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { BillingService } from './billing.service.js';
 import { CreateInvoiceDto } from './dto/create-invoice.dto.js';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto.js';
@@ -28,8 +33,9 @@ import { ChangeExpenseAccountStatusDto } from './dto/change-expense-account-stat
 import { SearchInvoicesDto } from './dto/search-invoices.dto.js';
 import { ListInvoicesDto } from './dto/list-invoices.dto.js';
 
+@RateLimit('mutation')
 @Controller('billing')
-@UseGuards(AuthGuard, PermissionsGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, IdempotencyGuard, PermissionsGuard)
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}
 
@@ -81,6 +87,7 @@ export class BillingController {
   }
 
   @Post('invoices')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.INVOICES_CREATE)
   async createInvoice(
     @Body() dto: CreateInvoiceDto,
@@ -126,6 +133,7 @@ export class BillingController {
   }
 
   @Post('invoices/:id/issue')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.INVOICES_ISSUE)
   async issueInvoice(
     @Param('id') id: string,
@@ -140,6 +148,7 @@ export class BillingController {
   }
 
   @Post('invoices/:id/cancel')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.INVOICES_CANCEL)
   async cancelInvoice(
     @Param('id') id: string,
@@ -167,6 +176,7 @@ export class BillingController {
   }
 
   @Post('invoices/:id/items')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.INVOICES_UPDATE)
   async addInvoiceItem(
     @Param('id') id: string,
@@ -222,6 +232,7 @@ export class BillingController {
   }
 
   @Post('payments')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.PAYMENTS_CREATE)
   async createPayment(
     @Body() dto: CreatePaymentDto,
@@ -236,6 +247,7 @@ export class BillingController {
   }
 
   @Post('payments/:id/confirm')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.PAYMENTS_CONFIRM)
   async confirmPayment(
     @Param('id') id: string,
@@ -250,6 +262,7 @@ export class BillingController {
   }
 
   @Post('payments/:id/cancel')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.PAYMENTS_CANCEL)
   async cancelPayment(
     @Param('id') id: string,
@@ -315,6 +328,7 @@ export class BillingController {
   }
 
   @Post('expense-accounts')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.EXPENSE_ACCOUNTS_CREATE)
   async createExpenseAccount(
     @Body() dto: CreateExpenseAccountDto,
@@ -360,6 +374,7 @@ export class BillingController {
   }
 
   @Post('expense-accounts/:id/status')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.EXPENSE_ACCOUNTS_UPDATE)
   async changeExpenseAccountStatus(
     @Param('id') id: string,
@@ -387,6 +402,7 @@ export class BillingController {
   }
 
   @Post('expense-accounts/:id/items')
+  @Idempotent(15000)
   @RequirePermission(PERMISSION.EXPENSE_ACCOUNTS_UPDATE)
   async addExpenseAccountItem(
     @Param('id') id: string,

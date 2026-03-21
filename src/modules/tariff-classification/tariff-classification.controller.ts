@@ -16,6 +16,9 @@ import { Session } from '../../common/decorators/session.decorator.js';
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { PERMISSION } from '../permissions/permission.codes.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { TariffClassificationService } from './tariff-classification.service.js';
 import { SearchFractionsDto } from './dto/search-fractions.dto.js';
 import { CreateTariffSectionDto } from './dto/create-tariff-section.dto.js';
@@ -25,8 +28,9 @@ import { CreateTariffHeadingDto } from './dto/create-tariff-heading.dto.js';
 import { CreateTariffSubheadingDto } from './dto/create-tariff-subheading.dto.js';
 import { CreateTariffFractionDto } from './dto/create-tariff-fraction.dto.js';
 
+@RateLimit('search')
 @Controller('tariff')
-@UseGuards(AuthGuard, PermissionsGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, PermissionsGuard)
 export class TariffClassificationController {
   constructor(private readonly tariffService: TariffClassificationService) {}
 

@@ -17,7 +17,9 @@ export type Database = NodePgDatabase<AppSchema>;
       useFactory: (config: AppConfigService): Database => {
         const pool = new Pool({
           connectionString: config.get('DATABASE_URL'),
-          ssl: { rejectUnauthorized: false },
+          ssl: true,
+          statement_timeout: 30_000, // 30s max per query
+          idle_in_transaction_session_timeout: 60_000, // 60s max idle in transaction
         });
         return drizzle(pool, { schema });
       },

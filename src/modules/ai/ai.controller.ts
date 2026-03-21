@@ -15,13 +15,19 @@ import type { ActiveSession } from '../../common/types/session.types.js';
 import { PERMISSION } from '../permissions/permission.codes.js';
 import { AuditLogsService } from '../audit-logs/audit-logs.service.js';
 import { AUDIT_ACTION } from '../audit-logs/audit-log.actions.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { Idempotent } from '../../common/idempotency/idempotency.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { IdempotencyGuard } from '../../common/idempotency/idempotency.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { AiSearchService } from './ai-search.service.js';
 import { AiSignalsService } from './ai-signals.service.js';
 import { AiSummariesService } from './ai-summaries.service.js';
 import { CreateAiSearchQueryDto } from './dto/create-ai-search-query.dto.js';
 
+@RateLimit('ai')
 @Controller('ai')
-@UseGuards(AuthGuard, PermissionsGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, IdempotencyGuard, PermissionsGuard)
 export class AiController {
   constructor(
     private readonly aiSearchService: AiSearchService,
@@ -31,6 +37,7 @@ export class AiController {
   ) {}
 
   @Post('search')
+  @Idempotent(30000)
   @RequirePermission(PERMISSION.AI_SEARCH)
   async search(
     @Headers('x-organization-id') organizationId: string,
@@ -60,6 +67,7 @@ export class AiController {
   }
 
   @Post('operations/:operationId/summary')
+  @Idempotent(30000)
   @RequirePermission(PERMISSION.AI_GENERATE_SUMMARY)
   async generateSummary(
     @Headers('x-organization-id') organizationId: string,

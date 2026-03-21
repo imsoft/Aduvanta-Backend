@@ -18,6 +18,11 @@ import { Session } from '../../common/decorators/session.decorator.js';
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { PERMISSION } from '../permissions/permission.codes.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { Idempotent } from '../../common/idempotency/idempotency.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { IdempotencyGuard } from '../../common/idempotency/idempotency.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { OperationsService } from './operations.service.js';
 import { CreateOperationDto } from './dto/create-operation.dto.js';
 import { UpdateOperationDto } from './dto/update-operation.dto.js';
@@ -25,8 +30,9 @@ import { ListOperationsDto } from './dto/list-operations.dto.js';
 import { ChangeOperationStatusDto } from './dto/change-operation-status.dto.js';
 import { AssignOperationDto } from './dto/assign-operation.dto.js';
 
+@RateLimit('mutation')
 @Controller('operations')
-@UseGuards(AuthGuard, PermissionsGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, IdempotencyGuard, PermissionsGuard)
 export class OperationsController {
   constructor(private readonly operationsService: OperationsService) {}
 
@@ -40,6 +46,7 @@ export class OperationsController {
   }
 
   @Post()
+  @Idempotent(10000)
   @RequirePermission(PERMISSION.OPERATIONS_CREATE)
   async create(
     @Headers('x-organization-id') organizationId: string,

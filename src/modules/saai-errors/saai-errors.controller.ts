@@ -8,6 +8,9 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AuthGuard } from '../../common/guards/auth.guard.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { RateLimitGuard } from '../../common/rate-limit/rate-limit.guard.js';
+import { AbuseDetectionGuard } from '../../common/abuse-detection/abuse-detection.guard.js';
 import { SaaiErrorsService } from './saai-errors.service.js';
 import {
   registroParamSchema,
@@ -16,8 +19,9 @@ import {
 } from './dto/search-errors.dto.js';
 
 @ApiTags('SAAI Errors')
+@RateLimit('search')
 @Controller('saai-errors')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard)
 export class SaaiErrorsController {
   constructor(private readonly service: SaaiErrorsService) {}
 
