@@ -101,6 +101,7 @@ export * from './notification-preferences.schema.js';
 export * from './saved-reports.schema.js';
 export * from './report-executions.schema.js';
 export * from './kpi-snapshots.schema.js';
+export * from './product-events.schema.js';
 
 // Anexo 22 reference catalogs (catálogos oficiales SAT)
 export * from './anexo22-customs-sections.schema.js';
