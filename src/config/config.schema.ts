@@ -14,6 +14,20 @@ export const configSchema = z.object({
   CORS_ORIGIN: z.string().default('http://localhost:3001'),
   COOKIE_DOMAIN: z.string().optional(),
   SENTRY_DSN: z.string().url().optional(),
+  // Google OAuth
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  // Encryption key for secrets at rest (32-byte hex = 64 hex chars)
+  ENCRYPTION_KEY: z
+    .string()
+    .length(64, 'ENCRYPTION_KEY must be a 64-character hex string')
+    .regex(/^[0-9a-f]+$/i, 'ENCRYPTION_KEY must be hexadecimal')
+    .optional(),
+  // Stripe
+  STRIPE_SECRET_KEY: z.string().min(1).optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
+  STRIPE_PUBLISHABLE_KEY: z.string().min(1).optional(),
+  FRONTEND_URL: z.string().url().default('http://localhost:3001'),
   // S3-compatible object storage
   S3_BUCKET: z.string().optional(),
   S3_REGION: z.string().optional(),

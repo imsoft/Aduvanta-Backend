@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
+import { RateLimitModule } from './common/rate-limit/rate-limit.module.js';
 import { AppConfigModule } from './config/config.module.js';
 import { AppConfigService } from './config/config.service.js';
 import { DatabaseModule } from './database/database.module.js';
@@ -50,6 +49,8 @@ import { UnitConverterModule } from './modules/unit-converter/unit-converter.mod
 import { Anexo22Module } from './modules/anexo22/anexo22.module.js';
 import { SaaiErrorsModule } from './modules/saai-errors/saai-errors.module.js';
 import { AiModule } from './modules/ai/ai.module.js';
+import { EventTrackingModule } from './modules/event-tracking/event-tracking.module.js';
+import { StripeModule } from './modules/stripe/stripe.module.js';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
 import { UsageModule } from './modules/usage/usage.module.js';
 import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module.js';
@@ -57,15 +58,7 @@ import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module
 @Module({
   imports: [
     AppConfigModule,
-    // Global rate limiting: 200 requests per minute per IP by default.
-    // Individual endpoints can override with @Throttle() decorator.
-    ThrottlerModule.forRoot([
-      {
-        name: 'global',
-        ttl: 60_000,
-        limit: 200,
-      },
-    ]),
+    RateLimitModule,
     LoggerModule.forRootAsync({
       imports: [AppConfigModule],
       inject: [AppConfigService],
@@ -124,14 +117,13 @@ import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module
     Anexo22Module,
     SaaiErrorsModule,
     AiModule,
+    EventTrackingModule,
+    StripeModule,
     SubscriptionsModule,
     UsageModule,
     FeatureFlagsModule,
     HealthModule,
   ],
-  providers: [
-    // Apply rate limiting globally to all routes.
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
-  ],
+  providers: [],
 })
 export class AppModule {}

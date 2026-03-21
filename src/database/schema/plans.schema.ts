@@ -1,4 +1,4 @@
-import { integer, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { integer, numeric, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const planStatusEnum = pgEnum('plan_status', ['ACTIVE', 'DEPRECATED']);
 
@@ -19,6 +19,16 @@ export const plans = pgTable('plans', {
     .notNull()
     .default(1_073_741_824), // 1 GB
   maxIntegrations: integer('max_integrations').notNull().default(3),
+  // Stripe price IDs for this plan
+  stripePriceIdMonthly: text('stripe_price_id_monthly'),
+  stripePriceIdYearly: text('stripe_price_id_yearly'),
+  // Display prices (stored in MXN centavos for precision)
+  priceMonthly: numeric('price_monthly', { precision: 10, scale: 2 }),
+  priceYearly: numeric('price_yearly', { precision: 10, scale: 2 }),
+  // Trial days for new subscriptions on this plan
+  trialDays: integer('trial_days').notNull().default(14),
+  // Sort order for display
+  sortOrder: integer('sort_order').notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),

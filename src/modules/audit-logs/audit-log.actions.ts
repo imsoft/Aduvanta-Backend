@@ -277,6 +277,11 @@ export const AUDIT_ACTION = {
   NOTIFICATION_BULK_SENT: 'notification.bulk_sent',
   NOTIFICATION_PREFERENCES_UPDATED: 'notification.preferences_updated',
 
+  // Security / Auth
+  AUTH_LOGIN_FAILED: 'auth.login_failed',
+  AUTH_ACCOUNT_LOCKED: 'auth.account_locked',
+  AUTH_RATE_LIMITED: 'auth.rate_limited',
+
   // Analytics & BI
   REPORT_CREATED: 'report.created',
   REPORT_UPDATED: 'report.updated',

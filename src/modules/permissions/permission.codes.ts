@@ -114,6 +114,7 @@ export const PERMISSION = {
 
   // Billing / SaaS plans
   BILLING_READ: 'billing.read',
+  BILLING_MANAGE: 'billing.manage',
   PLANS_READ: 'plans.read',
   USAGE_READ: 'usage.read',
 

@@ -16,4 +16,6 @@ export const organizations = pgTable('organizations', {
   // References Better Auth's user table — no FK constraint to avoid
   // drizzle-kit migration conflicts with Better Auth-managed tables.
   createdById: text('created_by_id').notNull(),
+  // Stripe customer ID — created when org first enters checkout flow.
+  stripeCustomerId: text('stripe_customer_id').unique(),
 });
