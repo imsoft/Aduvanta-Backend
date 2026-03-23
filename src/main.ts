@@ -172,6 +172,16 @@ async function bootstrap(): Promise<void> {
 
   app.setGlobalPrefix('api');
 
+  // GET / — sin prefijo /api; evita 404 al abrir la URL base del API en el navegador
+  const expressApp = app.getHttpAdapter().getInstance() as express.Application;
+  expressApp.get('/', (_req: Request, res: Response) => {
+    res.status(200).json({
+      status: 'ok',
+      service: 'aduvanta-api',
+      health: '/api/health',
+    });
+  });
+
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalInterceptors(
     app.get(AbuseSignalInterceptor),
