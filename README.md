@@ -87,7 +87,6 @@ pnpm run test:cov   # Cobertura
 
 ## Despliegue (p. ej. Vercel)
 
-- El repo incluye `vercel.json` con `includeFiles` para `better-auth` y `better-call`, para que el empaquetado serverless no omita los `.mjs` de integración Node.
 - `BETTER_AUTH_URL` debe ser exactamente la URL pública HTTPS del mismo proyecto (por ejemplo `https://api.aduvanta.com`).
 - `CORS_ORIGIN` debe incluir todos los orígenes desde los que cargue el frontend (`https://aduvanta.com`, `https://www.aduvanta.com`, etc.).
 - `FRONTEND_URL` debe apuntar al dominio canónico del frontend.
