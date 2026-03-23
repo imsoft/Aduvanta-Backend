@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { Pool } from 'pg';
-import { betterAuth } from 'better-auth';
 import { AppConfigService } from '../../config/config.service.js';
 import { BETTER_AUTH } from './auth.constants.js';
 
@@ -8,7 +7,9 @@ import { BETTER_AUTH } from './auth.constants.js';
   providers: [
     {
       provide: BETTER_AUTH,
-      useFactory: (config: AppConfigService) => {
+      useFactory: async (config: AppConfigService) => {
+        const { betterAuth } = await import('better-auth');
+
         const pool = new Pool({
           connectionString: config.get('DATABASE_URL'),
           ssl: true,
