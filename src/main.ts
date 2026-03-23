@@ -31,6 +31,24 @@ async function bootstrap(): Promise<void> {
 
   const logger = app.get(Logger);
 
+  // CORS — register early so preflight requests complete before auth interception.
+  const corsOrigins = config
+    .get('CORS_ORIGIN')
+    .split(',')
+    .map((o) => o.trim());
+
+  app.enableCors({
+    origin: corsOrigins.length === 1 ? corsOrigins[0] : corsOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'x-organization-id',
+      'Idempotency-Key',
+    ],
+  });
+
   // Stripe webhooks require the raw body for signature verification.
   // Must be registered before the JSON parser.
   app.use(
@@ -151,24 +169,6 @@ async function bootstrap(): Promise<void> {
     }),
   );
   app.use(cookieParser());
-
-  // CORS — supports comma-separated origins for multi-subdomain deployment.
-  const corsOrigins = config
-    .get('CORS_ORIGIN')
-    .split(',')
-    .map((o) => o.trim());
-
-  app.enableCors({
-    origin: corsOrigins.length === 1 ? corsOrigins[0] : corsOrigins,
-    credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'x-organization-id',
-      'Idempotency-Key',
-    ],
-  });
 
   app.setGlobalPrefix('api');
 
