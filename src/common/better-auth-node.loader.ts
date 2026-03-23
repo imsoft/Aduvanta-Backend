@@ -1,7 +1,7 @@
 /**
- * better-auth (and better-auth/node) are ESM-only. Nest emits CommonJS.
- * Vercel's bundler may rewrite `import('better-auth/node')` to `require()`, which
- * throws ERR_REQUIRE_ESM. Using a runtime-only import via Function avoids static analysis.
+ * better-auth/node is ESM-only. Nest emits CommonJS; `import()` here stays as runtime
+ * dynamic import in the emitted JS (not `require()`). Do not use `new Function(import…)`:
+ * Vercel’s file tracer then skips `better-auth` and `node.mjs` is missing at runtime.
  */
 let betterAuthNodePromise: Promise<typeof import('better-auth/node')> | null =
   null;
@@ -10,11 +10,7 @@ export function getBetterAuthNode(): Promise<
   typeof import('better-auth/node')
 > {
   if (!betterAuthNodePromise) {
-    const runtimeImport = new Function(
-      'specifier',
-      'return import(specifier)',
-    ) as (s: string) => Promise<typeof import('better-auth/node')>;
-    betterAuthNodePromise = runtimeImport('better-auth/node');
+    betterAuthNodePromise = import('better-auth/node');
   }
   return betterAuthNodePromise;
 }
