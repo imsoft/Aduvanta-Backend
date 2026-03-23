@@ -1,13 +1,13 @@
 # Aduvanta — Backend
 
-API en [NestJS](https://nestjs.com/) para la plataforma Aduvanta: operaciones aduaneras, clientes, cumplimiento, facturación, integraciones y más.
+API en [NestJS](https://nestjs.com/) para la plataforma Aduvanta: operaciones aduaneras, clientes, cumplimiento, documentos, facturación (Stripe), integraciones y más.
 
 ## Requisitos
 
 - Node.js LTS reciente
 - [pnpm](https://pnpm.io/)
-- PostgreSQL (p. ej. [Neon](https://neon.tech/))
-- Redis (Redis Cloud, Upstash o instancia local)
+- PostgreSQL (por ejemplo [Neon](https://neon.tech/))
+- Redis (Redis Cloud, Upstash o `redis://localhost:6379`)
 
 ## Stack principal
 
@@ -15,16 +15,17 @@ API en [NestJS](https://nestjs.com/) para la plataforma Aduvanta: operaciones ad
 |------|------------|
 | Framework | NestJS 11 |
 | Base de datos | PostgreSQL + [Drizzle ORM](https://orm.drizzle.team/) |
-| Autenticación | [Better Auth](https://www.better-auth.com/) (`/api/auth`) |
-| Caché / colas | Redis ([ioredis](https://github.com/redis/ioredis)) |
-| Almacenamiento | AWS S3 |
+| Autenticación | [Better Auth](https://www.better-auth.com/) — rutas bajo `/api/auth` |
+| Caché / límites | Redis ([ioredis](https://github.com/redis/ioredis)) |
+| Almacenamiento | S3 compatible (AWS S3, R2, etc.) — opcional hasta que uses subida de archivos |
+| Pagos | Stripe (opcional) |
 | Observabilidad | OpenTelemetry, Sentry (opcional) |
 | Validación | class-validator, Zod |
 | Email | Resend |
 
-El prefijo global de la API es `api` (rutas bajo `/api/...`).
+El prefijo global de rutas REST es `api` (por ejemplo `/api/operations/...`). Better Auth se monta en `/api/auth/*`.
 
-## Configuración
+## Configuración local
 
 1. Instalar dependencias:
 
@@ -32,50 +33,64 @@ El prefijo global de la API es `api` (rutas bajo `/api/...`).
 pnpm install
 ```
 
-2. Copiar variables de entorno y ajustarlas:
+2. Copiar variables de entorno:
 
 ```bash
 cp .env.example .env
 ```
 
-Variables mínimas (ver comentarios en `.env.example`):
+3. Editar `.env` con al menos las variables obligatorias (validadas en `src/config/config.schema.ts`):
 
-- `DATABASE_URL` — conexión PostgreSQL
-- `REDIS_URL` — conexión Redis
-- `BETTER_AUTH_SECRET` — secreto seguro (≥ 32 caracteres)
-- `BETTER_AUTH_URL` — URL base del backend (p. ej. `http://localhost:3000`)
-- `CORS_ORIGIN` — origen del frontend (p. ej. `http://localhost:3001`)
-- `PORT` — puerto del servidor (por defecto `3000`)
+| Variable | Descripción |
+|----------|-------------|
+| `DATABASE_URL` | Cadena PostgreSQL (`?sslmode=require` en la nube) |
+| `REDIS_URL` | URL de conexión Redis |
+| `BETTER_AUTH_SECRET` | Secreto aleatorio (≥ 32 caracteres) |
+| `BETTER_AUTH_URL` | URL pública base del API, sin path final. Ej.: `http://localhost:3000` en local, `https://api.tu-dominio.com` en producción |
+| `CORS_ORIGIN` | Origen del frontend. Puede ser **varios valores separados por comas** (se recortan espacios). Ej.: `http://localhost:3001` o `https://aduvanta.com,https://www.aduvanta.com` |
+| `PORT` | Puerto HTTP (por defecto `3000`) |
 
-`SENTRY_DSN` es opcional.
+Variables opcionales frecuentes:
 
-3. Esquema de base de datos: Drizzle con configuración en `drizzle.config.ts` (esquema en `src/database/schema/`, migraciones generadas en `drizzle/`). Las tablas de Better Auth están excluidas del filtro de migraciones; consulta el flujo del equipo para `drizzle-kit generate` / `migrate`.
+| Variable | Uso |
+|----------|-----|
+| `FRONTEND_URL` | URL del sitio Next (Stripe, redirecciones). Por defecto `http://localhost:3001` |
+| `COOKIE_DOMAIN` | Dominio de cookies compartidas entre subdominios (p. ej. `.aduvanta.com`) si aplica |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Login con Google |
+| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `STRIPE_PUBLISHABLE_KEY` | Facturación y webhooks |
+| `S3_BUCKET`, `S3_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Almacenamiento de documentos y exportaciones. `S3_ENDPOINT` solo si usas proveedor compatible no-AWS |
+| `ENCRYPTION_KEY` | Hex de 64 caracteres para cifrado de secretos en integraciones |
+| `SENTRY_DSN` | Errores en producción |
 
-## Scripts
+4. Esquema y migraciones: Drizzle (`drizzle.config.ts`, esquema en `src/database/schema/`). Consulta el flujo del equipo para `drizzle-kit generate` / migraciones. Las tablas de Better Auth pueden tener un tratamiento aparte en migraciones.
+
+## Desarrollo y producción
 
 ```bash
 # Desarrollo con recarga
 pnpm run start:dev
 
-# Producción (tras build)
+# Build y arranque producción
 pnpm run build
 pnpm run start:prod
-
-# Calidad
-pnpm run lint
-pnpm run format
-
-# Tests
-pnpm run test
-pnpm run test:e2e
-pnpm run test:cov
 ```
 
-## Tests
+## Scripts útiles
 
-- Unitarios: `pnpm run test`
-- E2E: `pnpm run test:e2e`
-- Cobertura: `pnpm run test:cov`
+```bash
+pnpm run lint       # ESLint
+pnpm run format     # Prettier
+pnpm run test       # Tests unitarios
+pnpm run test:e2e   # Tests e2e
+pnpm run test:cov   # Cobertura
+```
+
+## Despliegue (p. ej. Vercel)
+
+- `BETTER_AUTH_URL` debe ser exactamente la URL pública HTTPS del mismo proyecto (por ejemplo `https://api.aduvanta.com`).
+- `CORS_ORIGIN` debe incluir todos los orígenes desde los que cargue el frontend (`https://aduvanta.com`, `https://www.aduvanta.com`, etc.).
+- `FRONTEND_URL` debe apuntar al dominio canónico del frontend.
+- Configura el webhook de Stripe apuntando a `https://<tu-api>/api/stripe/webhooks` (o la ruta que exponga tu despliegue).
 
 ## Documentación adicional
 

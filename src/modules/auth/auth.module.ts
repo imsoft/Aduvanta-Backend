@@ -22,6 +22,12 @@ import { BETTER_AUTH } from './auth.constants.js';
         const googleClientId = config.get('GOOGLE_CLIENT_ID');
         const googleClientSecret = config.get('GOOGLE_CLIENT_SECRET');
 
+        const trustedOrigins = config
+          .get('CORS_ORIGIN')
+          .split(',')
+          .map((o) => o.trim())
+          .filter(Boolean);
+
         return betterAuth({
           database: pool,
           baseURL: config.get('BETTER_AUTH_URL'),
@@ -37,7 +43,7 @@ import { BETTER_AUTH } from './auth.constants.js';
                 }
               : {}),
           },
-          trustedOrigins: [config.get('CORS_ORIGIN')],
+          trustedOrigins,
           advanced: {
             ...(cookieDomain
               ? {
