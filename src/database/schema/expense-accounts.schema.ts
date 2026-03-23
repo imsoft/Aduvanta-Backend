@@ -6,8 +6,8 @@ import {
   date,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { clients } from './clients.schema.js';
+import { organizations } from './organizations.schema';
+import { clients } from './clients.schema';
 
 export const expenseAccountStatusEnum = pgEnum('expense_account_status', [
   'DRAFT',

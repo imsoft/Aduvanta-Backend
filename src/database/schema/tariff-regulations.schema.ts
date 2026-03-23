@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, pgEnum } from 'drizzle-orm/pg-core';
-import { tariffFractions } from './tariff-fractions.schema.js';
+import { tariffFractions } from './tariff-fractions.schema';
 
 export const regulationTypeEnum = pgEnum('regulation_type', [
   // Non-tariff regulations and restrictions (RRNA)

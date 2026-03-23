@@ -6,9 +6,9 @@ import {
   integer,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { warehouses } from './warehouses.schema.js';
-import { warehouseZones } from './warehouse-zones.schema.js';
+import { organizations } from './organizations.schema';
+import { warehouses } from './warehouses.schema';
+import { warehouseZones } from './warehouse-zones.schema';
 
 export const inventoryStatusEnum = pgEnum('warehouse_inventory_status', [
   'IN_STOCK', // En existencia

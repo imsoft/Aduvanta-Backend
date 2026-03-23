@@ -5,7 +5,7 @@ import {
   numeric,
   timestamp,
 } from 'drizzle-orm/pg-core';
-import { valuationDeclarations } from './valuation-declarations.schema.js';
+import { valuationDeclarations } from './valuation-declarations.schema';
 
 // Individual product/item in a valuation declaration (Hoja de Cálculo line)
 export const valuationItems = pgTable('valuation_items', {

@@ -1,5 +1,5 @@
 import { pgTable, text, integer, timestamp } from 'drizzle-orm/pg-core';
-import { tariffSections } from './tariff-sections.schema.js';
+import { tariffSections } from './tariff-sections.schema';
 
 // TIGIE Chapter — two-digit level (e.g., Chapter 01: Live Animals)
 export const tariffChapters = pgTable('tariff_chapters', {

@@ -1,5 +1,5 @@
 import { pgTable, text, jsonb, timestamp } from 'drizzle-orm/pg-core';
-import { customsEntries, entryStatusEnum } from './customs-entries.schema.js';
+import { customsEntries, entryStatusEnum } from './customs-entries.schema';
 
 // Status change history for customs entries
 export const customsEntryStatusHistory = pgTable(

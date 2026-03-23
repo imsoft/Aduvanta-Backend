@@ -7,8 +7,8 @@ import {
   pgEnum,
   boolean,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { customsEntries } from './customs-entries.schema.js';
+import { organizations } from './organizations.schema';
+import { customsEntries } from './customs-entries.schema';
 
 // COVE document type
 export const eDocumentTypeEnum = pgEnum('e_document_type', [

@@ -7,8 +7,8 @@ import {
   date,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { customsEntries } from './customs-entries.schema.js';
+import { organizations } from './organizations.schema';
+import { customsEntries } from './customs-entries.schema';
 
 // WTO valuation methods (Articles 1-8 of the WTO Customs Valuation Agreement)
 export const valuationMethodEnum = pgEnum('valuation_method', [

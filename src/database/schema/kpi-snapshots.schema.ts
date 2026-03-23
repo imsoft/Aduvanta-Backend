@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, numeric, pgEnum } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
+import { organizations } from './organizations.schema';
 
 export const kpiPeriodEnum = pgEnum('kpi_period', [
   'DAILY',

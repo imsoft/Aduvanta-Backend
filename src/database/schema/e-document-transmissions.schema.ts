@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, pgEnum } from 'drizzle-orm/pg-core';
-import { eDocuments } from './e-documents.schema.js';
+import { eDocuments } from './e-documents.schema';
 
 export const transmissionStatusEnum = pgEnum('transmission_status', [
   'PENDING',

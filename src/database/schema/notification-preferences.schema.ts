@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
+import { organizations } from './organizations.schema';
 
 export const notificationPreferences = pgTable('notification_preferences', {
   id: text('id')

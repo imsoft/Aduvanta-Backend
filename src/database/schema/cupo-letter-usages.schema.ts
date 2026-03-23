@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, numeric } from 'drizzle-orm/pg-core';
-import { cupoLetters } from './cupo-letters.schema.js';
+import { cupoLetters } from './cupo-letters.schema';
 
 export const cupoLetterUsages = pgTable('cupo_letter_usages', {
   id: text('id')

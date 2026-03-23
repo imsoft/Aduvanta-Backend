@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { shipments } from './shipments.schema.js';
+import { shipments } from './shipments.schema';
 
 // Comments and notes on a shipment (internal communication)
 export const shipmentComments = pgTable('shipment_comments', {

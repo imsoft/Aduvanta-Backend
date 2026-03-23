@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, integer, pgEnum } from 'drizzle-orm/pg-core';
-import { savedReports } from './saved-reports.schema.js';
+import { savedReports } from './saved-reports.schema';
 
 export const executionStatusEnum = pgEnum('report_execution_status', [
   'PENDING',

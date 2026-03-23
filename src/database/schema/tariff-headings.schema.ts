@@ -1,5 +1,5 @@
 import { pgTable, text, integer, timestamp } from 'drizzle-orm/pg-core';
-import { tariffChapters } from './tariff-chapters.schema.js';
+import { tariffChapters } from './tariff-chapters.schema';
 
 // TIGIE Heading (Partida) — four-digit level (e.g., 0101: Live horses, asses, mules)
 export const tariffHeadings = pgTable('tariff_headings', {

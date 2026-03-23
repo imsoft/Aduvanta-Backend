@@ -6,8 +6,8 @@ import {
   date,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { invoices } from './invoices.schema.js';
+import { organizations } from './organizations.schema';
+import { invoices } from './invoices.schema';
 
 export const paymentStatusEnum = pgEnum('payment_status', [
   'PENDING',

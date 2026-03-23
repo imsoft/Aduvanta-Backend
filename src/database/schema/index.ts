@@ -1,123 +1,123 @@
 // Better Auth tables (read-only — managed by Better Auth, not drizzle-kit)
-export * from './auth.schema.js';
+export * from './auth.schema';
 
 // Application tables (managed by drizzle-kit migrations)
-export * from './organizations.schema.js';
-export * from './memberships.schema.js';
-export * from './audit-logs.schema.js';
-export * from './clients.schema.js';
-export * from './client-contacts.schema.js';
-export * from './client-addresses.schema.js';
-export * from './operations.schema.js';
-export * from './operation-status-history.schema.js';
-export * from './operation-comments.schema.js';
-export * from './document-categories.schema.js';
-export * from './documents.schema.js';
-export * from './document-versions.schema.js';
-export * from './client-portal-access.schema.js';
-export * from './operation-charges.schema.js';
-export * from './operation-advances.schema.js';
-export * from './rule-sets.schema.js';
-export * from './document-requirements.schema.js';
-export * from './status-transition-rules.schema.js';
-export * from './integrations.schema.js';
-export * from './integration-deliveries.schema.js';
-export * from './export-jobs.schema.js';
-export * from './import-jobs.schema.js';
-export * from './plans.schema.js';
-export * from './organization-subscriptions.schema.js';
-export * from './feature-flags.schema.js';
+export * from './organizations.schema';
+export * from './memberships.schema';
+export * from './audit-logs.schema';
+export * from './clients.schema';
+export * from './client-contacts.schema';
+export * from './client-addresses.schema';
+export * from './operations.schema';
+export * from './operation-status-history.schema';
+export * from './operation-comments.schema';
+export * from './document-categories.schema';
+export * from './documents.schema';
+export * from './document-versions.schema';
+export * from './client-portal-access.schema';
+export * from './operation-charges.schema';
+export * from './operation-advances.schema';
+export * from './rule-sets.schema';
+export * from './document-requirements.schema';
+export * from './status-transition-rules.schema';
+export * from './integrations.schema';
+export * from './integration-deliveries.schema';
+export * from './export-jobs.schema';
+export * from './import-jobs.schema';
+export * from './plans.schema';
+export * from './organization-subscriptions.schema';
+export * from './feature-flags.schema';
 
 // Tariff classification (TIGIE)
-export * from './tariff-sections.schema.js';
-export * from './tariff-chapters.schema.js';
-export * from './tariff-headings.schema.js';
-export * from './tariff-subheadings.schema.js';
-export * from './tariff-fractions.schema.js';
-export * from './tariff-regulations.schema.js';
-export * from './trade-agreements.schema.js';
-export * from './tariff-agreement-preferences.schema.js';
-export * from './legal-documents.schema.js';
+export * from './tariff-sections.schema';
+export * from './tariff-chapters.schema';
+export * from './tariff-headings.schema';
+export * from './tariff-subheadings.schema';
+export * from './tariff-fractions.schema';
+export * from './tariff-regulations.schema';
+export * from './trade-agreements.schema';
+export * from './tariff-agreement-preferences.schema';
+export * from './legal-documents.schema';
 
 // Customs entries (pedimentos)
-export * from './customs-offices.schema.js';
-export * from './customs-patents.schema.js';
-export * from './customs-entries.schema.js';
-export * from './customs-entry-parties.schema.js';
-export * from './customs-entry-items.schema.js';
-export * from './customs-entry-item-taxes.schema.js';
-export * from './customs-entry-documents.schema.js';
-export * from './customs-entry-status-history.schema.js';
+export * from './customs-offices.schema';
+export * from './customs-patents.schema';
+export * from './customs-entries.schema';
+export * from './customs-entry-parties.schema';
+export * from './customs-entry-items.schema';
+export * from './customs-entry-item-taxes.schema';
+export * from './customs-entry-documents.schema';
+export * from './customs-entry-status-history.schema';
 
 // Shipments / Customs operations (tráfico y despacho)
-export * from './shipments.schema.js';
-export * from './shipment-stages.schema.js';
-export * from './shipment-entries.schema.js';
-export * from './shipment-comments.schema.js';
+export * from './shipments.schema';
+export * from './shipment-stages.schema';
+export * from './shipment-entries.schema';
+export * from './shipment-comments.schema';
 
 // Customs valuation (Manifestación de Valor en Aduana)
-export * from './valuation-declarations.schema.js';
-export * from './valuation-items.schema.js';
-export * from './valuation-costs.schema.js';
+export * from './valuation-declarations.schema';
+export * from './valuation-items.schema';
+export * from './valuation-costs.schema';
 
 // COVE / E-Documents (Comprobante de Valor Electrónico)
-export * from './e-documents.schema.js';
-export * from './e-document-items.schema.js';
-export * from './e-document-transmissions.schema.js';
+export * from './e-documents.schema';
+export * from './e-document-items.schema';
+export * from './e-document-transmissions.schema';
 
 // Billing (facturación, cuenta de gastos, pagos)
-export * from './invoices.schema.js';
-export * from './invoice-items.schema.js';
-export * from './payments.schema.js';
-export * from './expense-accounts.schema.js';
-export * from './expense-account-items.schema.js';
+export * from './invoices.schema';
+export * from './invoice-items.schema';
+export * from './payments.schema';
+export * from './expense-accounts.schema';
+export * from './expense-account-items.schema';
 
 // Treasury (tesorería, cuentas bancarias, movimientos)
-export * from './bank-accounts.schema.js';
-export * from './fund-movements.schema.js';
-export * from './client-balances.schema.js';
+export * from './bank-accounts.schema';
+export * from './fund-movements.schema';
+export * from './client-balances.schema';
 
 // Document management (gestión documental)
-export * from './document-folders.schema.js';
-export * from './document-templates.schema.js';
-export * from './document-checklists.schema.js';
-export * from './document-checklist-items.schema.js';
+export * from './document-folders.schema';
+export * from './document-templates.schema';
+export * from './document-checklists.schema';
+export * from './document-checklist-items.schema';
 
 // Warehouse control (control de almacén)
-export * from './warehouses.schema.js';
-export * from './warehouse-zones.schema.js';
-export * from './warehouse-inventory.schema.js';
-export * from './warehouse-movements.schema.js';
+export * from './warehouses.schema';
+export * from './warehouse-zones.schema';
+export * from './warehouse-inventory.schema';
+export * from './warehouse-movements.schema';
 
 // CUPO letters (cartas CUPO / cupos arancelarios)
-export * from './cupo-letters.schema.js';
-export * from './cupo-letter-usages.schema.js';
+export * from './cupo-letters.schema';
+export * from './cupo-letter-usages.schema';
 
 // Notifications (notificaciones)
-export * from './notifications.schema.js';
-export * from './notification-preferences.schema.js';
+export * from './notifications.schema';
+export * from './notification-preferences.schema';
 
 // Analytics & BI (reportes, KPIs)
-export * from './saved-reports.schema.js';
-export * from './report-executions.schema.js';
-export * from './kpi-snapshots.schema.js';
-export * from './product-events.schema.js';
+export * from './saved-reports.schema';
+export * from './report-executions.schema';
+export * from './kpi-snapshots.schema';
+export * from './product-events.schema';
 
 // Anexo 22 reference catalogs (catálogos oficiales SAT)
-export * from './anexo22-customs-sections.schema.js';
-export * from './anexo22-transport-means.schema.js';
-export * from './anexo22-pedimento-keys.schema.js';
-export * from './anexo22-customs-regimes.schema.js';
-export * from './anexo22-units-of-measure.schema.js';
-export * from './anexo22-countries.schema.js';
-export * from './anexo22-currencies.schema.js';
-export * from './anexo22-taxes.schema.js';
-export * from './anexo22-identifiers.schema.js';
-export * from './anexo22-rrna.schema.js';
-export * from './anexo22-payment-methods.schema.js';
-export * from './anexo22-container-types.schema.js';
-export * from './anexo22-operation-types.schema.js';
+export * from './anexo22-customs-sections.schema';
+export * from './anexo22-transport-means.schema';
+export * from './anexo22-pedimento-keys.schema';
+export * from './anexo22-customs-regimes.schema';
+export * from './anexo22-units-of-measure.schema';
+export * from './anexo22-countries.schema';
+export * from './anexo22-currencies.schema';
+export * from './anexo22-taxes.schema';
+export * from './anexo22-identifiers.schema';
+export * from './anexo22-rrna.schema';
+export * from './anexo22-payment-methods.schema';
+export * from './anexo22-container-types.schema';
+export * from './anexo22-operation-types.schema';
 
 // SAAI error codes (catálogo de errores del Sistema Automatizado Aduanero Integral)
-export * from './saai-error-codes.schema.js';
-export * from './saai-registro-types.schema.js';
+export * from './saai-error-codes.schema';
+export * from './saai-registro-types.schema';

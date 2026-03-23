@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
+import { organizations } from './organizations.schema';
 
 // Customs broker patent numbers — organization-scoped
 // A customs brokerage firm can hold multiple patents across different customs offices.

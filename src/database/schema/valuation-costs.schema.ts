@@ -1,5 +1,5 @@
 import { pgTable, text, numeric, timestamp, pgEnum } from 'drizzle-orm/pg-core';
-import { valuationDeclarations } from './valuation-declarations.schema.js';
+import { valuationDeclarations } from './valuation-declarations.schema';
 
 export const costCategoryEnum = pgEnum('cost_category', [
   'INCREMENTABLE',

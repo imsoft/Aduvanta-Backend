@@ -6,7 +6,7 @@ import {
   boolean,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
+import { organizations } from './organizations.schema';
 
 export const bankAccountTypeEnum = pgEnum('bank_account_type', [
   'CHECKING', // Cuenta de cheques

@@ -1,5 +1,5 @@
 import { pgTable, text, integer, timestamp } from 'drizzle-orm/pg-core';
-import { tariffHeadings } from './tariff-headings.schema.js';
+import { tariffHeadings } from './tariff-headings.schema';
 
 // TIGIE Subheading (Subpartida) — six-digit level (e.g., 010121: Pure-bred breeding horses)
 export const tariffSubheadings = pgTable('tariff_subheadings', {

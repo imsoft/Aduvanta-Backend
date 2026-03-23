@@ -6,7 +6,7 @@ import {
   timestamp,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { invoices } from './invoices.schema.js';
+import { invoices } from './invoices.schema';
 
 export const invoiceItemCategoryEnum = pgEnum('invoice_item_category', [
   'SERVICE_FEE', // Honorarios

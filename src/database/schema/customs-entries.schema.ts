@@ -8,9 +8,9 @@ import {
   jsonb,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { customsOffices } from './customs-offices.schema.js';
-import { customsPatents } from './customs-patents.schema.js';
+import { organizations } from './organizations.schema';
+import { customsOffices } from './customs-offices.schema';
+import { customsPatents } from './customs-patents.schema';
 
 export const customsRegimeEnum = pgEnum('customs_regime', [
   'IMP_DEFINITIVA', // A1 — Importación definitiva

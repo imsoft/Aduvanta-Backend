@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, jsonb } from 'drizzle-orm/pg-core';
-import { shipments } from './shipments.schema.js';
+import { shipments } from './shipments.schema';
 
 // Individual stage/milestone in a shipment's lifecycle
 // Tracks time spent at each stage for performance analysis

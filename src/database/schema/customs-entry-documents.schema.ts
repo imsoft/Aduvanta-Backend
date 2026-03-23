@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { customsEntries } from './customs-entries.schema.js';
+import { customsEntries } from './customs-entries.schema';
 
 // Documents attached to a customs entry (invoices, permits, certificates, etc.)
 export const customsEntryDocuments = pgTable('customs_entry_documents', {

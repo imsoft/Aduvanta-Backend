@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, boolean, pgEnum } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
+import { organizations } from './organizations.schema';
 
 export const warehouseTypeEnum = pgEnum('warehouse_type', [
   'BONDED', // Recinto fiscalizado

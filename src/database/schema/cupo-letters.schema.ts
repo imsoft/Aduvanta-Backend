@@ -6,7 +6,7 @@ import {
   boolean,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
+import { organizations } from './organizations.schema';
 
 export const cupoLetterStatusEnum = pgEnum('cupo_letter_status', [
   'DRAFT', // Borrador

@@ -6,7 +6,7 @@ import {
   timestamp,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { tariffSubheadings } from './tariff-subheadings.schema.js';
+import { tariffSubheadings } from './tariff-subheadings.schema';
 
 export const measurementUnitEnum = pgEnum('measurement_unit', [
   'KG',

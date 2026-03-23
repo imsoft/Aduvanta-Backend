@@ -6,7 +6,7 @@ import {
   timestamp,
   date,
 } from 'drizzle-orm/pg-core';
-import { expenseAccounts } from './expense-accounts.schema.js';
+import { expenseAccounts } from './expense-accounts.schema';
 
 // Individual line items in a Cuenta de Gastos
 export const expenseAccountItems = pgTable('expense_account_items', {

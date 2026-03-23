@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
-import { tariffFractions } from './tariff-fractions.schema.js';
-import { tradeAgreements } from './trade-agreements.schema.js';
+import { tariffFractions } from './tariff-fractions.schema';
+import { tradeAgreements } from './trade-agreements.schema';
 
 // Preferential tariff rates per fraction under specific trade agreements
 export const tariffAgreementPreferences = pgTable(

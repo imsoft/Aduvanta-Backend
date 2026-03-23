@@ -6,7 +6,7 @@ import {
   boolean,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { documentChecklists } from './document-checklists.schema.js';
+import { documentChecklists } from './document-checklists.schema';
 
 export const checklistItemStatusEnum = pgEnum('checklist_item_status', [
   'REQUIRED',

@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, pgEnum } from 'drizzle-orm/pg-core';
-import { customsEntries } from './customs-entries.schema.js';
+import { customsEntries } from './customs-entries.schema';
 
 export const entryPartyRoleEnum = pgEnum('entry_party_role', [
   'IMPORTER',

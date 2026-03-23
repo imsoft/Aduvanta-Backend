@@ -8,8 +8,8 @@ import {
   jsonb,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { customsEntries } from './customs-entries.schema.js';
+import { organizations } from './organizations.schema';
+import { customsEntries } from './customs-entries.schema';
 
 export const shipmentStatusEnum = pgEnum('shipment_status', [
   'PENDING', // Awaiting customs processing

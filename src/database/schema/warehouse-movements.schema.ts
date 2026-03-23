@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, numeric, pgEnum } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { warehouses } from './warehouses.schema.js';
-import { warehouseInventory } from './warehouse-inventory.schema.js';
+import { organizations } from './organizations.schema';
+import { warehouses } from './warehouses.schema';
+import { warehouseInventory } from './warehouse-inventory.schema';
 
 export const movementDirectionEnum = pgEnum('warehouse_movement_direction', [
   'INBOUND', // Entrada

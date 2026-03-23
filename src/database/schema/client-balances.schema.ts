@@ -1,6 +1,6 @@
 import { pgTable, text, numeric, timestamp, unique } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { clients } from './clients.schema.js';
+import { organizations } from './organizations.schema';
+import { clients } from './clients.schema';
 
 // Running balance per client — tracks advances received vs charges incurred
 export const clientBalances = pgTable(

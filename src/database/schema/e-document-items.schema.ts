@@ -5,7 +5,7 @@ import {
   numeric,
   timestamp,
 } from 'drizzle-orm/pg-core';
-import { eDocuments } from './e-documents.schema.js';
+import { eDocuments } from './e-documents.schema';
 
 // Line items within a COVE / E-Document
 export const eDocumentItems = pgTable('e_document_items', {

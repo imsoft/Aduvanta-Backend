@@ -6,7 +6,7 @@ import {
   numeric,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { warehouses } from './warehouses.schema.js';
+import { warehouses } from './warehouses.schema';
 
 export const zoneTypeEnum = pgEnum('warehouse_zone_type', [
   'RECEIVING', // Zona de recepción

@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, integer } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
+import { organizations } from './organizations.schema';
 
 // Hierarchical folder structure for organizing documents
 export const documentFolders = pgTable('document_folders', {

@@ -6,8 +6,8 @@ import {
   date,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { organizations } from './organizations.schema.js';
-import { bankAccounts } from './bank-accounts.schema.js';
+import { organizations } from './organizations.schema';
+import { bankAccounts } from './bank-accounts.schema';
 
 export const movementTypeEnum = pgEnum('movement_type', [
   'INCOME', // Ingreso (advance from client, payment received)

@@ -5,8 +5,8 @@ import {
   numeric,
   timestamp,
 } from 'drizzle-orm/pg-core';
-import { customsEntries } from './customs-entries.schema.js';
-import { tariffFractions } from './tariff-fractions.schema.js';
+import { customsEntries } from './customs-entries.schema';
+import { tariffFractions } from './tariff-fractions.schema';
 
 // Line items (partidas) within a customs entry
 export const customsEntryItems = pgTable('customs_entry_items', {

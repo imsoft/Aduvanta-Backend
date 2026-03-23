@@ -1,5 +1,5 @@
 import { pgTable, text, numeric, timestamp, pgEnum } from 'drizzle-orm/pg-core';
-import { customsEntryItems } from './customs-entry-items.schema.js';
+import { customsEntryItems } from './customs-entry-items.schema';
 
 export const taxTypeEnum = pgEnum('tax_type', [
   'IGI', // Impuesto General de Importación

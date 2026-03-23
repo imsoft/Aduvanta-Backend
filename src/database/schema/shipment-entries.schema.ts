@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core';
-import { shipments } from './shipments.schema.js';
-import { customsEntries } from './customs-entries.schema.js';
+import { shipments } from './shipments.schema';
+import { customsEntries } from './customs-entries.schema';
 
 // Join table: links shipments to customs entries (many-to-many)
 // A shipment can have multiple pedimentos (e.g., consolidated, rectifications)
