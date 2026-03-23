@@ -33,7 +33,13 @@ import { ListEntriesDto } from './dto/list-entries.dto.js';
 
 @RateLimit('mutation')
 @Controller('customs')
-@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, IdempotencyGuard, PermissionsGuard)
+@UseGuards(
+  AuthGuard,
+  AbuseDetectionGuard,
+  RateLimitGuard,
+  IdempotencyGuard,
+  PermissionsGuard,
+)
 export class CustomsEntriesController {
   constructor(private readonly customsService: CustomsEntriesService) {}
 

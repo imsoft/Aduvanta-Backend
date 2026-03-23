@@ -1,4 +1,11 @@
-import { IsString, IsOptional, IsIn, IsObject, IsNumber, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsIn,
+  IsObject,
+  IsNumber,
+  IsDateString,
+} from 'class-validator';
 import type { EventCategory } from '../event-tracking.types.js';
 
 export class TrackEventDto {

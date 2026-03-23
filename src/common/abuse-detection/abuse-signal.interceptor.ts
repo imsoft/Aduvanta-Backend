@@ -25,9 +25,7 @@ type ActiveSession = {
 export class AbuseSignalInterceptor implements NestInterceptor {
   private readonly logger = new Logger(AbuseSignalInterceptor.name);
 
-  constructor(
-    private readonly abuseDetectionService: AbuseDetectionService,
-  ) {}
+  constructor(private readonly abuseDetectionService: AbuseDetectionService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     return next.handle().pipe(
@@ -40,8 +38,9 @@ export class AbuseSignalInterceptor implements NestInterceptor {
           const status = error.getStatus();
           const request = context.switchToHttp().getRequest<Request>();
           const ip = this.extractIp(request);
-          const session = (request as Request & { activeSession?: ActiveSession })
-            .activeSession;
+          const session = (
+            request as Request & { activeSession?: ActiveSession }
+          ).activeSession;
 
           const baseEvent = {
             userId: session?.session.userId,

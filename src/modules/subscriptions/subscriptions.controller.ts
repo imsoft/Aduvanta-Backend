@@ -68,9 +68,7 @@ export class SubscriptionsController {
 
   @Post('subscriptions/portal')
   @RequirePermission(PERMISSION.BILLING_MANAGE)
-  async createPortal(
-    @Headers('x-organization-id') organizationId: string,
-  ) {
+  async createPortal(@Headers('x-organization-id') organizationId: string) {
     return this.subscriptionsService.createPortalSession(organizationId);
   }
 

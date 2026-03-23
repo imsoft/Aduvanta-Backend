@@ -1,2 +1,2 @@
-export { AbuseDetectionService } from './abuse-detection.service'
-export { AbuseDetectionGuard } from './abuse-detection.guard'
+export { AbuseDetectionService } from './abuse-detection.service';
+export { AbuseDetectionGuard } from './abuse-detection.guard';

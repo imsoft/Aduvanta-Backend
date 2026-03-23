@@ -27,7 +27,13 @@ import { CreateAiSearchQueryDto } from './dto/create-ai-search-query.dto.js';
 
 @RateLimit('ai')
 @Controller('ai')
-@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, IdempotencyGuard, PermissionsGuard)
+@UseGuards(
+  AuthGuard,
+  AbuseDetectionGuard,
+  RateLimitGuard,
+  IdempotencyGuard,
+  PermissionsGuard,
+)
 export class AiController {
   constructor(
     private readonly aiSearchService: AiSearchService,

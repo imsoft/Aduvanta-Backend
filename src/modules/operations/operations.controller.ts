@@ -32,7 +32,13 @@ import { AssignOperationDto } from './dto/assign-operation.dto.js';
 
 @RateLimit('mutation')
 @Controller('operations')
-@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, IdempotencyGuard, PermissionsGuard)
+@UseGuards(
+  AuthGuard,
+  AbuseDetectionGuard,
+  RateLimitGuard,
+  IdempotencyGuard,
+  PermissionsGuard,
+)
 export class OperationsController {
   constructor(private readonly operationsService: OperationsService) {}
 

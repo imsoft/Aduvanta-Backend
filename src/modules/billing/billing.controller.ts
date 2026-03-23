@@ -35,7 +35,13 @@ import { ListInvoicesDto } from './dto/list-invoices.dto.js';
 
 @RateLimit('mutation')
 @Controller('billing')
-@UseGuards(AuthGuard, AbuseDetectionGuard, RateLimitGuard, IdempotencyGuard, PermissionsGuard)
+@UseGuards(
+  AuthGuard,
+  AbuseDetectionGuard,
+  RateLimitGuard,
+  IdempotencyGuard,
+  PermissionsGuard,
+)
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}
 

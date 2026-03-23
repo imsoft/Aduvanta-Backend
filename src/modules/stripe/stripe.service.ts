@@ -1,5 +1,9 @@
 import Stripe from 'stripe';
-import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { AppConfigService } from '../../config/config.service.js';
 
 @Injectable()
@@ -158,8 +162,7 @@ export class StripeService {
     const client = this.assertConfigured();
 
     try {
-      const subscription =
-        await client.subscriptions.retrieve(subscriptionId);
+      const subscription = await client.subscriptions.retrieve(subscriptionId);
       const itemId = subscription.items.data[0]?.id;
 
       if (!itemId) {
@@ -257,10 +260,7 @@ export class StripeService {
       });
       return result.data;
     } catch (error) {
-      this.logger.error(
-        { error, productId },
-        'Failed to list Stripe prices',
-      );
+      this.logger.error({ error, productId }, 'Failed to list Stripe prices');
       throw this.wrapStripeError(error);
     }
   }
@@ -278,8 +278,7 @@ export class StripeService {
 
   private isStripeNotFoundError(error: unknown): boolean {
     return (
-      error instanceof Stripe.errors.StripeError &&
-      error.statusCode === 404
+      error instanceof Stripe.errors.StripeError && error.statusCode === 404
     );
   }
 

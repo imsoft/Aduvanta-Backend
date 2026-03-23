@@ -1,6 +1,6 @@
-import { SetMetadata } from '@nestjs/common'
+import { SetMetadata } from '@nestjs/common';
 
-export const RATE_LIMIT_CATEGORY_KEY = 'rate_limit_category'
+export const RATE_LIMIT_CATEGORY_KEY = 'rate_limit_category';
 
 /**
  * Sets the rate limit category for a controller or route handler.
@@ -14,5 +14,5 @@ export const RATE_LIMIT_CATEGORY_KEY = 'rate_limit_category'
  *   async classifyTariff() { ... }
  */
 export function RateLimit(category: string) {
-  return SetMetadata(RATE_LIMIT_CATEGORY_KEY, category)
+  return SetMetadata(RATE_LIMIT_CATEGORY_KEY, category);
 }

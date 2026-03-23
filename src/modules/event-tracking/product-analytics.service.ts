@@ -113,7 +113,10 @@ export class ProductAnalyticsService {
     try {
       const rows = await this.db
         .select({
-          month: sql<string>`DATE_TRUNC('month', ${productEvents.occurredAt})`.as('month'),
+          month:
+            sql<string>`DATE_TRUNC('month', ${productEvents.occurredAt})`.as(
+              'month',
+            ),
           count: countDistinct(productEvents.userId).as('count'),
         })
         .from(productEvents)
@@ -267,11 +270,10 @@ export class ProductAnalyticsService {
       }
 
       return stepCounts.map((current, index) => {
-        const previousUsers = index === 0 ? current.users : stepCounts[index - 1].users;
+        const previousUsers =
+          index === 0 ? current.users : stepCounts[index - 1].users;
         const dropoffRate =
-          previousUsers > 0
-            ? 1 - current.users / previousUsers
-            : 0;
+          previousUsers > 0 ? 1 - current.users / previousUsers : 0;
 
         return {
           step: current.step,
@@ -288,10 +290,7 @@ export class ProductAnalyticsService {
     }
   }
 
-  async getSaasMetrics(
-    startDate: Date,
-    endDate: Date,
-  ): Promise<SaasMetrics> {
+  async getSaasMetrics(startDate: Date, endDate: Date): Promise<SaasMetrics> {
     try {
       // MRR: sum of active/trialing subscriptions × plan monthly price
       const mrrResult = await this.db.execute<{ mrr: string }>(sql`
@@ -353,7 +352,8 @@ export class ProductAnalyticsService {
       const newSubscribers = Number(newSubResult.total);
 
       const churnDenominator = totalSubscribers + churnCount;
-      const churnRate = churnDenominator > 0 ? churnCount / churnDenominator : 0;
+      const churnRate =
+        churnDenominator > 0 ? churnCount / churnDenominator : 0;
 
       return {
         mrr,

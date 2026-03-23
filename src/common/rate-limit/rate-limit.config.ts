@@ -11,16 +11,16 @@
  */
 
 type PlanLimits = {
-  limit: number
-  windowMs: number
-}
+  limit: number;
+  windowMs: number;
+};
 
-type PlanKey = 'default' | 'free' | 'starter' | 'professional' | 'enterprise'
+type PlanKey = 'default' | 'free' | 'starter' | 'professional' | 'enterprise';
 
-type RateLimitConfig = Record<string, Record<PlanKey, PlanLimits>>
+type RateLimitConfig = Record<string, Record<PlanKey, PlanLimits>>;
 
-const MINUTE = 60_000
-const HOUR = 3_600_000
+const MINUTE = 60_000;
+const HOUR = 3_600_000;
 
 export const RATE_LIMITS: RateLimitConfig = {
   /**
@@ -88,7 +88,7 @@ export const RATE_LIMITS: RateLimitConfig = {
     professional: { limit: 300, windowMs: MINUTE },
     enterprise: { limit: 600, windowMs: MINUTE },
   },
-}
+};
 
 /**
  * IP-level rate limits — applied before authentication.
@@ -97,7 +97,7 @@ export const RATE_LIMITS: RateLimitConfig = {
 export const IP_RATE_LIMITS = {
   global: { limit: 300, windowMs: MINUTE },
   auth: { limit: 15, windowMs: MINUTE },
-} as const
+} as const;
 
 /**
  * Tenant-level rate limits — aggregate across all users in an org.
@@ -109,4 +109,4 @@ export const TENANT_RATE_LIMITS: Record<PlanKey, PlanLimits> = {
   starter: { limit: 2000, windowMs: MINUTE },
   professional: { limit: 5000, windowMs: MINUTE },
   enterprise: { limit: 15000, windowMs: MINUTE },
-}
+};

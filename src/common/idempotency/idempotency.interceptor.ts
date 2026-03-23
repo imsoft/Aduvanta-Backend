@@ -5,11 +5,11 @@ import {
   CallHandler,
   Inject,
   Logger,
-} from '@nestjs/common'
-import { Observable, tap } from 'rxjs'
-import Redis from 'ioredis'
-import { REDIS } from '../../redis/redis.module'
-import type { Request } from 'express'
+} from '@nestjs/common';
+import { Observable, tap } from 'rxjs';
+import Redis from 'ioredis';
+import { REDIS } from '../../redis/redis.module';
+import type { Request } from 'express';
 
 /**
  * Interceptor that marks idempotency locks as "done" after successful response.
@@ -21,17 +21,17 @@ import type { Request } from 'express'
  */
 @Injectable()
 export class IdempotencyInterceptor implements NestInterceptor {
-  private readonly logger = new Logger(IdempotencyInterceptor.name)
+  private readonly logger = new Logger(IdempotencyInterceptor.name);
 
   constructor(@Inject(REDIS) private readonly redis: Redis) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const request = context.switchToHttp().getRequest<Request>()
+    const request = context.switchToHttp().getRequest<Request>();
     const lockKey = (request as Request & { idempotencyLockKey?: string })
-      .idempotencyLockKey
+      .idempotencyLockKey;
 
     if (!lockKey) {
-      return next.handle()
+      return next.handle();
     }
 
     return next.handle().pipe(
@@ -45,7 +45,7 @@ export class IdempotencyInterceptor implements NestInterceptor {
                 { err, lockKey },
                 'Failed to mark idempotency key as done',
               ),
-            )
+            );
         },
         error: () => {
           // Error — release lock so client can retry
@@ -56,9 +56,9 @@ export class IdempotencyInterceptor implements NestInterceptor {
                 { err, lockKey },
                 'Failed to release idempotency lock after error',
               ),
-            )
+            );
         },
       }),
-    )
+    );
   }
 }

@@ -6,20 +6,20 @@ import {
   HttpStatus,
   Logger,
   Inject,
-} from '@nestjs/common'
-import { Reflector } from '@nestjs/core'
-import Redis from 'ioredis'
-import { REDIS } from '../../redis/redis.module'
-import { IDEMPOTENCY_KEY } from './idempotency.decorator'
-import type { Request } from 'express'
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import Redis from 'ioredis';
+import { REDIS } from '../../redis/redis.module';
+import { IDEMPOTENCY_KEY } from './idempotency.decorator';
+import type { Request } from 'express';
 
 type IdempotencyConfig = {
-  lockTtlMs: number
-}
+  lockTtlMs: number;
+};
 
 type ActiveSession = {
-  session: { userId: string }
-}
+  session: { userId: string };
+};
 
 /**
  * Guard that prevents duplicate mutation requests.
@@ -42,7 +42,7 @@ type ActiveSession = {
  */
 @Injectable()
 export class IdempotencyGuard implements CanActivate {
-  private readonly logger = new Logger(IdempotencyGuard.name)
+  private readonly logger = new Logger(IdempotencyGuard.name);
 
   constructor(
     @Inject(REDIS) private readonly redis: Redis,
@@ -53,33 +53,33 @@ export class IdempotencyGuard implements CanActivate {
     const config = this.reflector.get<IdempotencyConfig>(
       IDEMPOTENCY_KEY,
       context.getHandler(),
-    )
+    );
 
     if (!config) {
-      return true
+      return true;
     }
 
-    const request = context.switchToHttp().getRequest<Request>()
+    const request = context.switchToHttp().getRequest<Request>();
     const session = (request as Request & { activeSession?: ActiveSession })
-      .activeSession
+      .activeSession;
 
     if (!session) {
-      return true
+      return true;
     }
 
-    const userId = session.session.userId
+    const userId = session.session.userId;
     const idempotencyKey = request.headers['idempotency-key'] as
       | string
-      | undefined
+      | undefined;
 
     // If client provides an idempotency key, use it. Otherwise, generate
     // a lock key from the request path + method (prevents same-user
     // double-submit on the same endpoint).
     const lockKey = idempotencyKey
       ? `idem:${userId}:${idempotencyKey}`
-      : `idem:lock:${userId}:${request.method}:${request.path}`
+      : `idem:lock:${userId}:${request.method}:${request.path}`;
 
-    const ttlSeconds = Math.ceil(config.lockTtlMs / 1000)
+    const ttlSeconds = Math.ceil(config.lockTtlMs / 1000);
 
     try {
       // SET NX — only set if key doesn't exist (atomic lock)
@@ -89,17 +89,17 @@ export class IdempotencyGuard implements CanActivate {
         'EX',
         ttlSeconds,
         'NX',
-      )
+      );
 
       if (!acquired) {
         // Key already exists — check if it's still processing or done
-        const status = await this.redis.get(lockKey)
+        const status = await this.redis.get(lockKey);
 
         if (status === 'processing') {
           this.logger.warn(
             { userId, idempotencyKey, path: request.path },
             'Duplicate request blocked (still processing)',
-          )
+          );
 
           throw new HttpException(
             {
@@ -109,7 +109,7 @@ export class IdempotencyGuard implements CanActivate {
               code: 'DUPLICATE_REQUEST',
             },
             HttpStatus.CONFLICT,
-          )
+          );
         }
 
         // Status is "done" or a cached response — for idempotency key
@@ -118,7 +118,7 @@ export class IdempotencyGuard implements CanActivate {
         if (idempotencyKey) {
           this.logger.log(
             `Idempotent request already completed: ${userId} ${idempotencyKey}`,
-          )
+          );
           throw new HttpException(
             {
               statusCode: HttpStatus.CONFLICT,
@@ -126,29 +126,30 @@ export class IdempotencyGuard implements CanActivate {
               code: 'ALREADY_PROCESSED',
             },
             HttpStatus.CONFLICT,
-          )
+          );
         }
 
         // No explicit idempotency key, and the lock expired — allow
-        return true
+        return true;
       }
 
       // Lock acquired — store the key on the request so the interceptor
       // can mark it complete after the response
-      ;(request as Request & { idempotencyLockKey?: string }).idempotencyLockKey =
-        lockKey
+      (
+        request as Request & { idempotencyLockKey?: string }
+      ).idempotencyLockKey = lockKey;
 
-      return true
+      return true;
     } catch (error) {
       if (error instanceof HttpException) {
-        throw error
+        throw error;
       }
       // Redis error — fail open
       this.logger.error(
         { err: error, lockKey },
         'Idempotency check failed, allowing request',
-      )
-      return true
+      );
+      return true;
     }
   }
 }

@@ -24,20 +24,51 @@ interface RouteEventMapping {
   eventName: string;
 }
 
-const UUID_PATTERN = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi;
+const UUID_PATTERN =
+  /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi;
 
 const ROUTE_EVENT_MAP = new Map<string, RouteEventMapping>([
-  ['POST /api/auth/sign-up', { category: 'auth', eventName: 'user.registered' }],
+  [
+    'POST /api/auth/sign-up',
+    { category: 'auth', eventName: 'user.registered' },
+  ],
   ['POST /api/auth/sign-in', { category: 'auth', eventName: 'user.logged_in' }],
-  ['POST /api/organizations', { category: 'product', eventName: 'organization.created' }],
-  ['POST /api/operations', { category: 'product', eventName: 'operation.created' }],
-  ['PATCH /api/operations/:id', { category: 'product', eventName: 'operation.updated' }],
-  ['POST /api/customs-entries', { category: 'product', eventName: 'pedimento.created' }],
-  ['PATCH /api/customs-entries/:id', { category: 'product', eventName: 'pedimento.edited' }],
-  ['POST /api/documents', { category: 'product', eventName: 'document.uploaded' }],
-  ['POST /api/subscriptions/checkout', { category: 'monetization', eventName: 'subscription.checkout_started' }],
-  ['POST /api/subscriptions/change-plan', { category: 'monetization', eventName: 'subscription.plan_changed' }],
-  ['POST /api/subscriptions/cancel', { category: 'monetization', eventName: 'subscription.cancelled' }],
+  [
+    'POST /api/organizations',
+    { category: 'product', eventName: 'organization.created' },
+  ],
+  [
+    'POST /api/operations',
+    { category: 'product', eventName: 'operation.created' },
+  ],
+  [
+    'PATCH /api/operations/:id',
+    { category: 'product', eventName: 'operation.updated' },
+  ],
+  [
+    'POST /api/customs-entries',
+    { category: 'product', eventName: 'pedimento.created' },
+  ],
+  [
+    'PATCH /api/customs-entries/:id',
+    { category: 'product', eventName: 'pedimento.edited' },
+  ],
+  [
+    'POST /api/documents',
+    { category: 'product', eventName: 'document.uploaded' },
+  ],
+  [
+    'POST /api/subscriptions/checkout',
+    { category: 'monetization', eventName: 'subscription.checkout_started' },
+  ],
+  [
+    'POST /api/subscriptions/change-plan',
+    { category: 'monetization', eventName: 'subscription.plan_changed' },
+  ],
+  [
+    'POST /api/subscriptions/cancel',
+    { category: 'monetization', eventName: 'subscription.cancelled' },
+  ],
   ['POST /api/exports', { category: 'product', eventName: 'export.requested' }],
 ]);
 
@@ -93,9 +124,7 @@ function resolveRouteMapping(
 export class EventTrackingInterceptor implements NestInterceptor {
   private readonly logger = new Logger(EventTrackingInterceptor.name);
 
-  constructor(
-    private readonly eventTrackingService: EventTrackingService,
-  ) {}
+  constructor(private readonly eventTrackingService: EventTrackingService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const req = context.switchToHttp().getRequest<RequestWithSession>();
@@ -121,7 +150,8 @@ export class EventTrackingInterceptor implements NestInterceptor {
           const event: TrackEventInput = {
             eventId: randomUUID(),
             userId: userId,
-            organizationId: typeof organizationId === 'string' ? organizationId : undefined,
+            organizationId:
+              typeof organizationId === 'string' ? organizationId : undefined,
             category: mapping.category,
             eventName: mapping.eventName,
             source: 'server',

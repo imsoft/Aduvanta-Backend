@@ -183,9 +183,7 @@ export class SubscriptionsService {
     return { url: session.url };
   }
 
-  async createPortalSession(
-    organizationId: string,
-  ): Promise<{ url: string }> {
+  async createPortalSession(organizationId: string): Promise<{ url: string }> {
     const [org] = await this.db
       .select({ stripeCustomerId: organizations.stripeCustomerId })
       .from(organizations)
@@ -265,7 +263,10 @@ export class SubscriptionsService {
       },
     });
 
-    return { message: 'Plan change processed. Subscription will update shortly via webhook.' };
+    return {
+      message:
+        'Plan change processed. Subscription will update shortly via webhook.',
+    };
   }
 
   async cancelSubscription(
@@ -280,9 +281,7 @@ export class SubscriptionsService {
     }
 
     if (!existing.subscription.stripeSubscriptionId) {
-      throw new BadRequestException(
-        'Subscription is not managed by Stripe.',
-      );
+      throw new BadRequestException('Subscription is not managed by Stripe.');
     }
 
     await this.stripeService.cancelSubscription(
@@ -302,7 +301,9 @@ export class SubscriptionsService {
       },
     });
 
-    return { message: 'Subscription will cancel at end of current billing period.' };
+    return {
+      message: 'Subscription will cancel at end of current billing period.',
+    };
   }
 
   async resumeSubscription(
@@ -317,9 +318,7 @@ export class SubscriptionsService {
     }
 
     if (!existing.subscription.stripeSubscriptionId) {
-      throw new BadRequestException(
-        'Subscription is not managed by Stripe.',
-      );
+      throw new BadRequestException('Subscription is not managed by Stripe.');
     }
 
     if (!existing.subscription.cancelAtPeriodEnd) {
@@ -343,7 +342,9 @@ export class SubscriptionsService {
       },
     });
 
-    return { message: 'Subscription cancellation reversed. Billing will continue.' };
+    return {
+      message: 'Subscription cancellation reversed. Billing will continue.',
+    };
   }
 
   // --- Private helpers ---

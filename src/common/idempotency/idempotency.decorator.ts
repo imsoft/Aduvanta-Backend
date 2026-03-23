@@ -1,6 +1,6 @@
-import { SetMetadata } from '@nestjs/common'
+import { SetMetadata } from '@nestjs/common';
 
-export const IDEMPOTENCY_KEY = 'idempotency'
+export const IDEMPOTENCY_KEY = 'idempotency';
 
 /**
  * Marks a mutation endpoint as idempotent.
@@ -19,5 +19,5 @@ export const IDEMPOTENCY_KEY = 'idempotency'
  *   async create(@Body() dto: CreateDto) { ... }
  */
 export function Idempotent(lockTtlMs: number = 30_000) {
-  return SetMetadata(IDEMPOTENCY_KEY, { lockTtlMs })
+  return SetMetadata(IDEMPOTENCY_KEY, { lockTtlMs });
 }

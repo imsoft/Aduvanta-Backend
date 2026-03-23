@@ -1,4 +1,11 @@
-import { integer, numeric, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+  integer,
+  numeric,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from 'drizzle-orm/pg-core';
 
 export const planStatusEnum = pgEnum('plan_status', ['ACTIVE', 'DEPRECATED']);
 

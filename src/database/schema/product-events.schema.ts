@@ -1,4 +1,11 @@
-import { index, jsonb, pgTable, text, timestamp, integer } from 'drizzle-orm/pg-core';
+import {
+  index,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  integer,
+} from 'drizzle-orm/pg-core';
 
 export const productEvents = pgTable(
   'product_events',

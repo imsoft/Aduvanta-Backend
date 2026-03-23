@@ -78,7 +78,6 @@ describe('OrganizationsService', () => {
     it('should create organization with owner membership and audit log', async () => {
       organizationsRepository.findBySlug.mockResolvedValue(undefined);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
       db.transaction.mockImplementation(
         async (fn: (tx: unknown) => Promise<unknown>) => {
           const txProxy = {
@@ -113,7 +112,6 @@ describe('OrganizationsService', () => {
         .mockResolvedValueOnce(fakeOrg) // base slug taken
         .mockResolvedValueOnce(undefined); // suffixed slug available
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
       db.transaction.mockImplementation(
         async (fn: (tx: unknown) => Promise<unknown>) => {
           const txProxy = {
