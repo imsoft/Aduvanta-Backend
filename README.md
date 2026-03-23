@@ -45,7 +45,7 @@ cp .env.example .env
 |----------|-------------|
 | `DATABASE_URL` | Cadena PostgreSQL (`?sslmode=require` en la nube) |
 | `REDIS_URL` | URL de conexión Redis |
-| `BETTER_AUTH_SECRET` | Secreto aleatorio (≥ 32 caracteres) |
+| `BETTER_AUTH_API_KEY` | Secreto de Better Auth (≥ 32 caracteres). Si aún tienes `BETTER_AUTH_SECRET`, también se acepta |
 | `BETTER_AUTH_URL` | URL pública base del API, sin path final. Ej.: `http://localhost:3000` en local, `https://api.tu-dominio.com` en producción |
 | `CORS_ORIGIN` | Origen del frontend. Puede ser **varios valores separados por comas** (se recortan espacios). Ej.: `http://localhost:3001` o `https://aduvanta.com,https://www.aduvanta.com` |
 | `PORT` | Puerto HTTP (por defecto `3000`) |

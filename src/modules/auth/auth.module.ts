@@ -32,7 +32,7 @@ import { BETTER_AUTH } from './auth.constants.js';
         return betterAuth({
           database: pool,
           baseURL: config.get('BETTER_AUTH_URL'),
-          secret: config.get('BETTER_AUTH_SECRET'),
+          secret: config.get('BETTER_AUTH_API_KEY'),
           emailAndPassword: { enabled: true },
           socialProviders: {
             ...(googleClientId && googleClientSecret
