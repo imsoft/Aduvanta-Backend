@@ -2,10 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "**/*.js": {
-      "includeFiles": [
-        "node_modules/better-auth/**",
-        "node_modules/better-call/**"
-      ]
+      "includeFiles": "node_modules/{better-auth,better-call}/**"
     }
   }
 }
