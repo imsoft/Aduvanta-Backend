@@ -36,6 +36,11 @@ export class PermissionsGuard implements CanActivate {
       throw new UnauthorizedException('No active session');
     }
 
+    // System admins bypass all permission checks.
+    if (request.activeSession.isSystemAdmin) {
+      return true;
+    }
+
     // Extract organizationId from route param or header — never fall back to generic 'id'.
     const organizationId =
       (request.params as Record<string, string>)['organizationId'] ??

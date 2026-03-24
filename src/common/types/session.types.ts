@@ -22,4 +22,5 @@ export interface ActiveSessionRecord {
 export interface ActiveSession {
   user: ActiveUser;
   session: ActiveSessionRecord;
+  isSystemAdmin: boolean;
 }

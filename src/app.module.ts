@@ -54,6 +54,7 @@ import { StripeModule } from './modules/stripe/stripe.module.js';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
 import { UsageModule } from './modules/usage/usage.module.js';
 import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module.js';
+import { SystemAdminModule } from './modules/system-admin/system-admin.module.js';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module
     DatabaseModule,
     RedisModule,
     StorageModule,
+    SystemAdminModule,
     AuthModule,
     UsersModule,
     MembershipsModule,

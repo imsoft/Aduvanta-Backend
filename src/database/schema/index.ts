@@ -2,6 +2,7 @@
 export * from './auth.schema';
 
 // Application tables (managed by drizzle-kit migrations)
+export * from './system-admins.schema';
 export * from './organizations.schema';
 export * from './memberships.schema';
 export * from './audit-logs.schema';

@@ -5,13 +5,18 @@ import type { ActiveSession } from '../../common/types/session.types.js';
 import { UsersService } from './users.service.js';
 import type { UserRecord } from './users.repository.js';
 
+interface MeResponse extends UserRecord {
+  isSystemAdmin: boolean;
+}
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
   @UseGuards(AuthGuard)
-  async getMe(@Session() session: ActiveSession): Promise<UserRecord> {
-    return this.usersService.getById(session.user.id);
+  async getMe(@Session() session: ActiveSession): Promise<MeResponse> {
+    const user = await this.usersService.getById(session.user.id);
+    return { ...user, isSystemAdmin: session.isSystemAdmin };
   }
 }
