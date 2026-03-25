@@ -17,7 +17,9 @@ import { BETTER_AUTH } from './auth.constants.js';
           idle_in_transaction_session_timeout: 60_000,
         });
 
-        const isProduction = config.get('NODE_ENV') === 'production';
+        const betterAuthUrl = config.get('BETTER_AUTH_URL')
+        const isProduction = config.get('NODE_ENV') === 'production'
+        const isSecureCookie = isProduction || betterAuthUrl?.startsWith('https://')
         const cookieDomain = config.get('COOKIE_DOMAIN');
 
         const googleClientId = config.get('GOOGLE_CLIENT_ID');
@@ -55,7 +57,10 @@ import { BETTER_AUTH } from './auth.constants.js';
                 }
               : {}),
             defaultCookieAttributes: {
-              secure: isProduction,
+              // Importante: el navegador rechaza cookies con prefijo `__Secure-` si `Secure=false`.
+              // better-auth ya decide el prefijo según el protocolo de `baseURL`, pero aquí
+              // sobreescribimos `secure`, así que lo alineamos con HTTPS.
+              secure: isSecureCookie,
               httpOnly: true,
               sameSite: 'lax',
             },
