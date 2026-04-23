@@ -94,6 +94,12 @@ pnpm run test:cov   # Cobertura
 
 ## Documentación adicional
 
+Guías internas del proyecto en [`docs/`](./docs/README.md):
+
+- [Actualizar dependencias](./docs/updating.md)
+
+Referencias externas:
+
 - [NestJS](https://docs.nestjs.com/)
 - [Better Auth](https://www.better-auth.com/docs)
 - [Drizzle ORM](https://orm.drizzle.team/docs/overview)
