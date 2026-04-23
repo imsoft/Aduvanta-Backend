@@ -19,6 +19,7 @@ import { AuthGuard } from '../../common/guards/auth.guard.js';
 import { PermissionsGuard } from '../../common/guards/permissions.guard.js';
 import { Session } from '../../common/decorators/session.decorator.js';
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
+import { documentUploadOptions } from '../../common/uploads/file-upload.config.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { PERMISSION } from '../permissions/permission.codes.js';
 import { DocumentsService } from './documents.service.js';
@@ -50,7 +51,7 @@ export class DocumentsController {
 
   @Post('operations/:operationId/documents')
   @RequirePermission(PERMISSION.DOCUMENTS_CREATE)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', documentUploadOptions))
   async create(
     @Headers('x-organization-id') organizationId: string,
     @Param('operationId') operationId: string,
@@ -122,7 +123,7 @@ export class DocumentsController {
 
   @Post('documents/:documentId/versions')
   @RequirePermission(PERMISSION.DOCUMENTS_UPLOAD_VERSION)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', documentUploadOptions))
   async uploadVersion(
     @Headers('x-organization-id') organizationId: string,
     @Param('documentId') documentId: string,

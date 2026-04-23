@@ -14,6 +14,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../../common/guards/auth.guard.js';
 import { PermissionsGuard } from '../../common/guards/permissions.guard.js';
+import { csvUploadOptions } from '../../common/uploads/file-upload.config.js';
 import { Session } from '../../common/decorators/session.decorator.js';
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
@@ -42,7 +43,7 @@ export class ImportsController {
 
   @Post()
   @RequirePermission(PERMISSION.IMPORTS_RUN)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', csvUploadOptions))
   async create(
     @Headers('x-organization-id') organizationId: string,
     @Body() dto: CreateImportJobDto,

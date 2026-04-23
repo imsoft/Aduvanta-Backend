@@ -10,6 +10,7 @@ import {
 import type { Request, Response } from 'express';
 import { StripeService } from './stripe.service.js';
 import { StripeWebhookService } from './stripe-webhook.service.js';
+import { StripeProcessedEventsRepository } from './stripe-processed-events.repository.js';
 import type Stripe from 'stripe';
 
 @Controller('stripe')
@@ -19,6 +20,7 @@ export class StripeWebhookController {
   constructor(
     private readonly stripeService: StripeService,
     private readonly stripeWebhookService: StripeWebhookService,
+    private readonly processedEventsRepo: StripeProcessedEventsRepository,
   ) {}
 
   @Post('webhooks')
@@ -46,6 +48,22 @@ export class StripeWebhookController {
       res
         .status(HttpStatus.BAD_REQUEST)
         .json({ error: 'Webhook signature verification failed' });
+      return;
+    }
+
+    // Idempotency: Stripe guarantees at-least-once delivery. If we already
+    // processed this event, reply 200 and skip the handler.
+    const firstTime = await this.processedEventsRepo.markProcessed(
+      event.id,
+      event.type,
+    );
+
+    if (!firstTime) {
+      this.logger.log(
+        { eventId: event.id, eventType: event.type },
+        'Stripe webhook already processed — skipping (idempotent replay)',
+      );
+      res.status(HttpStatus.OK).json({ received: true, duplicate: true });
       return;
     }
 
@@ -98,11 +116,18 @@ export class StripeWebhookController {
         }
       }
     } catch (error) {
+      // Release the idempotency marker so Stripe retries reprocess cleanly
+      // once the underlying bug is fixed. Return 500 to trigger Stripe
+      // automatic retry with exponential backoff.
+      await this.processedEventsRepo.unmark(event.id);
       this.logger.error(
         { error, eventId: event.id, eventType: event.type },
-        'Error processing Stripe webhook event',
+        'Error processing Stripe webhook event — responding 500 to let Stripe retry',
       );
-      // Always return 200 to Stripe to prevent retries for processing errors
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ error: 'Error processing webhook event' });
+      return;
     }
 
     res.status(HttpStatus.OK).json({ received: true });

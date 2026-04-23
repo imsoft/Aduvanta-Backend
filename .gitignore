@@ -54,3 +54,21 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Secret material (keys, certs, service accounts). Never commit these.
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+credentials*.json
+serviceAccount*.json
+service-account*.json
+gcp-*.json
+google-credentials*.json
+
+# Local storage for tooling that may cache secrets
+.wrangler/
+.sentryclirc

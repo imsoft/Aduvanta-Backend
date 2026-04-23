@@ -1,3 +1,7 @@
+// Sentry MUST be initialized before any other import that could throw, so
+// its async-context tracking wraps Nest bootstrap, DB connections, etc.
+import './instrument.js';
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
@@ -6,6 +10,7 @@ import { getBetterAuthNode } from './common/better-auth-node.loader.js';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import { createHash } from 'node:crypto';
 import type { IncomingMessage, ServerResponse } from 'http';
 import type { Request, Response, NextFunction } from 'express';
 import { AppModule } from './app.module.js';
@@ -60,6 +65,34 @@ async function bootstrap(): Promise<void> {
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
+  // Security headers and cookie parsing must run BEFORE the Better Auth
+  // handler so that responses for /api/auth/* (login, signup, OAuth, reset,
+  // session) also include HSTS, X-Content-Type-Options, frame protection, CSP.
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'none'"],
+          scriptSrc: ["'none'"],
+          styleSrc: ["'none'"],
+          imgSrc: ["'none'"],
+          connectSrc: ["'self'"],
+          frameSrc: ["'none'"],
+          frameAncestors: ["'none'"],
+        },
+      },
+      hsts: { maxAge: 63_072_000, includeSubDomains: true, preload: true },
+    }),
+  );
+  app.use(cookieParser(config.get('COOKIE_SECRET')));
+
+  // Behind Vercel/other trusted reverse proxies; needed for req.ip and
+  // rate-limit by IP to use the real client address from x-forwarded-for.
+  const expressInstance = app
+    .getHttpAdapter()
+    .getInstance() as express.Application;
+  expressInstance.set('trust proxy', 1);
+
   // --- Auth rate limiter + account lockout (Redis-backed) ---
   const LOCKOUT_THRESHOLD = 5;
   const LOCKOUT_WINDOW_MS = 15 * 60_000; // 15 minutes
@@ -82,6 +115,7 @@ async function bootstrap(): Promise<void> {
 
       if (email) {
         const lockoutKey = `lockout:${email}`;
+        const emailHash = hashEmail(email);
 
         // Check lockout status in Redis
         void rateLimitService
@@ -89,7 +123,7 @@ async function bootstrap(): Promise<void> {
           .then((failedCount) => {
             if (failedCount >= LOCKOUT_THRESHOLD) {
               logger.warn(
-                { email, ip },
+                { emailHash, ip },
                 'Account temporarily locked due to repeated failed login attempts',
               );
 
@@ -125,10 +159,13 @@ async function bootstrap(): Promise<void> {
                   path: req.originalUrl,
                   method: req.method,
                   userAgent: req.headers['user-agent'],
-                  metadata: { email },
+                  metadata: { emailHash },
                 });
 
-                logger.warn({ email, ip, status }, 'Failed login attempt');
+                logger.warn(
+                  { emailHash, ip, status },
+                  'Failed login attempt',
+                );
               }
               // Clear lockout counter on successful login.
               if (status < 300 && email) {
@@ -151,24 +188,6 @@ async function bootstrap(): Promise<void> {
       res as unknown as ServerResponse,
     ).catch(next);
   });
-
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'none'"],
-          scriptSrc: ["'none'"],
-          styleSrc: ["'none'"],
-          imgSrc: ["'none'"],
-          connectSrc: ["'self'"],
-          frameSrc: ["'none'"],
-          frameAncestors: ["'none'"],
-        },
-      },
-      hsts: { maxAge: 63_072_000, includeSubDomains: true, preload: true },
-    }),
-  );
-  app.use(cookieParser());
 
   app.setGlobalPrefix('api');
 
@@ -196,16 +215,36 @@ async function bootstrap(): Promise<void> {
     }),
   );
 
+  // Register shutdown hooks so Nest calls onApplicationShutdown on every
+  // provider (DatabaseModule closes the pg pool, RedisModule closes the
+  // Redis connection). Prevents dropped in-flight work on SIGTERM.
+  app.enableShutdownHooks();
+
   const port = config.get('PORT');
   await app.listen(port);
 }
 
 function extractIp(req: Request): string {
+  // With `trust proxy` enabled, Express normalizes req.ip to the real
+  // client address from x-forwarded-for. Prefer req.ip over the raw header
+  // to avoid spoofing.
+  if (req.ip) {
+    return req.ip;
+  }
   const forwarded = req.headers['x-forwarded-for'];
   if (typeof forwarded === 'string') {
     return forwarded.split(',')[0].trim();
   }
-  return req.ip ?? req.socket.remoteAddress ?? 'unknown';
+  return req.socket.remoteAddress ?? 'unknown';
+}
+
+/**
+ * Derives a short, stable, non-reversible identifier from an email so logs
+ * can still be joined across events without storing PII in clear.
+ * Short prefix of SHA-256 keeps logs grep-friendly while being one-way.
+ */
+function hashEmail(email: string): string {
+  return createHash('sha256').update(email).digest('hex').slice(0, 16);
 }
 
 void bootstrap();

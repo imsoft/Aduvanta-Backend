@@ -26,6 +26,7 @@ export const configSchema = z.preprocess(
     BETTER_AUTH_URL: z.string().url('BETTER_AUTH_URL must be a valid URL'),
     CORS_ORIGIN: z.string().default('http://localhost:3001'),
     COOKIE_DOMAIN: z.string().optional(),
+    COOKIE_SECRET: z.string().min(32).optional(),
     SENTRY_DSN: z.string().url().optional(),
     // Google OAuth
     GOOGLE_CLIENT_ID: z.string().optional(),
@@ -36,6 +37,28 @@ export const configSchema = z.preprocess(
       .length(64, 'ENCRYPTION_KEY must be a 64-character hex string')
       .regex(/^[0-9a-f]+$/i, 'ENCRYPTION_KEY must be hexadecimal')
       .optional(),
+    // Email (Resend)
+    RESEND_API_KEY: z.string().min(1).optional(),
+    // Acepta tanto "no-reply@aduvanta.com" como el formato RFC 5322 con
+     // display name "Aduvanta <no-reply@aduvanta.com>". Resend/Nodemailer
+     // consumen cualquiera de los dos, así que solo validamos que haya un
+     // carácter `@`.
+    EMAIL_FROM: z
+      .string()
+      .min(3)
+      .refine((v) => v.includes('@'), 'EMAIL_FROM must contain an email address')
+      .default('Aduvanta <no-reply@aduvanta.com>'),
+    EMAIL_VERIFICATION_REQUIRED: z
+      .enum(['true', 'false'])
+      .default('false')
+      .transform((v) => v === 'true'),
+    SYSTEM_ADMIN_EMAIL: z.string().email().optional(),
+    MAX_UPLOAD_SIZE: z.coerce
+      .number()
+      .int()
+      .positive()
+      .default(25 * 1024 * 1024),
+    PG_POOL_MAX: z.coerce.number().int().positive().default(10),
     // Stripe
     STRIPE_SECRET_KEY: z.string().min(1).optional(),
     STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
@@ -47,6 +70,32 @@ export const configSchema = z.preprocess(
     S3_ENDPOINT: z.string().url().optional(),
     AWS_ACCESS_KEY_ID: z.string().optional(),
     AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  }).superRefine((data, ctx) => {
+    // In production, reject obviously-unsafe CORS configurations.
+    if (data.NODE_ENV === 'production') {
+      const origins = data.CORS_ORIGIN.split(',').map((o) => o.trim());
+      const forbidden = origins.filter(
+        (o) =>
+          o === '*' ||
+          o.startsWith('http://') ||
+          o.includes('localhost') ||
+          o.includes('127.0.0.1'),
+      );
+      if (forbidden.length > 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['CORS_ORIGIN'],
+          message: `CORS_ORIGIN contains values not allowed in production: ${forbidden.join(', ')}. Require HTTPS origins only.`,
+        });
+      }
+      if (data.BETTER_AUTH_URL.startsWith('http://')) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['BETTER_AUTH_URL'],
+          message: 'BETTER_AUTH_URL must use HTTPS in production.',
+        });
+      }
+    }
   }),
 );
 

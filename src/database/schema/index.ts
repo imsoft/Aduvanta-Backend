@@ -27,6 +27,7 @@ export * from './export-jobs.schema';
 export * from './import-jobs.schema';
 export * from './plans.schema';
 export * from './organization-subscriptions.schema';
+export * from './stripe-processed-events.schema';
 export * from './feature-flags.schema';
 
 // Tariff classification (TIGIE)

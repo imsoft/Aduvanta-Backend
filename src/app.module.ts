@@ -51,6 +51,7 @@ import { SaaiErrorsModule } from './modules/saai-errors/saai-errors.module.js';
 import { AiModule } from './modules/ai/ai.module.js';
 import { EventTrackingModule } from './modules/event-tracking/event-tracking.module.js';
 import { StripeModule } from './modules/stripe/stripe.module.js';
+import { EmailModule } from './modules/email/email.module.js';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module.js';
 import { UsageModule } from './modules/usage/usage.module.js';
 import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module.js';
@@ -70,12 +71,37 @@ import { SystemAdminModule } from './modules/system-admin/system-admin.module.js
             config.get('NODE_ENV') !== 'production'
               ? { target: 'pino-pretty' }
               : undefined,
+          // Scrub sensitive data from logs. Anything matched by these
+          // paths is replaced with `[REDACTED]` before serialization.
+          redact: {
+            paths: [
+              'req.headers.authorization',
+              'req.headers.cookie',
+              'req.headers["x-api-key"]',
+              'res.headers["set-cookie"]',
+              '*.password',
+              '*.passwordHash',
+              '*.token',
+              '*.accessToken',
+              '*.refreshToken',
+              '*.secret',
+              '*.apiKey',
+              '*.encryptionKey',
+              '*.authorization',
+              '*.cookie',
+              'body.password',
+              'body.newPassword',
+              'body.token',
+            ],
+            censor: '[REDACTED]',
+          },
         },
       }),
     }),
     DatabaseModule,
     RedisModule,
     StorageModule,
+    EmailModule,
     SystemAdminModule,
     AuthModule,
     UsersModule,
