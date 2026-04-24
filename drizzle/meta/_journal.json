@@ -92,6 +92,27 @@
       "when": 1774396800000,
       "tag": "0012_product_events",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1774483200000,
+      "tag": "0013_system_admins",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1774569600000,
+      "tag": "0014_stripe_processed_events",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1745366400000,
+      "tag": "0015_operational_modules",
+      "breakpoints": true
     }
   ]
 }
