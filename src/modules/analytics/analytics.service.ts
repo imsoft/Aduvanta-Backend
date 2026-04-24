@@ -226,4 +226,8 @@ export class AnalyticsService {
       endDate ? new Date(endDate) : undefined,
     );
   }
+
+  async getDashboardSummary(organizationId: string) {
+    return this.repository.getDashboardMetrics(organizationId);
+  }
 }

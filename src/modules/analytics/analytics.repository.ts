@@ -5,6 +5,11 @@ import {
   savedReports,
   reportExecutions,
   kpiSnapshots,
+  operations,
+  customsEntries,
+  warehouseInventory,
+  importerRegistry,
+  immexPrograms,
 } from '../../database/schema/index.js';
 
 export type SavedReportRecord = typeof savedReports.$inferSelect;
@@ -184,5 +189,107 @@ export class AnalyticsRepository {
       .returning();
 
     return created;
+  }
+
+  // --- Dashboard summary ---
+
+  async getDashboardMetrics(organizationId: string) {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+    const monthEnd = now.toISOString().split('T')[0];
+    const in30Days = new Date(now.getTime() + 30 * 86400000).toISOString().split('T')[0];
+
+    const [
+      activeOpsResult,
+      entriesThisMonthResult,
+      entriesByStatusResult,
+      warehouseItemsResult,
+      expiringRegistriesResult,
+      expiringImmexResult,
+    ] = await Promise.all([
+      // Active operations
+      this.db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(operations)
+        .where(
+          and(
+            eq(operations.organizationId, organizationId),
+            sql`${operations.status} NOT IN ('COMPLETED', 'CANCELLED', 'ARCHIVED')`,
+          ),
+        ),
+
+      // Pedimentos this month
+      this.db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(customsEntries)
+        .where(
+          and(
+            eq(customsEntries.organizationId, organizationId),
+            gte(customsEntries.createdAt, new Date(monthStart)),
+            lte(customsEntries.createdAt, new Date(monthEnd + 'T23:59:59Z')),
+          ),
+        ),
+
+      // Entries by status
+      this.db
+        .select({
+          status: customsEntries.status,
+          count: sql<number>`count(*)::int`,
+        })
+        .from(customsEntries)
+        .where(eq(customsEntries.organizationId, organizationId))
+        .groupBy(customsEntries.status),
+
+      // Warehouse items count
+      this.db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(warehouseInventory)
+        .where(eq(warehouseInventory.organizationId, organizationId)),
+
+      // Expiring importer registries in 30 days
+      this.db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(importerRegistry)
+        .where(
+          and(
+            eq(importerRegistry.organizationId, organizationId),
+            eq(importerRegistry.status, 'ACTIVE'),
+            lte(importerRegistry.expirationDate, in30Days),
+          ),
+        ),
+
+      // Expiring IMMEX programs in 60 days
+      this.db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(immexPrograms)
+        .where(
+          and(
+            eq(immexPrograms.organizationId, organizationId),
+            eq(immexPrograms.status, 'ACTIVE'),
+            lte(immexPrograms.expirationDate, new Date(now.getTime() + 60 * 86400000).toISOString().split('T')[0]),
+          ),
+        ),
+    ]);
+
+    const statusMap = Object.fromEntries(
+      entriesByStatusResult.map((r) => [r.status, r.count]),
+    ) as Record<string, number>;
+
+    return {
+      activeOperations: activeOpsResult[0]?.count ?? 0,
+      entriesThisMonth: entriesThisMonthResult[0]?.count ?? 0,
+      pendingPayments: (statusMap['VALIDATED'] ?? 0),
+      pendingPaymentsAmount: null,
+      expiringRegistries: (expiringRegistriesResult[0]?.count ?? 0) + (expiringImmexResult[0]?.count ?? 0),
+      warehouseItems: warehouseItemsResult[0]?.count ?? 0,
+      entriesByStatus: {
+        DRAFT: statusMap['DRAFT'] ?? 0,
+        PREVALIDATED: statusMap['PREVALIDATED'] ?? 0,
+        VALIDATED: statusMap['VALIDATED'] ?? 0,
+        PAID: statusMap['PAID'] ?? 0,
+        DISPATCHED: statusMap['DISPATCHED'] ?? 0,
+        RELEASED: statusMap['RELEASED'] ?? 0,
+      },
+    };
   }
 }

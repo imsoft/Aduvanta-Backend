@@ -119,6 +119,16 @@ export class AnalyticsController {
     return this.service.getExecutionById(reportId, executionId, organizationId);
   }
 
+  // ========== Dashboard summary ==========
+
+  @Get('dashboard')
+  @RequirePermission(PERMISSION.ANALYTICS_READ)
+  async getDashboard(
+    @Headers('x-organization-id') organizationId: string,
+  ) {
+    return this.service.getDashboardSummary(organizationId);
+  }
+
   // ========== KPIs ==========
 
   @Get('kpi')

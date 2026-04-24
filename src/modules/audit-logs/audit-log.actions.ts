@@ -288,6 +288,34 @@ export const AUDIT_ACTION = {
   REPORT_DELETED: 'report.deleted',
   REPORT_EXECUTED: 'report.executed',
   REPORT_EXPORTED: 'report.exported',
+
+  // Customs Inspections (Semáforo / Reconocimiento)
+  INSPECTION_CREATED: 'inspection.created',
+  INSPECTION_UPDATED: 'inspection.updated',
+  INSPECTION_SEMAPHORE_RECORDED: 'inspection.semaphore_recorded',
+
+  // Customs Previos
+  PREVIO_CREATED: 'previo.created',
+  PREVIO_COMPLETED: 'previo.completed',
+  PREVIO_CANCELLED: 'previo.cancelled',
+
+  // Importer Registry (Padrón)
+  IMPORTER_REGISTRY_CREATED: 'importer_registry.created',
+  IMPORTER_REGISTRY_UPDATED: 'importer_registry.updated',
+
+  // IMMEX Programs
+  IMMEX_PROGRAM_CREATED: 'immex_program.created',
+  IMMEX_PROGRAM_UPDATED: 'immex_program.updated',
+
+  // Customs Rectifications
+  RECTIFICATION_CREATED: 'rectification.created',
+  RECTIFICATION_SUBMITTED: 'rectification.submitted',
+  RECTIFICATION_APPROVED: 'rectification.approved',
+  RECTIFICATION_REJECTED: 'rectification.rejected',
+
+  // Client Accounts (Cuenta Corriente)
+  ACCOUNT_MOVEMENT_CREATED: 'account.movement_created',
+  ACCOUNT_STATEMENT_GENERATED: 'account.statement_generated',
 } as const;
 
 export type AuditAction = (typeof AUDIT_ACTION)[keyof typeof AUDIT_ACTION];

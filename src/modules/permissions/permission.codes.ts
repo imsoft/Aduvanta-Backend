@@ -288,6 +288,35 @@ export const PERMISSION = {
   ANALYTICS_REPORTS_EXECUTE: 'analytics.reports_execute',
   ANALYTICS_REPORTS_EXPORT: 'analytics.reports_export',
   ANALYTICS_KPI_READ: 'analytics.kpi_read',
+
+  // Customs Inspections (Semáforo / Reconocimiento Aduanal)
+  CUSTOMS_INSPECTIONS_READ: 'customs_inspections.read',
+  CUSTOMS_INSPECTIONS_CREATE: 'customs_inspections.create',
+  CUSTOMS_INSPECTIONS_UPDATE: 'customs_inspections.update',
+
+  // Customs Previos (Pre-inspección)
+  CUSTOMS_PREVIOS_READ: 'customs_previos.read',
+  CUSTOMS_PREVIOS_CREATE: 'customs_previos.create',
+  CUSTOMS_PREVIOS_UPDATE: 'customs_previos.update',
+
+  // Importer / Exporter Registry (Padrón de Importadores)
+  IMPORTER_REGISTRY_READ: 'importer_registry.read',
+  IMPORTER_REGISTRY_CREATE: 'importer_registry.create',
+  IMPORTER_REGISTRY_UPDATE: 'importer_registry.update',
+
+  // IMMEX Programs
+  IMMEX_PROGRAMS_READ: 'immex_programs.read',
+  IMMEX_PROGRAMS_CREATE: 'immex_programs.create',
+  IMMEX_PROGRAMS_UPDATE: 'immex_programs.update',
+
+  // Customs Rectifications
+  CUSTOMS_RECTIFICATIONS_READ: 'customs_rectifications.read',
+  CUSTOMS_RECTIFICATIONS_CREATE: 'customs_rectifications.create',
+  CUSTOMS_RECTIFICATIONS_UPDATE: 'customs_rectifications.update',
+
+  // Client Accounts (Cuenta Corriente)
+  CLIENT_ACCOUNTS_READ: 'client_accounts.read',
+  CLIENT_ACCOUNTS_WRITE: 'client_accounts.write',
 } as const;
 
 export type Permission = (typeof PERMISSION)[keyof typeof PERMISSION];

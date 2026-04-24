@@ -56,6 +56,13 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
 import { UsageModule } from './modules/usage/usage.module.js';
 import { FeatureFlagsModule } from './modules/feature-flags/feature-flags.module.js';
 import { SystemAdminModule } from './modules/system-admin/system-admin.module.js';
+import { CustomsInspectionsModule } from './modules/customs-inspections/customs-inspections.module.js';
+import { CustomsPreviosModule } from './modules/customs-previos/customs-previos.module.js';
+import { ImporterRegistryModule } from './modules/importer-registry/importer-registry.module.js';
+import { ImmexProgramsModule } from './modules/immex-programs/immex-programs.module.js';
+import { CustomsRectificationsModule } from './modules/customs-rectifications/customs-rectifications.module.js';
+import { SaaiGeneratorModule } from './modules/saai-generator/saai-generator.module.js';
+import { ClientAccountsModule } from './modules/client-accounts/client-accounts.module.js';
 
 @Module({
   imports: [
@@ -150,6 +157,13 @@ import { SystemAdminModule } from './modules/system-admin/system-admin.module.js
     SubscriptionsModule,
     UsageModule,
     FeatureFlagsModule,
+    CustomsInspectionsModule,
+    CustomsPreviosModule,
+    ImporterRegistryModule,
+    ImmexProgramsModule,
+    CustomsRectificationsModule,
+    SaaiGeneratorModule,
+    ClientAccountsModule,
     HealthModule,
   ],
   providers: [],

@@ -123,3 +123,21 @@ export * from './anexo22-operation-types.schema';
 // SAAI error codes (catálogo de errores del Sistema Automatizado Aduanero Integral)
 export * from './saai-error-codes.schema';
 export * from './saai-registro-types.schema';
+
+// Customs inspections (semáforo fiscal, reconocimiento aduanero)
+export * from './customs-inspections.schema';
+
+// Customs previos (pre-inspección física)
+export * from './customs-previos.schema';
+
+// Importer / exporter registry (padrón de importadores / exportadores)
+export * from './importer-registry.schema';
+
+// IMMEX programs (manufactura, maquiladora, servicios)
+export * from './immex-programs.schema';
+
+// Customs rectifications (rectificaciones de pedimentos)
+export * from './customs-rectifications.schema';
+
+// Client account movements, statements and funds (cuenta corriente)
+export * from './client-account-statements.schema';
