@@ -63,6 +63,7 @@ import { ImmexProgramsModule } from './modules/immex-programs/immex-programs.mod
 import { CustomsRectificationsModule } from './modules/customs-rectifications/customs-rectifications.module.js';
 import { SaaiGeneratorModule } from './modules/saai-generator/saai-generator.module.js';
 import { ClientAccountsModule } from './modules/client-accounts/client-accounts.module.js';
+import { ExchangeRatesModule } from './modules/exchange-rates/exchange-rates.module.js';
 
 @Module({
   imports: [
@@ -164,6 +165,7 @@ import { ClientAccountsModule } from './modules/client-accounts/client-accounts.
     CustomsRectificationsModule,
     SaaiGeneratorModule,
     ClientAccountsModule,
+    ExchangeRatesModule,
     HealthModule,
   ],
   providers: [],

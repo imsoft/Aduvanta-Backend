@@ -70,6 +70,9 @@ export const configSchema = z.preprocess(
     S3_ENDPOINT: z.string().url().optional(),
     AWS_ACCESS_KEY_ID: z.string().optional(),
     AWS_SECRET_ACCESS_KEY: z.string().optional(),
+    // Exchange rates
+    EXCHANGE_RATE_API_KEY: z.string().min(1).optional(),
+    BANXICO_TOKEN: z.string().min(1).optional(),
   }).superRefine((data, ctx) => {
     // In production, reject obviously-unsafe CORS configurations.
     if (data.NODE_ENV === 'production') {
