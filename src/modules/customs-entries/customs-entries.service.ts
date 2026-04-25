@@ -158,12 +158,15 @@ export class CustomsEntriesService {
 
   async getEntryDetails(id: string, organizationId: string) {
     const entry = await this.getEntryById(id, organizationId);
-    const [items, parties, documents, statusHistory] = await Promise.all([
-      this.repository.findItemsByEntry(id),
-      this.repository.findPartiesByEntry(id),
-      this.repository.findDocumentsByEntry(id),
-      this.repository.findStatusHistory(id),
-    ]);
+    const [items, parties, documents, statusHistory, identifiers, containers] =
+      await Promise.all([
+        this.repository.findItemsByEntry(id),
+        this.repository.findPartiesByEntry(id),
+        this.repository.findDocumentsByEntry(id),
+        this.repository.findStatusHistory(id),
+        this.repository.findIdentifiersByEntry(id),
+        this.repository.findContainersByEntry(id),
+      ]);
 
     return {
       ...entry,
@@ -171,6 +174,8 @@ export class CustomsEntriesService {
       parties,
       documents,
       statusHistory,
+      identifiers,
+      containers,
     };
   }
 

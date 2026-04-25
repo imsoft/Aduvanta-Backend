@@ -50,6 +50,8 @@ export * from './customs-entry-items.schema';
 export * from './customs-entry-item-taxes.schema';
 export * from './customs-entry-documents.schema';
 export * from './customs-entry-status-history.schema';
+export * from './customs-entry-identifiers.schema';
+export * from './customs-entry-containers.schema';
 
 // Shipments / Customs operations (tráfico y despacho)
 export * from './shipments.schema';

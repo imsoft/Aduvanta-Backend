@@ -119,6 +119,42 @@ export const customsEntries = pgTable('customs_entries', {
   // Electronic payment reference
   paymentReference: text('payment_reference'),
 
+  // Gross weight of all goods (kg) — PESO BRUTO
+  grossWeightKg: numeric('gross_weight_kg', { precision: 16, scale: 4 }),
+
+  // Number of packages — TOTAL DE BULTOS
+  packageCount: integer('package_count'),
+
+  // Package marks, numbers and description — MARCAS, NÚMEROS Y TOTAL DE BULTOS
+  packageMarks: text('package_marks'),
+
+  // Incrementable costs at pedimento level (Art. 65-66 Ley Aduanera)
+  freightValue: numeric('freight_value', { precision: 16, scale: 2 }),
+  insuranceValue: numeric('insurance_value', { precision: 16, scale: 2 }),
+  packagingValue: numeric('packaging_value', { precision: 16, scale: 2 }),
+  otherIncrementables: numeric('other_incrementables', { precision: 16, scale: 2 }),
+
+  // INCOTERM (e.g., "FOB", "CIF", "EXW", "DDP")
+  incoterm: text('incoterm'),
+
+  // Vinculación con el proveedor (Art. 68 LA) — S=yes, N=no
+  vinculacion: text('vinculacion'),
+
+  // Número de acuse de valor (COVE) — Art. 59-A
+  valueReceiptNumber: text('value_receipt_number'),
+
+  // Payment method code — forma de pago (catálogo SAT)
+  paymentMethod: text('payment_method'),
+
+  // SAAI acceptance code — código de aceptación
+  acceptanceCode: text('acceptance_code'),
+
+  // Clave de la sección aduanera de despacho
+  customsSectionKey: text('customs_section_key'),
+
+  // Exit date (for exports) — FECHA SALIDA
+  exitDate: date('exit_date'),
+
   // Internal reference / customs broker reference number
   internalReference: text('internal_reference'),
 

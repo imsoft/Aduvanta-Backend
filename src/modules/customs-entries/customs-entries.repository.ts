@@ -8,6 +8,8 @@ import {
   customsEntryParties,
   customsEntryDocuments,
   customsEntryStatusHistory,
+  customsEntryIdentifiers,
+  customsEntryContainers,
   customsOffices,
   customsPatents,
 } from '../../database/schema/index.js';
@@ -21,6 +23,10 @@ export type CustomsEntryDocumentRecord =
   typeof customsEntryDocuments.$inferSelect;
 export type CustomsEntryStatusHistoryRecord =
   typeof customsEntryStatusHistory.$inferSelect;
+export type CustomsEntryIdentifierRecord =
+  typeof customsEntryIdentifiers.$inferSelect;
+export type CustomsEntryContainerRecord =
+  typeof customsEntryContainers.$inferSelect;
 export type CustomsOfficeRecord = typeof customsOffices.$inferSelect;
 export type CustomsPatentRecord = typeof customsPatents.$inferSelect;
 
@@ -388,5 +394,63 @@ export class CustomsEntriesRepository {
       .returning();
 
     return created;
+  }
+
+  // --- Identifiers ---
+
+  async findIdentifiersByEntry(
+    entryId: string,
+  ): Promise<CustomsEntryIdentifierRecord[]> {
+    return this.db
+      .select()
+      .from(customsEntryIdentifiers)
+      .where(eq(customsEntryIdentifiers.entryId, entryId))
+      .orderBy(asc(customsEntryIdentifiers.createdAt));
+  }
+
+  async insertIdentifier(
+    data: typeof customsEntryIdentifiers.$inferInsert,
+  ): Promise<CustomsEntryIdentifierRecord> {
+    const [created] = await this.db
+      .insert(customsEntryIdentifiers)
+      .values(data)
+      .returning();
+
+    return created;
+  }
+
+  async deleteIdentifier(id: string): Promise<void> {
+    await this.db
+      .delete(customsEntryIdentifiers)
+      .where(eq(customsEntryIdentifiers.id, id));
+  }
+
+  // --- Containers ---
+
+  async findContainersByEntry(
+    entryId: string,
+  ): Promise<CustomsEntryContainerRecord[]> {
+    return this.db
+      .select()
+      .from(customsEntryContainers)
+      .where(eq(customsEntryContainers.entryId, entryId))
+      .orderBy(asc(customsEntryContainers.createdAt));
+  }
+
+  async insertContainer(
+    data: typeof customsEntryContainers.$inferInsert,
+  ): Promise<CustomsEntryContainerRecord> {
+    const [created] = await this.db
+      .insert(customsEntryContainers)
+      .values(data)
+      .returning();
+
+    return created;
+  }
+
+  async deleteContainer(id: string): Promise<void> {
+    await this.db
+      .delete(customsEntryContainers)
+      .where(eq(customsEntryContainers.id, id));
   }
 }

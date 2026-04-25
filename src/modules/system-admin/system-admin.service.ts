@@ -8,4 +8,24 @@ export class SystemAdminService {
   async isSystemAdmin(userId: string): Promise<boolean> {
     return this.repository.isSystemAdmin(userId);
   }
+
+  async getPlatformOverview() {
+    return this.repository.getPlatformOverview();
+  }
+
+  async listAllOrganizations(limit: number, offset: number) {
+    return this.repository.listAllOrganizations(limit, offset);
+  }
+
+  async listAllUsers(limit: number, offset: number, search?: string) {
+    return this.repository.listAllUsers(limit, offset, search);
+  }
+
+  async addSystemAdmin(userId: string): Promise<void> {
+    return this.repository.addSystemAdmin(userId);
+  }
+
+  async removeSystemAdmin(userId: string): Promise<void> {
+    return this.repository.removeSystemAdmin(userId);
+  }
 }
