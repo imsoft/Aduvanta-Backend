@@ -79,6 +79,17 @@ export const RATE_LIMITS: RateLimitConfig = {
   },
 
   /**
+   * General read endpoints — lists, detail views, dashboards.
+   */
+  read: {
+    default: { limit: 120, windowMs: MINUTE },
+    free: { limit: 120, windowMs: MINUTE },
+    starter: { limit: 240, windowMs: MINUTE },
+    professional: { limit: 480, windowMs: MINUTE },
+    enterprise: { limit: 1000, windowMs: MINUTE },
+  },
+
+  /**
    * Search/lookup endpoints — TIGIE, Anexo 22 catalogs.
    */
   search: {

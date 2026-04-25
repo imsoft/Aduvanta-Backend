@@ -15,6 +15,18 @@ import { Session } from '../../common/decorators/session.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { SystemAdminService } from './system-admin.service.js';
 
+const MAX_PAGE_LIMIT = 100;
+
+function parsePagination(
+  limit: string,
+  offset: string,
+): { limit: number; offset: number } {
+  return {
+    limit: Math.min(Math.max(parseInt(limit) || 0, 1), MAX_PAGE_LIMIT),
+    offset: Math.max(parseInt(offset) || 0, 0),
+  };
+}
+
 @Controller('system-admin')
 @UseGuards(AuthGuard)
 export class SystemAdminController {
@@ -44,7 +56,8 @@ export class SystemAdminController {
     @Query('limit') limit = '25',
     @Query('offset') offset = '0',
   ) {
-    return this.service.listAllOrganizations(parseInt(limit), parseInt(offset));
+    const p = parsePagination(limit, offset);
+    return this.service.listAllOrganizations(p.limit, p.offset);
   }
 
   @Get('users')
@@ -54,7 +67,8 @@ export class SystemAdminController {
     @Query('offset') offset = '0',
     @Query('search') search?: string,
   ) {
-    return this.service.listAllUsers(parseInt(limit), parseInt(offset), search);
+    const p = parsePagination(limit, offset);
+    return this.service.listAllUsers(p.limit, p.offset, search);
   }
 
   @Get('entries')
@@ -64,7 +78,8 @@ export class SystemAdminController {
     @Query('offset') offset = '0',
     @Query('search') search?: string,
   ) {
-    return this.service.listAllEntries(parseInt(limit), parseInt(offset), search);
+    const p = parsePagination(limit, offset);
+    return this.service.listAllEntries(p.limit, p.offset, search);
   }
 
   @Get('operations')
@@ -73,7 +88,8 @@ export class SystemAdminController {
     @Query('limit') limit = '25',
     @Query('offset') offset = '0',
   ) {
-    return this.service.listAllOperations(parseInt(limit), parseInt(offset));
+    const p = parsePagination(limit, offset);
+    return this.service.listAllOperations(p.limit, p.offset);
   }
 
   @Get('audit-logs')
@@ -82,7 +98,8 @@ export class SystemAdminController {
     @Query('limit') limit = '50',
     @Query('offset') offset = '0',
   ) {
-    return this.service.listAllAuditLogs(parseInt(limit), parseInt(offset));
+    const p = parsePagination(limit, offset);
+    return this.service.listAllAuditLogs(p.limit, p.offset);
   }
 
   @Get('feature-flags')
@@ -107,7 +124,8 @@ export class SystemAdminController {
     @Query('limit') limit = '25',
     @Query('offset') offset = '0',
   ) {
-    return this.service.getUsageByOrganization(parseInt(limit), parseInt(offset));
+    const p = parsePagination(limit, offset);
+    return this.service.getUsageByOrganization(p.limit, p.offset);
   }
 
   @Get('sessions')
@@ -116,7 +134,8 @@ export class SystemAdminController {
     @Query('limit') limit = '50',
     @Query('offset') offset = '0',
   ) {
-    return this.service.listActiveSessions(parseInt(limit), parseInt(offset));
+    const p = parsePagination(limit, offset);
+    return this.service.listActiveSessions(p.limit, p.offset);
   }
 
   @Delete('sessions/:sessionId')

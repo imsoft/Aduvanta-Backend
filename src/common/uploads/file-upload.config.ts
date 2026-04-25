@@ -70,6 +70,18 @@ export const CSV_UPLOAD_MIME_TYPES = new Set<string>([
 type MulterFile = Parameters<NonNullable<MulterOptions['fileFilter']>>[1];
 type MulterCallback = Parameters<NonNullable<MulterOptions['fileFilter']>>[2];
 
+// Safe extensions allowed when MIME type is the ambiguous octet-stream.
+// When the OS cannot determine the MIME type it falls back to octet-stream
+// (common on macOS for CSV/XML files). We allow the upload only when the
+// declared extension is in this explicit list so arbitrary binaries (.exe,
+// .sh, .dll) are rejected even if the MIME check passes.
+const SAFE_OCTET_STREAM_EXTENSIONS = new Set([
+  '.csv', '.tsv', '.txt', '.xml', '.json',
+  '.pdf', '.doc', '.docx', '.xls', '.xlsx',
+  '.odt', '.ods', '.rtf', '.zip', '.rar', '.7z',
+  '.png', '.jpg', '.jpeg', '.webp', '.gif', '.tiff', '.bmp', '.heic', '.heif',
+]);
+
 function makeFileFilter(
   allowedMimeTypes: Set<string>,
 ): NonNullable<MulterOptions['fileFilter']> {
@@ -83,6 +95,20 @@ function makeFileFilter(
       );
       return;
     }
+
+    if (file.mimetype === 'application/octet-stream') {
+      const ext = file.originalname.slice(file.originalname.lastIndexOf('.')).toLowerCase();
+      if (!SAFE_OCTET_STREAM_EXTENSIONS.has(ext)) {
+        callback(
+          new BadRequestException(
+            `File extension "${ext}" is not allowed when MIME type is application/octet-stream.`,
+          ),
+          false,
+        );
+        return;
+      }
+    }
+
     callback(null, true);
   };
 }

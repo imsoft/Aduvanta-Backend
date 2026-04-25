@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import type { Pool } from 'pg';
+import type Redis from 'ioredis';
 import { AppConfigService } from '../../config/config.service.js';
 import { DATABASE_POOL } from '../../database/database.module.js';
+import { REDIS } from '../../redis/redis.module.js';
 import { EmailService } from '../email/email.service.js';
 import { BETTER_AUTH } from './auth.constants.js';
 
@@ -13,6 +15,7 @@ import { BETTER_AUTH } from './auth.constants.js';
         config: AppConfigService,
         emailService: EmailService,
         pool: Pool,
+        redis: Redis,
       ) => {
         const { betterAuth } = await import('better-auth');
 
@@ -39,6 +42,16 @@ import { BETTER_AUTH } from './auth.constants.js';
           database: pool,
           baseURL: betterAuthUrl,
           secret: config.get('BETTER_AUTH_API_KEY'),
+          secondaryStorage: {
+            get: (key) => redis.get(`ba:${key}`),
+            set: (key, value, ttl) => {
+              if (ttl) {
+                return redis.set(`ba:${key}`, value, 'EX', ttl).then(() => {});
+              }
+              return redis.set(`ba:${key}`, value).then(() => {});
+            },
+            delete: (key) => redis.del(`ba:${key}`).then(() => {}),
+          },
           emailAndPassword: {
             enabled: true,
             minPasswordLength: 12,
@@ -112,7 +125,7 @@ import { BETTER_AUTH } from './auth.constants.js';
           },
         });
       },
-      inject: [AppConfigService, EmailService, DATABASE_POOL],
+      inject: [AppConfigService, EmailService, DATABASE_POOL, REDIS],
     },
   ],
   exports: [BETTER_AUTH],

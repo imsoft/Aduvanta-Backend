@@ -10,6 +10,7 @@ import { AuthGuard } from '../../common/guards/auth.guard.js';
 import { PermissionsGuard } from '../../common/guards/permissions.guard.js';
 import { Session } from '../../common/decorators/session.decorator.js';
 import { RequirePermission } from '../../common/decorators/require-permission.decorator.js';
+import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { PERMISSION } from '../permissions/permission.codes.js';
 import { PortalService } from './portal.service.js';
@@ -17,6 +18,7 @@ import { ListPortalOperationsDto } from './dto/list-portal-operations.dto.js';
 
 @Controller('portal')
 @UseGuards(AuthGuard, PermissionsGuard)
+@RateLimit('read')
 export class PortalController {
   constructor(private readonly portalService: PortalService) {}
 

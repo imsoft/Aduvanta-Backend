@@ -8,6 +8,7 @@ import { Logger } from 'nestjs-pino';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter.js';
 import { getBetterAuthNode } from './common/better-auth-node.loader.js';
 import helmet from 'helmet';
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { createHash } from 'node:crypto';
@@ -64,6 +65,8 @@ async function bootstrap(): Promise<void> {
   // Parse JSON bodies early so auth middleware can read req.body.
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+
+  app.use(compression());
 
   // Security headers and cookie parsing must run BEFORE the Better Auth
   // handler so that responses for /api/auth/* (login, signup, OAuth, reset,
