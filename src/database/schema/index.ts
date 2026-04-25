@@ -143,3 +143,6 @@ export * from './customs-rectifications.schema';
 
 // Client account movements, statements and funds (cuenta corriente)
 export * from './client-account-statements.schema';
+
+// System-wide announcements / banners
+export * from './system-announcements.schema';

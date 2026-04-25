@@ -120,6 +120,13 @@
       "when": 1745452800000,
       "tag": "0016_pedimento_sat_fields",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1745539200000,
+      "tag": "0017_system_announcements",
+      "breakpoints": true
     }
   ]
 }

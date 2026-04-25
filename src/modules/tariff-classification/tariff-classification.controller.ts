@@ -44,6 +44,11 @@ export class TariffClassificationController {
     return this.tariffService.searchFractions(dto.q, limit, offset);
   }
 
+  @Get('customs-offices')
+  async listCustomsOffices() {
+    return this.tariffService.listCustomsOffices();
+  }
+
   // --- Sections ---
 
   @Get('sections')

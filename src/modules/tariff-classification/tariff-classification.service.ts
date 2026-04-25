@@ -281,6 +281,10 @@ export class TariffClassificationService {
     return this.repository.searchFractions(query, limit, offset);
   }
 
+  async listCustomsOffices() {
+    return this.repository.listCustomsOffices();
+  }
+
   // --- Fraction Details (regulations + preferences) ---
 
   async getFractionDetails(id: string) {

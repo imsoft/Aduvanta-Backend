@@ -26,6 +26,12 @@ export class SystemAdminController {
     return { isSystemAdmin: session.isSystemAdmin };
   }
 
+  // Active announcements — any authenticated user can fetch them
+  @Get('announcements/active')
+  async getActiveAnnouncements() {
+    return this.service.listActiveAnnouncements();
+  }
+
   @Get('overview')
   @UseGuards(SystemAdminGuard)
   async getOverview() {
@@ -38,10 +44,7 @@ export class SystemAdminController {
     @Query('limit') limit = '25',
     @Query('offset') offset = '0',
   ) {
-    return this.service.listAllOrganizations(
-      parseInt(limit),
-      parseInt(offset),
-    );
+    return this.service.listAllOrganizations(parseInt(limit), parseInt(offset));
   }
 
   @Get('users')
@@ -51,11 +54,7 @@ export class SystemAdminController {
     @Query('offset') offset = '0',
     @Query('search') search?: string,
   ) {
-    return this.service.listAllUsers(
-      parseInt(limit),
-      parseInt(offset),
-      search,
-    );
+    return this.service.listAllUsers(parseInt(limit), parseInt(offset), search);
   }
 
   @Get('entries')
@@ -99,6 +98,94 @@ export class SystemAdminController {
     @Body() body: { isEnabled: boolean; organizationId?: string },
   ) {
     await this.service.setFeatureFlag(key, body.isEnabled, body.organizationId);
+    return { success: true };
+  }
+
+  @Get('usage')
+  @UseGuards(SystemAdminGuard)
+  async getUsage(
+    @Query('limit') limit = '25',
+    @Query('offset') offset = '0',
+  ) {
+    return this.service.getUsageByOrganization(parseInt(limit), parseInt(offset));
+  }
+
+  @Get('sessions')
+  @UseGuards(SystemAdminGuard)
+  async listSessions(
+    @Query('limit') limit = '50',
+    @Query('offset') offset = '0',
+  ) {
+    return this.service.listActiveSessions(parseInt(limit), parseInt(offset));
+  }
+
+  @Delete('sessions/:sessionId')
+  @UseGuards(SystemAdminGuard)
+  async revokeSession(@Param('sessionId') sessionId: string) {
+    await this.service.revokeSession(sessionId);
+    return { success: true };
+  }
+
+  @Get('billing')
+  @UseGuards(SystemAdminGuard)
+  async getBilling() {
+    return this.service.getBillingSummary();
+  }
+
+  @Get('announcements')
+  @UseGuards(SystemAdminGuard)
+  async listAnnouncements() {
+    return this.service.listAnnouncements();
+  }
+
+  @Post('announcements')
+  @UseGuards(SystemAdminGuard)
+  async createAnnouncement(
+    @Session() session: ActiveSession,
+    @Body()
+    body: {
+      title: string;
+      body: string;
+      level: 'INFO' | 'WARNING' | 'CRITICAL';
+      startsAt?: string;
+      endsAt?: string;
+    },
+  ) {
+    return this.service.createAnnouncement({
+      title: body.title,
+      body: body.body,
+      level: body.level,
+      startsAt: body.startsAt ? new Date(body.startsAt) : new Date(),
+      endsAt: body.endsAt ? new Date(body.endsAt) : undefined,
+      createdById: session.user.id,
+    });
+  }
+
+  @Put('announcements/:id')
+  @UseGuards(SystemAdminGuard)
+  async updateAnnouncement(
+    @Param('id') id: string,
+    @Body()
+    body: Partial<{
+      title: string;
+      body: string;
+      level: 'INFO' | 'WARNING' | 'CRITICAL';
+      isActive: boolean;
+      startsAt: string;
+      endsAt: string | null;
+    }>,
+  ) {
+    return this.service.updateAnnouncement(id, {
+      ...body,
+      startsAt: body.startsAt ? new Date(body.startsAt) : undefined,
+      endsAt: body.endsAt !== undefined ? (body.endsAt ? new Date(body.endsAt) : null) : undefined,
+    });
+  }
+
+  @Delete('announcements/:id')
+  @UseGuards(SystemAdminGuard)
+  async deleteAnnouncement(@Param('id') id: string) {
+    await this.service.deleteAnnouncement(id);
     return { success: true };
   }
 

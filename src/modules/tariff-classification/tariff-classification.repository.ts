@@ -10,6 +10,7 @@ import {
   tariffRegulations,
   tariffAgreementPreferences,
   tradeAgreements,
+  customsOffices,
 } from '../../database/schema/index.js';
 
 export type TariffSectionRecord = typeof tariffSections.$inferSelect;
@@ -331,6 +332,13 @@ export class TariffClassificationRepository {
   }
 
   // --- Agreement Preferences ---
+
+  async listCustomsOffices() {
+    return this.db
+      .select()
+      .from(customsOffices)
+      .orderBy(customsOffices.sortOrder, customsOffices.code);
+  }
 
   async findPreferencesByFraction(fractionId: string): Promise<
     Array<{

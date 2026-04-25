@@ -41,6 +41,59 @@ export class SystemAdminService {
     return this.repository.setFeatureFlag(key, isEnabled, organizationId);
   }
 
+  async getUsageByOrganization(limit: number, offset: number) {
+    return this.repository.getUsageByOrganization(limit, offset);
+  }
+
+  async listActiveSessions(limit: number, offset: number) {
+    return this.repository.listActiveSessions(limit, offset);
+  }
+
+  async revokeSession(sessionId: string): Promise<void> {
+    return this.repository.revokeSession(sessionId);
+  }
+
+  async getBillingSummary() {
+    return this.repository.getBillingSummary();
+  }
+
+  async listAnnouncements() {
+    return this.repository.listAnnouncements();
+  }
+
+  async listActiveAnnouncements() {
+    return this.repository.listActiveAnnouncements();
+  }
+
+  async createAnnouncement(data: {
+    title: string;
+    body: string;
+    level: 'INFO' | 'WARNING' | 'CRITICAL';
+    startsAt: Date;
+    endsAt?: Date;
+    createdById: string;
+  }) {
+    return this.repository.createAnnouncement(data);
+  }
+
+  async updateAnnouncement(
+    id: string,
+    data: Partial<{
+      title: string;
+      body: string;
+      level: 'INFO' | 'WARNING' | 'CRITICAL';
+      isActive: boolean;
+      startsAt: Date;
+      endsAt: Date | null;
+    }>,
+  ) {
+    return this.repository.updateAnnouncement(id, data);
+  }
+
+  async deleteAnnouncement(id: string): Promise<void> {
+    return this.repository.deleteAnnouncement(id);
+  }
+
   async addSystemAdmin(userId: string): Promise<void> {
     return this.repository.addSystemAdmin(userId);
   }
