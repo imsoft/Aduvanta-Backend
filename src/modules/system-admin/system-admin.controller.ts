@@ -1,9 +1,11 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -54,6 +56,50 @@ export class SystemAdminController {
       parseInt(offset),
       search,
     );
+  }
+
+  @Get('entries')
+  @UseGuards(SystemAdminGuard)
+  async listEntries(
+    @Query('limit') limit = '25',
+    @Query('offset') offset = '0',
+    @Query('search') search?: string,
+  ) {
+    return this.service.listAllEntries(parseInt(limit), parseInt(offset), search);
+  }
+
+  @Get('operations')
+  @UseGuards(SystemAdminGuard)
+  async listOperations(
+    @Query('limit') limit = '25',
+    @Query('offset') offset = '0',
+  ) {
+    return this.service.listAllOperations(parseInt(limit), parseInt(offset));
+  }
+
+  @Get('audit-logs')
+  @UseGuards(SystemAdminGuard)
+  async listAuditLogs(
+    @Query('limit') limit = '50',
+    @Query('offset') offset = '0',
+  ) {
+    return this.service.listAllAuditLogs(parseInt(limit), parseInt(offset));
+  }
+
+  @Get('feature-flags')
+  @UseGuards(SystemAdminGuard)
+  async listFeatureFlags() {
+    return this.service.listAllFeatureFlags();
+  }
+
+  @Put('feature-flags/:key')
+  @UseGuards(SystemAdminGuard)
+  async setFeatureFlag(
+    @Param('key') key: string,
+    @Body() body: { isEnabled: boolean; organizationId?: string },
+  ) {
+    await this.service.setFeatureFlag(key, body.isEnabled, body.organizationId);
+    return { success: true };
   }
 
   @Post('users/:userId/make-admin')

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq, sql, desc, count } from 'drizzle-orm';
+import { eq, sql, desc, ilike, or, isNull } from 'drizzle-orm';
 import { DATABASE, type Database } from '../../database/database.module.js';
 import { systemAdmins } from '../../database/schema/system-admins.schema.js';
 import { organizations } from '../../database/schema/organizations.schema.js';
@@ -7,6 +7,7 @@ import { memberships } from '../../database/schema/memberships.schema.js';
 import { operations } from '../../database/schema/operations.schema.js';
 import { customsEntries } from '../../database/schema/customs-entries.schema.js';
 import { auditLogs } from '../../database/schema/audit-logs.schema.js';
+import { featureFlags } from '../../database/schema/feature-flags.schema.js';
 
 @Injectable()
 export class SystemAdminRepository {
@@ -139,6 +140,122 @@ export class SystemAdminRepository {
       }[],
       total: (countResult.rows[0] as { count: number })?.count ?? 0,
     };
+  }
+
+  async listAllEntries(limit: number, offset: number, search?: string) {
+    const searchFilter = search
+      ? or(
+          ilike(customsEntries.entryNumber, `%${search}%`),
+          ilike(customsEntries.internalReference, `%${search}%`),
+          ilike(customsEntries.entryKey, `%${search}%`),
+        )
+      : undefined;
+
+    const [rows, countResult] = await Promise.all([
+      this.db
+        .select({
+          id: customsEntries.id,
+          entryNumber: customsEntries.entryNumber,
+          entryKey: customsEntries.entryKey,
+          regime: customsEntries.regime,
+          status: customsEntries.status,
+          grandTotal: customsEntries.grandTotal,
+          internalReference: customsEntries.internalReference,
+          organizationId: customsEntries.organizationId,
+          createdAt: customsEntries.createdAt,
+          organizationSlug: sql<string>`(
+            select slug from organizations o where o.id = ${customsEntries.organizationId}
+          )`,
+        })
+        .from(customsEntries)
+        .where(searchFilter)
+        .orderBy(desc(customsEntries.createdAt))
+        .limit(limit)
+        .offset(offset),
+
+      this.db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(customsEntries)
+        .where(searchFilter),
+    ]);
+
+    return { entries: rows, total: countResult[0]?.count ?? 0 };
+  }
+
+  async listAllOperations(limit: number, offset: number) {
+    const [rows, countResult] = await Promise.all([
+      this.db
+        .select({
+          id: operations.id,
+          reference: operations.reference,
+          title: operations.title,
+          type: operations.type,
+          status: operations.status,
+          priority: operations.priority,
+          organizationId: operations.organizationId,
+          createdAt: operations.createdAt,
+          organizationSlug: sql<string>`(
+            select slug from organizations o where o.id = ${operations.organizationId}
+          )`,
+        })
+        .from(operations)
+        .orderBy(desc(operations.createdAt))
+        .limit(limit)
+        .offset(offset),
+
+      this.db.select({ count: sql<number>`count(*)::int` }).from(operations),
+    ]);
+
+    return { operations: rows, total: countResult[0]?.count ?? 0 };
+  }
+
+  async listAllAuditLogs(limit: number, offset: number) {
+    const [rows, countResult] = await Promise.all([
+      this.db
+        .select({
+          id: auditLogs.id,
+          action: auditLogs.action,
+          resource: auditLogs.resource,
+          resourceId: auditLogs.resourceId,
+          actorId: auditLogs.actorId,
+          organizationId: auditLogs.organizationId,
+          metadata: auditLogs.metadata,
+          createdAt: auditLogs.createdAt,
+        })
+        .from(auditLogs)
+        .orderBy(desc(auditLogs.createdAt))
+        .limit(limit)
+        .offset(offset),
+
+      this.db.select({ count: sql<number>`count(*)::int` }).from(auditLogs),
+    ]);
+
+    return { logs: rows, total: countResult[0]?.count ?? 0 };
+  }
+
+  async listAllFeatureFlags() {
+    return this.db
+      .select({
+        id: featureFlags.id,
+        key: featureFlags.key,
+        description: featureFlags.description,
+        isEnabled: featureFlags.isEnabled,
+        organizationId: featureFlags.organizationId,
+        createdAt: featureFlags.createdAt,
+        updatedAt: featureFlags.updatedAt,
+      })
+      .from(featureFlags)
+      .orderBy(isNull(featureFlags.organizationId), featureFlags.key);
+  }
+
+  async setFeatureFlag(key: string, isEnabled: boolean, organizationId?: string): Promise<void> {
+    await this.db
+      .insert(featureFlags)
+      .values({ key, isEnabled, organizationId: organizationId ?? null })
+      .onConflictDoUpdate({
+        target: [featureFlags.key, featureFlags.organizationId],
+        set: { isEnabled, updatedAt: new Date() },
+      });
   }
 
   async addSystemAdmin(userId: string): Promise<void> {
