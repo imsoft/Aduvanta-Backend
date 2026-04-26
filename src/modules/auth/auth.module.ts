@@ -43,14 +43,31 @@ import { BETTER_AUTH } from './auth.constants.js';
           baseURL: betterAuthUrl,
           secret: config.get('BETTER_AUTH_API_KEY'),
           secondaryStorage: {
-            get: (key) => redis.get(`ba:${key}`),
-            set: (key, value, ttl) => {
-              if (ttl) {
-                return redis.set(`ba:${key}`, value, 'EX', ttl).then(() => {});
+            get: async (key) => {
+              try {
+                return await redis.get(`ba:${key}`);
+              } catch {
+                return null;
               }
-              return redis.set(`ba:${key}`, value).then(() => {});
             },
-            delete: (key) => redis.del(`ba:${key}`).then(() => {}),
+            set: async (key, value, ttl) => {
+              try {
+                if (ttl) {
+                  await redis.set(`ba:${key}`, value, 'EX', ttl);
+                } else {
+                  await redis.set(`ba:${key}`, value);
+                }
+              } catch {
+                // Redis unavailable — Better Auth falls back to database
+              }
+            },
+            delete: async (key) => {
+              try {
+                await redis.del(`ba:${key}`);
+              } catch {
+                // Redis unavailable — no-op
+              }
+            },
           },
           emailAndPassword: {
             enabled: true,
