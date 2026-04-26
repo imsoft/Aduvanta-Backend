@@ -64,6 +64,7 @@ import { CustomsRectificationsModule } from './modules/customs-rectifications/cu
 import { SaaiGeneratorModule } from './modules/saai-generator/saai-generator.module.js';
 import { ClientAccountsModule } from './modules/client-accounts/client-accounts.module.js';
 import { ExchangeRatesModule } from './modules/exchange-rates/exchange-rates.module.js';
+import { BlogModule } from './modules/blog/blog.module.js';
 
 @Module({
   imports: [
@@ -166,6 +167,7 @@ import { ExchangeRatesModule } from './modules/exchange-rates/exchange-rates.mod
     SaaiGeneratorModule,
     ClientAccountsModule,
     ExchangeRatesModule,
+    BlogModule,
     HealthModule,
   ],
   providers: [],

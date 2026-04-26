@@ -146,3 +146,6 @@ export * from './client-account-statements.schema';
 
 // System-wide announcements / banners
 export * from './system-announcements.schema';
+
+// Blog posts (public blog with admin management)
+export * from './blog-posts.schema';
