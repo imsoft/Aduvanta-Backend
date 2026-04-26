@@ -28,4 +28,11 @@ export class UsersRepository {
 
     return result[0];
   }
+
+  async updateImage(id: string, imageUrl: string | null): Promise<void> {
+    await this.db
+      .update(users)
+      .set({ image: imageUrl, updatedAt: new Date() })
+      .where(eq(users.id, id));
+  }
 }
