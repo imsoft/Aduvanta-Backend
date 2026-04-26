@@ -180,7 +180,18 @@ async function bootstrap(): Promise<void> {
             toNodeHandler(auth)(
               req as unknown as IncomingMessage,
               res as unknown as ServerResponse,
-            ).catch(next);
+            ).catch((err: unknown) => {
+              logger.error(
+                {
+                  method: req.method,
+                  url: req.originalUrl,
+                  error: err instanceof Error ? err.message : String(err),
+                  stack: err instanceof Error ? err.stack : undefined,
+                },
+                'Better Auth handler error',
+              );
+              next(err);
+            });
           });
         return;
       }
@@ -189,7 +200,18 @@ async function bootstrap(): Promise<void> {
     toNodeHandler(auth)(
       req as unknown as IncomingMessage,
       res as unknown as ServerResponse,
-    ).catch(next);
+    ).catch((err: unknown) => {
+      logger.error(
+        {
+          method: req.method,
+          url: req.originalUrl,
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+        },
+        'Better Auth handler error',
+      );
+      next(err);
+    });
   });
 
   app.setGlobalPrefix('api');
