@@ -12,7 +12,11 @@
       "Bash(mkdir -p /Users/brangarciaramos/Proyectos/Aduvanta/aduvanta-frontend/src/app/\\\\[locale\\\\]/\\\\\\(dashboard\\\\\\)/dashboard/admin/blog)",
       "Bash(mkdir -p /Users/brangarciaramos/Proyectos/Aduvanta/aduvanta-frontend/src/app/\\\\[locale\\\\]/\\\\\\(dashboard\\\\\\)/dashboard/admin/blog/new)",
       "Bash(mkdir -p \"/Users/brangarciaramos/Proyectos/Aduvanta/aduvanta-frontend/src/app/[locale]/\\(dashboard\\)/dashboard/admin/blog/[id]/edit\")",
-      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('nav',{}\\).get\\('groups',{}\\), indent=2\\)\\)\")"
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('nav',{}\\).get\\('groups',{}\\), indent=2\\)\\)\")",
+      "Bash(grep -n '\"price\": \"\\\\$2,000\"\\\\|\"price\": \"\\\\$8,000\"\\\\|\"price\": \"\\\\$35,000\"' /Users/brangarciaramos/Proyectos/Aduvanta/aduvanta-frontend/messages/es-MX.json)"
+    ],
+    "additionalDirectories": [
+      "/Users/brangarciaramos/Proyectos/Aduvanta/aduvanta-frontend/src/app/[locale]/(dashboard)/dashboard/admin"
     ]
   }
 }

@@ -135,6 +135,9 @@ export * from './customs-previos.schema';
 // Importer / exporter registry (padrón de importadores / exportadores)
 export * from './importer-registry.schema';
 
+// Billing overrides (super admin discounts and free access grants)
+export * from './billing-overrides.schema';
+
 // IMMEX programs (manufactura, maquiladora, servicios)
 export * from './immex-programs.schema';
 

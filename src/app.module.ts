@@ -65,6 +65,7 @@ import { SaaiGeneratorModule } from './modules/saai-generator/saai-generator.mod
 import { ClientAccountsModule } from './modules/client-accounts/client-accounts.module.js';
 import { ExchangeRatesModule } from './modules/exchange-rates/exchange-rates.module.js';
 import { BlogModule } from './modules/blog/blog.module.js';
+import { BillingOverridesModule } from './modules/billing-overrides/billing-overrides.module.js';
 
 @Module({
   imports: [
@@ -168,6 +169,7 @@ import { BlogModule } from './modules/blog/blog.module.js';
     ClientAccountsModule,
     ExchangeRatesModule,
     BlogModule,
+    BillingOverridesModule,
     HealthModule,
   ],
   providers: [],
