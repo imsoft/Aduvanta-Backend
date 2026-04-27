@@ -62,6 +62,16 @@ export class BlogService {
     });
   }
 
+  async getById(id: string): Promise<BlogPost> {
+    const post = await this.repo.findById(id);
+
+    if (!post) {
+      throw new NotFoundException(`Blog post with id "${id}" not found`);
+    }
+
+    return post;
+  }
+
   async update(id: string, dto: UpdateBlogPostDto): Promise<BlogPost> {
     const existing = await this.repo.findById(id);
 

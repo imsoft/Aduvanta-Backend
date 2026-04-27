@@ -48,6 +48,13 @@ export class BlogController {
     return this.service.listAll(page, limit, query.status);
   }
 
+  @Get('admin/posts/:id')
+  @RateLimit('read')
+  @UseGuards(AuthGuard, SystemAdminGuard)
+  async getById(@Param('id') id: string) {
+    return this.service.getById(id);
+  }
+
   @Post('admin/posts')
   @RateLimit('mutation')
   @UseGuards(AuthGuard, SystemAdminGuard)
