@@ -91,6 +91,17 @@ export class StorageService {
     );
   }
 
+  getPublicUrl(key: string): string {
+    const publicUrl = this.config.get('S3_PUBLIC_URL');
+    if (publicUrl) return `${publicUrl}/${key}`;
+
+    const endpoint = this.config.get('S3_ENDPOINT');
+    if (endpoint) return `${endpoint}/${this.bucket}/${key}`;
+
+    const region = this.config.get('S3_REGION');
+    return `https://${this.bucket}.s3.${region}.amazonaws.com/${key}`;
+  }
+
   isConfigured(): boolean {
     return this.client !== null && !!this.bucket;
   }

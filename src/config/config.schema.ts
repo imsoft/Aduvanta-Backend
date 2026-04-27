@@ -73,6 +73,10 @@ export const configSchema = z.preprocess(
     // Exchange rates
     EXCHANGE_RATE_API_KEY: z.string().min(1).optional(),
     BANXICO_TOKEN: z.string().min(1).optional(),
+    // Google Cloud Translation API v2
+    GOOGLE_TRANSLATE_API_KEY: z.string().min(1).optional(),
+    // Base public URL for S3-hosted assets (e.g. Cloudflare R2 custom domain)
+    S3_PUBLIC_URL: z.string().url().optional(),
   }).superRefine((data, ctx) => {
     // In production, reject obviously-unsafe CORS configurations.
     if (data.NODE_ENV === 'production') {

@@ -122,3 +122,17 @@ export const csvUploadOptions: MulterOptions = {
   limits: { fileSize: MAX_UPLOAD_SIZE_BYTES, files: 1 },
   fileFilter: makeFileFilter(CSV_UPLOAD_MIME_TYPES),
 };
+
+const IMAGE_MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+
+export const IMAGE_UPLOAD_MIME_TYPES = new Set<string>([
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+]);
+
+export const imageUploadOptions: MulterOptions = {
+  limits: { fileSize: IMAGE_MAX_SIZE_BYTES, files: 1 },
+  fileFilter: makeFileFilter(IMAGE_UPLOAD_MIME_TYPES),
+};

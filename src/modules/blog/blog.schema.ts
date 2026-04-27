@@ -11,6 +11,29 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
+const SUPPORTED_LANGUAGES = ['es', 'en'] as const;
+type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
+
+export class TranslateBlogPostDto {
+  @IsString()
+  @MinLength(1)
+  title: string;
+
+  @IsString()
+  @MinLength(1)
+  excerpt: string;
+
+  @IsString()
+  @MinLength(1)
+  content: string;
+
+  @IsEnum(SUPPORTED_LANGUAGES)
+  source: SupportedLanguage;
+
+  @IsEnum(SUPPORTED_LANGUAGES)
+  target: SupportedLanguage;
+}
+
 const POST_STATUSES = ['DRAFT', 'PUBLISHED'] as const;
 type PostStatus = (typeof POST_STATUSES)[number];
 

@@ -1,6 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  NotFoundException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import { AppConfigService } from '../../config/config.service.js';
+import { StorageService } from '../storage/storage.service.js';
 import { BlogRepository, type BlogPost } from './blog.repository.js';
-import type { CreateBlogPostDto, UpdateBlogPostDto } from './blog.schema.js';
+import type { CreateBlogPostDto, UpdateBlogPostDto, TranslateBlogPostDto } from './blog.schema.js';
+
+type TranslateResult = { title: string; excerpt: string; content: string };
 
 const WORDS_PER_MINUTE = 200;
 
@@ -11,7 +20,11 @@ function calculateReadingTime(content: string): number {
 
 @Injectable()
 export class BlogService {
-  constructor(private readonly repo: BlogRepository) {}
+  constructor(
+    private readonly repo: BlogRepository,
+    private readonly config: AppConfigService,
+    private readonly storage: StorageService,
+  ) {}
 
   async listPublished(
     page: number,
@@ -114,5 +127,58 @@ export class BlogService {
     }
 
     await this.repo.delete(id);
+  }
+
+  async uploadCoverImage(
+    buffer: Buffer,
+    mimetype: string,
+  ): Promise<{ url: string }> {
+    const ext = mimetype.split('/')[1] ?? 'jpg';
+    const key = `blog-covers/${crypto.randomUUID()}.${ext}`;
+    await this.storage.upload(key, buffer, mimetype);
+    return { url: this.storage.getPublicUrl(key) };
+  }
+
+  async translate(dto: TranslateBlogPostDto): Promise<TranslateResult> {
+    const apiKey = this.config.get('GOOGLE_TRANSLATE_API_KEY');
+
+    if (!apiKey) {
+      throw new ServiceUnavailableException(
+        'Translation service is not configured. Set GOOGLE_TRANSLATE_API_KEY.',
+      );
+    }
+
+    const response = await fetch(
+      `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          q: [dto.title, dto.excerpt, dto.content],
+          source: dto.source,
+          target: dto.target,
+          format: 'text',
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      const body = await response.text();
+      throw new BadGatewayException(
+        `Google Translate returned ${response.status}: ${body}`,
+      );
+    }
+
+    const result = (await response.json()) as {
+      data: { translations: Array<{ translatedText: string }> };
+    };
+
+    const [t, e, c] = result.data.translations;
+
+    return {
+      title: t.translatedText,
+      excerpt: e.translatedText,
+      content: c.translatedText,
+    };
   }
 }

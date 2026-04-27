@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -7,15 +8,19 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../../common/guards/auth.guard.js';
 import { SystemAdminGuard } from '../../common/guards/system-admin.guard.js';
 import { Session } from '../../common/decorators/session.decorator.js';
 import type { ActiveSession } from '../../common/types/session.types.js';
 import { RateLimit } from '../../common/rate-limit/rate-limit.decorator.js';
+import { imageUploadOptions } from '../../common/uploads/file-upload.config.js';
 import { BlogService } from './blog.service.js';
-import { CreateBlogPostDto, UpdateBlogPostDto, ListBlogPostsDto } from './blog.schema.js';
+import { CreateBlogPostDto, UpdateBlogPostDto, ListBlogPostsDto, TranslateBlogPostDto } from './blog.schema.js';
 
 @Controller('blog')
 export class BlogController {
@@ -53,6 +58,22 @@ export class BlogController {
   @UseGuards(AuthGuard, SystemAdminGuard)
   async getById(@Param('id') id: string) {
     return this.service.getById(id);
+  }
+
+  @Post('admin/cover-image')
+  @RateLimit('mutation')
+  @UseGuards(AuthGuard, SystemAdminGuard)
+  @UseInterceptors(FileInterceptor('file', imageUploadOptions))
+  async uploadCoverImage(@UploadedFile() file: Express.Multer.File) {
+    if (!file) throw new BadRequestException('An image file is required');
+    return this.service.uploadCoverImage(file.buffer, file.mimetype);
+  }
+
+  @Post('admin/translate')
+  @RateLimit('mutation')
+  @UseGuards(AuthGuard, SystemAdminGuard)
+  async translate(@Body() dto: TranslateBlogPostDto) {
+    return this.service.translate(dto);
   }
 
   @Post('admin/posts')
